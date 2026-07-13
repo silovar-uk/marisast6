@@ -23,12 +23,34 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Validate JavaScript and move data
+        run: |
+          node --check app.js
+          for file in data-core.js data-{1..6}.js; do node --check "$file"; done
+          node <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const context = { window: {} };
+          vm.createContext(context);
+          for (const file of ['data-core.js', 'data-1.js', 'data-2.js', 'data-3.js', 'data-4.js', 'data-5.js', 'data-6.js']) {
+            vm.runInContext(fs.readFileSync(file, 'utf8'), context, { filename: file });
+          }
+          const data = context.window.MARISA_DATA;
+          if (data.moves.length !== 48) throw new Error(`Expected 48 moves, got ${data.moves.length}`);
+          if (new Set(data.moves.map(move => move.id)).size !== 48) throw new Error('Move IDs must be unique');
+          if (!data.firstSix.every(id => data.moves.some(move => move.id === id))) throw new Error('FIRST 6 contains an unknown move');
+          console.log(`Validated ${data.moves.length} move entries.`);
+          NODE
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: .
+
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
