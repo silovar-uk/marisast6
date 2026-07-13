@@ -1,0 +1,74 @@
+name: Deploy static site to Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate JavaScript, moves, situations, and gallery
+        run: |
+          node --check app.js
+          node --check strategy-gallery.js
+          for file in data-core.js situations.js data-{1..6}.js; do node --check "$file"; done
+          node <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const context = { window: {} };
+          vm.createContext(context);
+          for (const file of ['data-core.js', 'situations.js', 'data-1.js', 'data-2.js', 'data-3.js', 'data-4.js', 'data-5.js', 'data-6.js']) {
+            vm.runInContext(fs.readFileSync(file, 'utf8'), context, { filename: file });
+          }
+          const data = context.window.MARISA_DATA;
+          const moveIds = new Set(data.moves.map(move => move.id));
+          const situations = data.situationGroups.flatMap(group => group.situations);
+          if (data.moves.length !== 48) throw new Error(`Expected 48 moves, got ${data.moves.length}`);
+          if (moveIds.size !== 48) throw new Error('Move IDs must be unique');
+          if (!data.firstSix.every(id => moveIds.has(id))) throw new Error('FIRST 6 contains an unknown move');
+          if (data.situationGroups.length !== 8) throw new Error(`Expected 8 situation groups, got ${data.situationGroups.length}`);
+          if (situations.length !== 40) throw new Error(`Expected 40 situations, got ${situations.length}`);
+          if (new Set(situations.map(item => item.id)).size !== 40) throw new Error('Situation IDs must be unique');
+          const unknownRefs = situations.flatMap(item => item.moves.filter(id => !moveIds.has(id)).map(id => `${item.id}:${id}`));
+          if (unknownRefs.length) throw new Error(`Unknown move references: ${unknownRefs.join(', ')}`);
+
+          const partPaths = Array.from({ length: 11 }, (_, index) => `assets/strategy/parts/${String(index + 1).padStart(2, '0')}.txt`);
+          const base64 = partPaths.map(path => fs.readFileSync(path, 'utf8').trim()).join('');
+          const sprite = Buffer.from(base64, 'base64');
+          if (sprite.length !== 51814) throw new Error(`Expected 51814 sprite bytes, got ${sprite.length}`);
+          if (sprite.subarray(0, 4).toString() !== 'RIFF' || sprite.subarray(8, 12).toString() !== 'WEBP') {
+            throw new Error('Strategy sprite is not a valid WebP container');
+          }
+          fs.mkdirSync('assets/strategy', { recursive: true });
+          fs.writeFileSync('assets/strategy/strategy-sprite.webp', sprite);
+          console.log(`Validated ${data.moves.length} moves, ${situations.length} situations, and ${sprite.length} sprite bytes.`);
+          NODE
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
