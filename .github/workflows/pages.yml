@@ -49,13 +49,13 @@ jobs:
           const unknownRefs = situations.flatMap(item => item.moves.filter(id => !moveIds.has(id)).map(id => `${item.id}:${id}`));
           if (unknownRefs.length) throw new Error(`Unknown move references: ${unknownRefs.join(', ')}`);
           const beginnerFlow = fs.readFileSync('strategy-gallery.js', 'utf8');
-          for (const requiredText of ['初心者実戦チャート', 'A中 → A中', 'コマ投げ', 'インパクト', '壁ドン']) {
+          for (const requiredText of ['初心者実戦チャート', 'A中 → A中', 'A←SP', 'A強', 'コマ投げ', 'インパクト', '壁ドン']) {
             if (!beginnerFlow.includes(requiredText)) throw new Error(`Beginner flow is missing: ${requiredText}`);
           }
-          if (beginnerFlow.includes('A＋中が届く距離') || beginnerFlow.includes('A＋中 → A＋中')) {
-            throw new Error('Legacy A＋中 notation remains in beginner flow');
+          for (const legacyText of ['A＋中が届く距離', 'A＋中 → A＋中', 'A＋←＋SP', '→＋強／A＋強']) {
+            if (beginnerFlow.includes(legacyText)) throw new Error(`Legacy assist notation remains: ${legacyText}`);
           }
-          console.log(`Validated ${data.moves.length} moves, ${situations.length} situations, and beginner flow content.`);
+          console.log(`Validated ${data.moves.length} moves, ${situations.length} situations, and compact assist notation.`);
           NODE
 
       - name: Configure Pages
