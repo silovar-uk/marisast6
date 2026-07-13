@@ -8,6 +8,7 @@
   <title>MODERN MARISA LAB｜全技の使いどころ</title>
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="enhancements.css" />
+  <link rel="stylesheet" href="strategy-gallery.css" />
 </head>
 <body>
   <header class="site-header">
@@ -18,6 +19,7 @@
       </a>
       <nav class="header-nav" aria-label="メインナビゲーション">
         <a href="#quick">状況から探す</a>
+        <a href="#strategy-gallery">画像講座</a>
         <a href="#moves">全技</a>
         <a href="#notation">入力表記</a>
       </nav>
@@ -49,6 +51,63 @@
         <p>8分野×5状況。距離、相手の行動、ゲージ、画面位置まで分解して「いま何をしたいか」から探す。</p>
       </div>
       <div id="purpose-grid" class="situation-groups"></div>
+    </section>
+
+    <section id="strategy-gallery" class="strategy-gallery-section">
+      <div class="shell">
+        <details class="strategy-gallery">
+          <summary class="strategy-gallery-summary">
+            <div>
+              <p class="eyebrow">VISUAL GUIDE</p>
+              <h2>立ち回り7枚講座</h2>
+              <p>必要な時だけ開いて、横スワイプで全体像を確認。</p>
+            </div>
+            <span class="strategy-gallery-toggle"><b>7</b>枚を見る<i>＋</i></span>
+          </summary>
+          <div class="strategy-gallery-body">
+            <div class="strategy-gallery-intro">
+              <p>図解で流れをつかみ、正確な入力・性能は下の全技データで確認。</p>
+              <div class="strategy-gallery-controls" aria-label="画像送り">
+                <button type="button" data-gallery-prev aria-label="前の画像">←</button>
+                <span><b id="gallery-current">1</b> / 7</span>
+                <button type="button" data-gallery-next aria-label="次の画像">→</button>
+              </div>
+            </div>
+            <p class="strategy-gallery-status" data-gallery-status>画像を読み込み中…</p>
+            <div id="strategy-carousel" class="strategy-carousel" tabindex="0" aria-label="モダンマリーザ立ち回り7枚講座">
+              <button class="strategy-slide" type="button" data-strategy-slide="0" style="--frame:0" aria-label="01 モダンマリーザの勝ち方を拡大表示">
+                <span class="strategy-art" aria-hidden="true"></span>
+                <span class="strategy-caption"><small>01 / 07</small><b>モダンマリーザの勝ち方</b></span>
+              </button>
+              <button class="strategy-slide" type="button" data-strategy-slide="1" style="--frame:1" aria-label="02 中距離の地上戦を拡大表示">
+                <span class="strategy-art" aria-hidden="true"></span>
+                <span class="strategy-caption"><small>02 / 07</small><b>中距離の地上戦</b></span>
+              </button>
+              <button class="strategy-slide" type="button" data-strategy-slide="2" style="--frame:2" aria-label="03 近距離と守りを拡大表示">
+                <span class="strategy-art" aria-hidden="true"></span>
+                <span class="strategy-caption"><small>03 / 07</small><b>近距離と守り</b></span>
+              </button>
+              <button class="strategy-slide" type="button" data-strategy-slide="3" style="--frame:3" aria-label="04 対空の使い分けを拡大表示">
+                <span class="strategy-art" aria-hidden="true"></span>
+                <span class="strategy-caption"><small>04 / 07</small><b>対空の使い分け</b></span>
+              </button>
+              <button class="strategy-slide" type="button" data-strategy-slide="4" style="--frame:4" aria-label="05 弾・下段への回答を拡大表示">
+                <span class="strategy-art" aria-hidden="true"></span>
+                <span class="strategy-caption"><small>05 / 07</small><b>弾・下段への回答</b></span>
+              </button>
+              <button class="strategy-slide" type="button" data-strategy-slide="5" style="--frame:5" aria-label="06 起き攻めと画面端を拡大表示">
+                <span class="strategy-art" aria-hidden="true"></span>
+                <span class="strategy-caption"><small>06 / 07</small><b>起き攻めと画面端</b></span>
+              </button>
+              <button class="strategy-slide" type="button" data-strategy-slide="6" style="--frame:6" aria-label="07 よくあるミスと修正を拡大表示">
+                <span class="strategy-art" aria-hidden="true"></span>
+                <span class="strategy-caption"><small>07 / 07</small><b>よくあるミスと修正</b></span>
+              </button>
+            </div>
+            <p class="strategy-gallery-note">※画像は立ち回りの補助図解です。正確な入力・数値は下の全技データを確認してください。</p>
+          </div>
+        </details>
+      </div>
     </section>
 
     <section id="moves" class="moves-section">
@@ -162,6 +221,14 @@
 
   <footer><div class="shell"><b>MODERN MARISA LAB</b><span>非公式ファンメイド攻略データベース</span></div></footer>
 
+  <dialog id="strategy-dialog" class="strategy-dialog" aria-labelledby="strategy-dialog-title">
+    <div class="strategy-dialog-panel">
+      <button class="strategy-dialog-close" type="button" data-dialog-close aria-label="画像を閉じる">×</button>
+      <div class="strategy-dialog-art" style="--frame:0" role="img"></div>
+      <p id="strategy-dialog-title" class="strategy-dialog-title"></p>
+    </div>
+  </dialog>
+
   <template id="move-template">
     <article class="move-card">
       <button class="move-summary" type="button" aria-expanded="false">
@@ -196,5 +263,6 @@
   <script src="data-5.js"></script>
   <script src="data-6.js"></script>
   <script src="app.js"></script>
+  <script src="strategy-gallery.js"></script>
 </body>
 </html>
