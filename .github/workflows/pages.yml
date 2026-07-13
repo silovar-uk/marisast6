@@ -24,7 +24,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Validate JavaScript, moves, situations, and gallery
+      - name: Validate JavaScript, moves, situations, and beginner flow
         run: |
           node --check app.js
           node --check strategy-gallery.js
@@ -48,17 +48,11 @@ jobs:
           if (new Set(situations.map(item => item.id)).size !== 40) throw new Error('Situation IDs must be unique');
           const unknownRefs = situations.flatMap(item => item.moves.filter(id => !moveIds.has(id)).map(id => `${item.id}:${id}`));
           if (unknownRefs.length) throw new Error(`Unknown move references: ${unknownRefs.join(', ')}`);
-
-          const partPaths = Array.from({ length: 11 }, (_, index) => `assets/strategy/parts/${String(index + 1).padStart(2, '0')}.txt`);
-          const base64 = partPaths.map(path => fs.readFileSync(path, 'utf8').trim()).join('');
-          const sprite = Buffer.from(base64, 'base64');
-          if (sprite.length !== 51814) throw new Error(`Expected 51814 sprite bytes, got ${sprite.length}`);
-          if (sprite.subarray(0, 4).toString() !== 'RIFF' || sprite.subarray(8, 12).toString() !== 'WEBP') {
-            throw new Error('Strategy sprite is not a valid WebP container');
+          const beginnerFlow = fs.readFileSync('strategy-gallery.js', 'utf8');
+          for (const requiredText of ['初心者実戦チャート', 'A＋中 → A＋中', 'コマ投げ', 'インパクト', '壁ドン']) {
+            if (!beginnerFlow.includes(requiredText)) throw new Error(`Beginner flow is missing: ${requiredText}`);
           }
-          fs.mkdirSync('assets/strategy', { recursive: true });
-          fs.writeFileSync('assets/strategy/strategy-sprite.webp', sprite);
-          console.log(`Validated ${data.moves.length} moves, ${situations.length} situations, and ${sprite.length} sprite bytes.`);
+          console.log(`Validated ${data.moves.length} moves, ${situations.length} situations, and beginner flow content.`);
           NODE
 
       - name: Configure Pages
