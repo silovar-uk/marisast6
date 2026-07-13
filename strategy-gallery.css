@@ -1,0 +1,429 @@
+.strategy-gallery-section {
+  padding: 18px 0 84px;
+}
+
+.strategy-gallery {
+  overflow: clip;
+  border: 1px solid rgba(23, 19, 16, .18);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 86% 8%, rgba(189, 145, 80, .17), transparent 34%),
+    linear-gradient(145deg, #1a1512, #241512 66%, #371417);
+  color: #fffdf8;
+  box-shadow: 0 24px 60px rgba(48, 34, 24, .16);
+}
+
+.strategy-gallery > summary {
+  list-style: none;
+}
+
+.strategy-gallery > summary::-webkit-details-marker {
+  display: none;
+}
+
+.strategy-gallery-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  min-height: 156px;
+  padding: 30px 34px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.strategy-gallery-summary:hover {
+  background: rgba(255, 255, 255, .025);
+}
+
+.strategy-gallery-summary:focus-visible {
+  outline: 3px solid #d8b675;
+  outline-offset: -4px;
+}
+
+.strategy-gallery-summary .eyebrow {
+  color: #d8b675;
+}
+
+.strategy-gallery-summary h2 {
+  margin: 0;
+  font-family: Georgia, "Yu Mincho", serif;
+  font-size: clamp(32px, 4.2vw, 54px);
+  line-height: 1;
+}
+
+.strategy-gallery-summary p:last-child {
+  margin: 12px 0 0;
+  color: #d6ccc2;
+  font-size: 14px;
+}
+
+.strategy-gallery-toggle {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 10px;
+  min-width: 154px;
+  padding: 12px 14px 12px 17px;
+  border: 1px solid rgba(216, 182, 117, .42);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .05);
+  color: #f3e8d1;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.strategy-gallery-toggle b {
+  display: grid;
+  place-items: center;
+  width: 27px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #8f1d24;
+  color: #fff;
+  font-size: 13px;
+}
+
+.strategy-gallery-toggle i {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  aspect-ratio: 1;
+  margin-left: auto;
+  border-radius: 50%;
+  background: #d8b675;
+  color: #241512;
+  font-size: 18px;
+  font-style: normal;
+  transition: transform .2s ease;
+}
+
+.strategy-gallery[open] .strategy-gallery-toggle i {
+  transform: rotate(45deg);
+}
+
+.strategy-gallery-body {
+  padding: 0 34px 34px;
+  border-top: 1px solid rgba(255, 255, 255, .11);
+}
+
+.strategy-gallery-intro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 22px 0 18px;
+}
+
+.strategy-gallery-intro > p {
+  margin: 0;
+  color: #d6ccc2;
+  font-size: 13px;
+}
+
+.strategy-gallery-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+.strategy-gallery-controls button,
+.strategy-dialog-close {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  aspect-ratio: 1;
+  border: 1px solid rgba(255, 255, 255, .18);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .07);
+  color: #fff;
+  cursor: pointer;
+}
+
+.strategy-gallery-controls button:hover,
+.strategy-dialog-close:hover {
+  border-color: #d8b675;
+  background: rgba(216, 182, 117, .14);
+}
+
+.strategy-gallery-controls button:focus-visible,
+.strategy-dialog-close:focus-visible,
+.strategy-slide:focus-visible {
+  outline: 3px solid #d8b675;
+  outline-offset: 3px;
+}
+
+.strategy-gallery-controls span {
+  min-width: 58px;
+  color: #cfc3b8;
+  text-align: center;
+  font-size: 12px;
+}
+
+.strategy-gallery-controls b {
+  color: #fff;
+  font-size: 16px;
+}
+
+.strategy-gallery-status {
+  min-height: 24px;
+  margin: 0 0 8px;
+  color: #d8b675;
+  font-size: 12px;
+}
+
+.strategy-gallery.is-ready .strategy-gallery-status {
+  display: none;
+}
+
+.strategy-gallery.is-error .strategy-gallery-status {
+  color: #ffb6af;
+}
+
+.strategy-carousel {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  padding: 5px 2px 18px;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scrollbar-color: rgba(216, 182, 117, .65) rgba(255, 255, 255, .08);
+  scrollbar-width: thin;
+}
+
+.strategy-carousel::-webkit-scrollbar {
+  height: 8px;
+}
+
+.strategy-carousel::-webkit-scrollbar-track {
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .07);
+}
+
+.strategy-carousel::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(216, 182, 117, .62);
+}
+
+.strategy-slide {
+  flex: 0 0 clamp(250px, 29vw, 330px);
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid rgba(216, 182, 117, .34);
+  border-radius: 17px;
+  background: #100d0b;
+  color: #fff;
+  text-align: left;
+  cursor: zoom-in;
+  scroll-snap-align: start;
+  box-shadow: 0 15px 32px rgba(0, 0, 0, .22);
+  transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+
+.strategy-slide:hover {
+  transform: translateY(-4px);
+  border-color: rgba(216, 182, 117, .8);
+  box-shadow: 0 20px 42px rgba(0, 0, 0, .32);
+}
+
+.strategy-art,
+.strategy-dialog-art {
+  display: block;
+  aspect-ratio: 4 / 5;
+  background-color: #231b17;
+  background-image:
+    linear-gradient(110deg, transparent 20%, rgba(255, 255, 255, .065) 42%, transparent 64%);
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  background-size: 200% 100%;
+}
+
+.strategy-gallery:not(.is-ready) .strategy-art {
+  animation: strategy-shimmer 1.5s linear infinite;
+}
+
+.strategy-gallery.is-ready .strategy-art,
+.strategy-dialog.is-ready .strategy-dialog-art {
+  background-image: var(--strategy-sprite);
+  background-position: 0 calc(var(--frame) * 16.6666667%);
+  background-size: 100% 700%;
+}
+
+.strategy-caption {
+  display: grid;
+  gap: 2px;
+  min-height: 70px;
+  padding: 13px 15px 15px;
+  border-top: 1px solid rgba(255, 255, 255, .11);
+}
+
+.strategy-caption small {
+  color: #d8b675;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .14em;
+}
+
+.strategy-caption b {
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.strategy-gallery-note {
+  margin: 10px 0 0;
+  color: #a99d92;
+  font-size: 11px;
+}
+
+.strategy-dialog {
+  width: min(620px, calc(100% - 28px));
+  max-height: calc(100dvh - 28px);
+  padding: 0;
+  border: 0;
+  border-radius: 20px;
+  background: #171310;
+  color: #fff;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, .55);
+}
+
+.strategy-dialog::backdrop {
+  background: rgba(8, 7, 6, .82);
+  backdrop-filter: blur(8px);
+}
+
+.strategy-dialog-panel {
+  position: relative;
+  padding: 16px;
+}
+
+.strategy-dialog-close {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  z-index: 2;
+  background: rgba(10, 8, 7, .82);
+  font-size: 22px;
+}
+
+.strategy-dialog-art {
+  width: min(100%, 520px);
+  margin: auto;
+  border: 1px solid rgba(216, 182, 117, .35);
+  border-radius: 12px;
+}
+
+.strategy-dialog-title {
+  margin: 13px 0 2px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+@keyframes strategy-shimmer {
+  to { background-position: -200% 0; }
+}
+
+@media (max-width: 900px) {
+  .strategy-gallery-summary {
+    min-height: 138px;
+    padding: 26px;
+  }
+
+  .strategy-gallery-body {
+    padding-inline: 26px;
+  }
+
+  .strategy-slide {
+    flex-basis: min(310px, 43vw);
+  }
+}
+
+@media (max-width: 620px) {
+  .strategy-gallery-section {
+    padding: 4px 0 62px;
+  }
+
+  .strategy-gallery {
+    border-radius: 18px;
+  }
+
+  .strategy-gallery-summary {
+    align-items: flex-end;
+    min-height: 128px;
+    padding: 22px 18px;
+  }
+
+  .strategy-gallery-summary h2 {
+    font-size: 31px;
+  }
+
+  .strategy-gallery-summary p:last-child {
+    max-width: 230px;
+    font-size: 11px;
+  }
+
+  .strategy-gallery-toggle {
+    min-width: auto;
+    padding: 8px;
+  }
+
+  .strategy-gallery-toggle b {
+    font-size: 0;
+  }
+
+  .strategy-gallery-toggle {
+    font-size: 0;
+  }
+
+  .strategy-gallery-toggle i {
+    margin: 0;
+  }
+
+  .strategy-gallery-body {
+    padding: 0 14px 22px;
+  }
+
+  .strategy-gallery-intro {
+    align-items: flex-start;
+    padding-top: 17px;
+  }
+
+  .strategy-gallery-intro > p {
+    max-width: 210px;
+    font-size: 11px;
+  }
+
+  .strategy-gallery-controls button {
+    width: 36px;
+  }
+
+  .strategy-carousel {
+    gap: 12px;
+    margin-inline: -14px;
+    padding-inline: 14px;
+    scroll-padding-inline: 14px;
+  }
+
+  .strategy-slide {
+    flex-basis: min(80vw, 318px);
+  }
+
+  .strategy-caption {
+    min-height: 64px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .strategy-carousel,
+  .strategy-slide,
+  .strategy-gallery-toggle i {
+    scroll-behavior: auto;
+    transition: none;
+  }
+
+  .strategy-gallery:not(.is-ready) .strategy-art {
+    animation: none;
+  }
+}
