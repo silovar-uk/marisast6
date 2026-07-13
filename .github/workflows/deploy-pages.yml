@@ -24,23 +24,30 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Validate JavaScript and move data
+      - name: Validate JavaScript, moves, and situations
         run: |
           node --check app.js
-          for file in data-core.js data-{1..6}.js; do node --check "$file"; done
+          for file in data-core.js situations.js data-{1..6}.js; do node --check "$file"; done
           node <<'NODE'
           const fs = require('fs');
           const vm = require('vm');
           const context = { window: {} };
           vm.createContext(context);
-          for (const file of ['data-core.js', 'data-1.js', 'data-2.js', 'data-3.js', 'data-4.js', 'data-5.js', 'data-6.js']) {
+          for (const file of ['data-core.js', 'situations.js', 'data-1.js', 'data-2.js', 'data-3.js', 'data-4.js', 'data-5.js', 'data-6.js']) {
             vm.runInContext(fs.readFileSync(file, 'utf8'), context, { filename: file });
           }
           const data = context.window.MARISA_DATA;
+          const moveIds = new Set(data.moves.map(move => move.id));
+          const situations = data.situationGroups.flatMap(group => group.situations);
           if (data.moves.length !== 48) throw new Error(`Expected 48 moves, got ${data.moves.length}`);
-          if (new Set(data.moves.map(move => move.id)).size !== 48) throw new Error('Move IDs must be unique');
-          if (!data.firstSix.every(id => data.moves.some(move => move.id === id))) throw new Error('FIRST 6 contains an unknown move');
-          console.log(`Validated ${data.moves.length} move entries.`);
+          if (moveIds.size !== 48) throw new Error('Move IDs must be unique');
+          if (!data.firstSix.every(id => moveIds.has(id))) throw new Error('FIRST 6 contains an unknown move');
+          if (data.situationGroups.length !== 8) throw new Error(`Expected 8 situation groups, got ${data.situationGroups.length}`);
+          if (situations.length !== 40) throw new Error(`Expected 40 situations, got ${situations.length}`);
+          if (new Set(situations.map(item => item.id)).size !== 40) throw new Error('Situation IDs must be unique');
+          const unknownRefs = situations.flatMap(item => item.moves.filter(id => !moveIds.has(id)).map(id => `${item.id}:${id}`));
+          if (unknownRefs.length) throw new Error(`Unknown move references: ${unknownRefs.join(', ')}`);
+          console.log(`Validated ${data.moves.length} moves and ${situations.length} situations.`);
           NODE
 
       - name: Configure Pages
