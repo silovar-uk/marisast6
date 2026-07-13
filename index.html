@@ -7,6 +7,7 @@
   <meta name="description" content="モダンマリーザの全技を、入力・性能・使いどころ・次の行動から逆引きできる攻略データベース。" />
   <title>MODERN MARISA LAB｜全技の使いどころ</title>
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="enhancements.css" />
 </head>
 <body>
   <header class="site-header">
@@ -29,49 +30,125 @@
         <p class="eyebrow">STREET FIGHTER 6 / MODERN</p>
         <h1>その技、<br><em>いつ出す？</em></h1>
         <p class="hero-lead">技名を覚えるためではなく、対戦中の判断を速くするためのマリーザ技図鑑。入力、ダメージ、発生・持続・硬直、ヒット後の派生まで一画面で確認できる。</p>
-        <div class="hero-meta"><span>基準日：2026.03.17調整</span><span>モダン操作専用</span><span>全技検索対応</span></div>
+        <div class="hero-meta">
+          <span>基準日：2026.03.17調整</span>
+          <span>モダン操作専用</span>
+          <span>全技検索対応</span>
+        </div>
       </div>
-      <aside class="hero-card" aria-label="最初に覚える技"><p class="hero-card-label">FIRST 6</p><h2>まず、この6つ。</h2><div id="first-six" class="first-six"></div></aside>
+      <aside class="hero-card" aria-label="最初に覚える技">
+        <p class="hero-card-label">FIRST 6</p>
+        <h2>まず、この6つ。</h2>
+        <div id="first-six" class="first-six"></div>
+      </aside>
     </section>
 
     <section id="quick" class="quick-section shell">
-      <div class="section-heading"><div><p class="eyebrow">QUICK FINDER</p><h2>状況から逆引き</h2></div><p>「技の名前」より先に、「いま何をしたいか」から探す。</p></div>
-      <div id="purpose-grid" class="purpose-grid"></div>
+      <div class="section-heading">
+        <div><p class="eyebrow">QUICK FINDER</p><h2>状況から逆引き</h2></div>
+        <p>8分野×5状況。距離、相手の行動、ゲージ、画面位置まで分解して「いま何をしたいか」から探す。</p>
+      </div>
+      <div id="purpose-grid" class="situation-groups"></div>
     </section>
 
-    <section id="moves" class="moves-section"><div class="shell">
-      <div class="section-heading moves-heading"><div><p class="eyebrow">MOVE DATABASE</p><h2>全技データ</h2></div><p><b id="result-count">0</b>技を表示中。カードを開くと、用途・性能・次の行動まで確認できる。</p></div>
-      <div class="tool-panel" aria-label="技の絞り込み">
-        <label class="search-box"><span aria-hidden="true">⌕</span><input id="search-input" type="search" placeholder="技名・入力・用途で検索（例：対空、N＋強、ファランクス）" autocomplete="off" /></label>
-        <div id="category-filters" class="filter-row" aria-label="カテゴリ"></div>
-        <div id="purpose-filters" class="filter-row secondary" aria-label="用途"></div>
-        <button id="clear-filters" class="clear-button" type="button">絞り込みを解除</button>
+    <section id="moves" class="moves-section">
+      <div class="shell">
+        <div class="section-heading moves-heading">
+          <div><p class="eyebrow">MOVE DATABASE</p><h2>全技データ</h2></div>
+          <p><b id="result-count">0</b>技を表示中。カードを開くと、用途・性能・次の行動まで確認できる。</p>
+        </div>
+
+        <div class="tool-panel" aria-label="技の絞り込み">
+          <label class="search-box">
+            <span aria-hidden="true">⌕</span>
+            <input id="search-input" type="search" placeholder="技名・入力・用途で検索（例：対空、N＋強、ファランクス）" autocomplete="off" />
+          </label>
+          <div id="category-filters" class="filter-row" aria-label="カテゴリ"></div>
+          <div id="purpose-filters" class="filter-row secondary" aria-label="用途"></div>
+          <button id="clear-filters" class="clear-button" type="button">絞り込みを解除</button>
+        </div>
+
+        <div id="active-situation" class="active-situation" hidden></div>
+
+        <div class="legend">
+          <span><i class="dot startup"></i>発生：攻撃判定が出るまで</span>
+          <span><i class="dot active"></i>持続：攻撃判定が出ている時間</span>
+          <span><i class="dot recovery"></i>硬直：動けない時間</span>
+          <span><i class="dot advantage"></i>±：ヒット／ガード後の有利不利</span>
+        </div>
+        <div class="rating-guide" aria-label="性能評価の色分け">
+          <b>性能色の見方</b>
+          <span class="rating-chip great">◎ 強い</span>
+          <span class="rating-chip good">○ 良好</span>
+          <span class="rating-chip neutral">― 標準・条件依存</span>
+          <span class="rating-chip caution">△ 注意</span>
+          <span class="rating-chip danger">× 大きな隙</span>
+          <small>同じ項目を絶対値で比べる目安。技全体の強さではなく、発生・硬直など各数値の性質を示す。</small>
+        </div>
+
+        <div id="move-list" class="move-list"></div>
+        <div id="empty-state" class="empty-state" hidden>
+          <b>該当する技が見つからへんかった。</b>
+          <span>検索語か絞り込みを少し減らしてみて。</span>
+        </div>
       </div>
-      <div class="legend"><span><i class="dot startup"></i>発生：攻撃判定が出るまで</span><span><i class="dot active"></i>持続：攻撃判定が出ている時間</span><span><i class="dot recovery"></i>硬直：動けない時間</span><span><i class="dot advantage"></i>±：ヒット／ガード後の有利不利</span></div>
-      <div id="move-list" class="move-list"></div>
-      <div id="empty-state" class="empty-state" hidden><b>該当する技が見つからへんかった。</b><span>検索語か絞り込みを少し減らしてみて。</span></div>
-    </div></section>
+    </section>
 
     <section id="notation" class="notation-section shell">
-      <div class="section-heading"><div><p class="eyebrow">INPUT GUIDE</p><h2>入力表記</h2></div><p>テンキー表記を知らなくても読めるよう、方向は矢印で統一。</p></div>
+      <div class="section-heading">
+        <div><p class="eyebrow">INPUT GUIDE</p><h2>入力表記</h2></div>
+        <p>テンキー表記を知らなくても読めるよう、方向は矢印で統一。</p>
+      </div>
       <div class="notation-layout">
-        <div class="direction-pad" aria-label="方向入力対応表"><span>↖</span><span>↑</span><span>↗</span><span>←</span><span class="neutral">N</span><span>→</span><span>↙</span><span>↓</span><span>↘</span></div>
-        <div class="notation-copy"><dl><div><dt>N</dt><dd>方向を入れない。ニュートラル。</dd></div><div><dt>A</dt><dd>アシストボタン。例：A＋中。</dd></div><div><dt>SP</dt><dd>必殺技ボタン。N＋SPは弱グラディウス。簡易入力は原則ダメージ80％。</dd></div><div><dt>長押し</dt><dd>ホールド版。最大まで溜めた数値を併記。</dd></div><div><dt>CR</dt><dd>キャンセルドライブラッシュ。</dd></div></dl></div>
+        <div class="direction-pad" aria-label="方向入力対応表">
+          <span>↖</span><span>↑</span><span>↗</span>
+          <span>←</span><span class="neutral">N</span><span>→</span>
+          <span>↙</span><span>↓</span><span>↘</span>
+        </div>
+        <div class="notation-copy">
+          <dl>
+            <div><dt>N</dt><dd>方向を入れない。ニュートラル。</dd></div>
+            <div><dt>A</dt><dd>アシストボタン。例：A＋中。</dd></div>
+            <div><dt>SP</dt><dd>必殺技ボタン。N＋SPは弱グラディウス。簡易入力は原則ダメージ80％。</dd></div>
+            <div><dt>長押し</dt><dd>ホールド版。最大まで溜めた数値を併記。</dd></div>
+            <div><dt>CR</dt><dd>キャンセルドライブラッシュ。</dd></div>
+          </dl>
+        </div>
       </div>
     </section>
 
-    <section class="notes-section"><div class="shell notes-grid">
-      <article><p class="eyebrow">HOW TO READ</p><h2>数値より、役割を先に見る。</h2><p>発生が速くても届かなければ意味がない。ガードで有利でも、距離が離れれば攻めは続かない。各カードでは、数値の横に「どんな距離・読み合いで強いか」を必ず記載している。</p></article>
-      <article><p class="eyebrow">DAMAGE RULE</p><h2>簡易入力は80％。</h2><p>SP、A＋SP、SP＋強による簡易入力は、原則として本来の80％ダメージ。コマンド入力できる技は100％。通常技はモダンでも同じダメージ。</p></article>
-    </div></section>
+    <section class="notes-section">
+      <div class="shell notes-grid">
+        <article>
+          <p class="eyebrow">HOW TO READ</p>
+          <h2>数値より、役割を先に見る。</h2>
+          <p>発生が速くても届かなければ意味がない。ガードで有利でも、距離が離れれば攻めは続かない。各カードでは、数値の横に「どんな距離・読み合いで強いか」を必ず記載している。</p>
+        </article>
+        <article>
+          <p class="eyebrow">DAMAGE RULE</p>
+          <h2>簡易入力は80％。</h2>
+          <p>SP、A＋SP、SP＋強による簡易入力は、原則として本来の80％ダメージ。コマンド入力できる技は100％。通常技はモダンでも同じダメージ。</p>
+        </article>
+      </div>
+    </section>
 
     <section class="unavailable-section shell">
-      <div class="section-heading"><div><p class="eyebrow">MODERN DIFFERENCE</p><h2>モダンでは使えない技</h2></div><p>クラシック版の技表と見比べた時に迷わないための差分。</p></div>
-      <div class="unavailable-grid"><div><b>立ち弱K</b><span>5F確定反撃などで使う蹴り</span></div><div><b>しゃがみ中K</b><span>下段の中足。必殺技キャンセル不可</span></div><div><b>立ち強K</b><span>差し返し向きの回転ミドル</span></div><div><b>↘＋強P</b><span>中段「マレウスブレイカー」</span></div><div><b>クアドリガ</b><span>キック系突進必殺技。OD版も使用不可</span></div></div>
+      <div class="section-heading">
+        <div><p class="eyebrow">MODERN DIFFERENCE</p><h2>モダンでは使えない技</h2></div>
+        <p>クラシック版の技表と見比べた時に迷わないための差分。</p>
+      </div>
+      <div class="unavailable-grid">
+        <div><b>立ち弱K</b><span>5F確定反撃などで使う蹴り</span></div>
+        <div><b>しゃがみ中K</b><span>下段の中足。必殺技キャンセル不可</span></div>
+        <div><b>立ち強K</b><span>差し返し向きの回転ミドル</span></div>
+        <div><b>↘＋強P</b><span>中段「マレウスブレイカー」</span></div>
+        <div><b>クアドリガ</b><span>キック系突進必殺技。OD版も使用不可</span></div>
+      </div>
     </section>
 
     <section class="sources shell">
-      <p class="eyebrow">SOURCES</p><h2>参照元</h2>
+      <p class="eyebrow">SOURCES</p>
+      <h2>参照元</h2>
       <div class="source-list">
         <a href="https://www.streetfighter.com/6/ja-jp/character/marisa/frame" target="_blank" rel="noreferrer"><b>CAPCOM公式</b><span>マリーザ フレームデータ</span></a>
         <a href="https://www.streetfighter.com/6/ja-jp/character/marisa/movelist" target="_blank" rel="noreferrer"><b>CAPCOM公式</b><span>マリーザ コマンドリスト</span></a>
@@ -86,12 +163,32 @@
   <footer><div class="shell"><b>MODERN MARISA LAB</b><span>非公式ファンメイド攻略データベース</span></div></footer>
 
   <template id="move-template">
-    <article class="move-card"><button class="move-summary" type="button" aria-expanded="false"><span class="move-command"></span><span class="move-main"><small class="move-category"></small><b class="move-name"></b><span class="move-purpose-summary"></span></span><span class="move-damage-summary"></span><span class="expand-icon" aria-hidden="true">＋</span></button>
-      <div class="move-detail" hidden><div class="detail-lead"><div><p class="detail-kicker">WHEN TO USE</p><h3 class="move-when"></h3></div><p class="move-description"></p></div><div class="purpose-tags"></div><div class="stats-grid"></div><div class="detail-columns"><section><h4>強い場面</h4><ul class="strong-list"></ul></section><section><h4>ヒット後・次の行動</h4><ul class="follow-list"></ul></section><section><h4>弱点・注意</h4><ul class="risk-list"></ul></section></div><div class="input-notes"></div></div>
+    <article class="move-card">
+      <button class="move-summary" type="button" aria-expanded="false">
+        <span class="move-command"></span>
+        <span class="move-main"><small class="move-category"></small><b class="move-name"></b><span class="move-purpose-summary"></span></span>
+        <span class="move-damage-summary"></span>
+        <span class="expand-icon" aria-hidden="true">＋</span>
+      </button>
+      <div class="move-detail" hidden>
+        <div class="detail-lead">
+          <div><p class="detail-kicker">WHEN TO USE</p><h3 class="move-when"></h3></div>
+          <p class="move-description"></p>
+        </div>
+        <div class="purpose-tags"></div>
+        <div class="stats-grid"></div>
+        <div class="detail-columns">
+          <section><h4>強い場面</h4><ul class="strong-list"></ul></section>
+          <section><h4>ヒット後・次の行動</h4><ul class="follow-list"></ul></section>
+          <section><h4>弱点・注意</h4><ul class="risk-list"></ul></section>
+        </div>
+        <div class="input-notes"></div>
+      </div>
     </article>
   </template>
 
   <script src="data-core.js"></script>
+  <script src="situations.js"></script>
   <script src="data-1.js"></script>
   <script src="data-2.js"></script>
   <script src="data-3.js"></script>
