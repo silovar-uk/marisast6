@@ -40,7 +40,7 @@
   }
 
   function result(tone, label, detail = "") {
-    return { tone, label, detail, ...ratingMeta[tone] };
+    return { ...ratingMeta[tone], tone, label, detail };
   }
 
   function rateStat(type, value) {
