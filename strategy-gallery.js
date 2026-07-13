@@ -1,9 +1,12 @@
 (() => {
-  const oldNotation = "A＋中";
-  const newNotation = "A中";
-
   function replaceNotation(value) {
-    return typeof value === "string" ? value.replaceAll(oldNotation, newNotation) : value;
+    if (typeof value !== "string") return value;
+
+    return value
+      .replace(/A＋(N|[←→↑↓↖↗↘↙])＋SP/g, "A$1SP")
+      .replace(/A＋SP/g, "ASP")
+      .replace(/A＋([弱中強])/g, "A$1")
+      .replace(/アシ(弱|中|強)/g, "A$1");
   }
 
   function normalizeData(value, seen = new WeakSet()) {
@@ -104,7 +107,7 @@
               <article class="branch-card branch-hit">
                 <p><i>YES</i> ヒットした</p>
                 <ol class="route-stack">
-                  <li><b>ODディマカイルス</b><span>A＋←＋SP</span></li>
+                  <li><b>ODディマカイルス</b><span>A←SP</span></li>
                   <li><b>2段目派生</b><span>→＋攻撃</span></li>
                   <li><b>ラッシュ → ←＋強</b><span>引き大／マグナバンカー</span></li>
                   <li class="route-finish"><b>締めを選ぶ</b><span>ODファランクス／ODグラディウス／SA3</span></li>
@@ -167,7 +170,7 @@
             </ol>
             <div class="notation-strip">
               <span><b>引き大</b>＝←＋強</span>
-              <span><b>膝</b>＝→＋強／A＋強</span>
+              <span><b>膝</b>＝→＋強／A強</span>
               <span><b>中K</b>＝N＋中</span>
               <span><b>派生</b>＝ディマ2段目</span>
             </div>
