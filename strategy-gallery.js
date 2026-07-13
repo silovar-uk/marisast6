@@ -1,6 +1,57 @@
 (() => {
+  const oldNotation = "A＋中";
+  const newNotation = "A中";
+
+  function replaceNotation(value) {
+    return typeof value === "string" ? value.replaceAll(oldNotation, newNotation) : value;
+  }
+
+  function normalizeData(value, seen = new WeakSet()) {
+    if (!value || typeof value !== "object" || seen.has(value)) return;
+    seen.add(value);
+
+    if (Array.isArray(value)) {
+      value.forEach((item, index) => {
+        if (typeof item === "string") value[index] = replaceNotation(item);
+        else normalizeData(item, seen);
+      });
+      return;
+    }
+
+    Object.keys(value).forEach(key => {
+      if (typeof value[key] === "string") value[key] = replaceNotation(value[key]);
+      else normalizeData(value[key], seen);
+    });
+  }
+
+  function normalizeDom(root = document.body) {
+    if (!root) return;
+
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const textNodes = [];
+    while (walker.nextNode()) textNodes.push(walker.currentNode);
+    textNodes.forEach(node => {
+      const next = replaceNotation(node.nodeValue);
+      if (next !== node.nodeValue) node.nodeValue = next;
+    });
+
+    root.querySelectorAll?.("[placeholder], [aria-label], [title], [value]").forEach(element => {
+      ["placeholder", "aria-label", "title", "value"].forEach(attribute => {
+        if (!element.hasAttribute(attribute)) return;
+        const current = element.getAttribute(attribute);
+        const next = replaceNotation(current);
+        if (next !== current) element.setAttribute(attribute, next);
+      });
+    });
+  }
+
+  normalizeData(window.MARISA_DATA);
+
   const section = document.querySelector("#strategy-gallery");
-  if (!section) return;
+  if (!section) {
+    normalizeDom();
+    return;
+  }
 
   const navLink = document.querySelector('a[href="#strategy-gallery"]');
   if (navLink) navLink.textContent = "初心者チャート";
@@ -23,7 +74,7 @@
         <div class="beginner-guide-body">
           <div class="beginner-alert">
             <b>最初の考え方</b>
-            <span>遠距離では無理に技を振らず、<strong>A＋中が届く距離</strong>まで歩く。触れたら、ヒットかガードかを見て分岐する。</span>
+            <span>遠距離では無理に技を振らず、<strong>A中が届く距離</strong>まで歩く。触れたら、ヒットかガードかを見て分岐する。</span>
           </div>
 
           <section class="flow-block flow-block-main" aria-labelledby="flow-neutral-title">
@@ -33,8 +84,8 @@
             </header>
             <ol class="route-line route-line-four">
               <li><small>遠距離</small><b>無理に振らない</b><span>歩き・パリィ前進</span></li>
-              <li><small>中距離</small><b>A＋中の間合いへ</b><span>相手の前歩きも止める</span></li>
-              <li><small>接触</small><b>A＋中</b><span>まず1段目を見る</span></li>
+              <li><small>中距離</small><b>A中の間合いへ</b><span>相手の前歩きも止める</span></li>
+              <li><small>接触</small><b>A中</b><span>まず1段目を見る</span></li>
               <li class="route-decision"><small>確認</small><b>当たった？</b><span>YES／NOへ分岐</span></li>
             </ol>
             <div class="route-subnote"><b>弱飛び・ラッシュから触る時</b><span>弱アシストコンボを使う。無敵技を読むなら完走せず、途中止めからガード・後退で空振らせる。</span></div>
@@ -43,10 +94,10 @@
           <section class="flow-block" aria-labelledby="flow-amp-title">
             <header>
               <span>02</span>
-              <div><p>HIT OR BLOCK</p><h3 id="flow-amp-title">A＋中からの分岐</h3></div>
+              <div><p>HIT OR BLOCK</p><h3 id="flow-amp-title">A中からの分岐</h3></div>
             </header>
             <div class="branch-origin">
-              <b>A＋中 → A＋中</b>
+              <b>A中 → A中</b>
               <span>2段目はヒット確認推奨。ガード時は-8Fなので、固定連携ではなく相手の行動を読む場面。</span>
             </div>
             <div class="branch-grid">
@@ -108,7 +159,7 @@
               <div><p>ONE ROUND LOOP</p><h3 id="flow-memory-title">対戦中はこの順番だけ考える</h3></div>
             </header>
             <ol class="route-line route-line-five">
-              <li><small>1</small><b>A＋中の距離へ寄る</b></li>
+              <li><small>1</small><b>A中の距離へ寄る</b></li>
               <li><small>2</small><b>触ってヒット確認</b></li>
               <li><small>3</small><b>当たればコンボ</b></li>
               <li><small>4</small><b>ガードなら相手を見る</b></li>
@@ -126,4 +177,24 @@
         </div>
       </details>
     </div>`;
+
+  normalizeDom();
+
+  const searchInput = document.querySelector("#search-input");
+  if (searchInput) searchInput.dispatchEvent(new Event("input", { bubbles: true }));
+
+  const observer = new MutationObserver(records => {
+    records.forEach(record => {
+      record.addedNodes.forEach(node => {
+        if (node.nodeType === Node.TEXT_NODE) {
+          const next = replaceNotation(node.nodeValue);
+          if (next !== node.nodeValue) node.nodeValue = next;
+        } else if (node.nodeType === Node.ELEMENT_NODE) {
+          normalizeDom(node);
+        }
+      });
+    });
+  });
+
+  observer.observe(document.body, { childList: true, subtree: true });
 })();
