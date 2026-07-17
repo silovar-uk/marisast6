@@ -1,0 +1,96 @@
+@media (max-width: 1000px) {
+  .playbook-heading { grid-template-columns: 1fr 260px; }
+  .playbook-category-wrap { grid-template-columns: 1fr; gap: 12px; }
+  .playbook-category-description { max-width: 620px; }
+  .loadout-list { grid-template-columns: repeat(3, 1fr); }
+  .playbook-steps { grid-template-columns: repeat(3, 1fr); }
+  .playbook-steps li:nth-child(3)::after { display: none; }
+  .code-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 720px) {
+  .playbook-section { padding: 6px 0 64px; }
+  .playbook-section .shell { width: min(100%, calc(100% - 20px)); }
+  .playbook-heading { grid-template-columns: 1fr; gap: 20px; margin-bottom: 22px; }
+  .playbook-heading h2 { font-size: 42px; }
+  .playbook-heading > div > p:last-child { font-size: 12px; }
+  .playbook-principle { width: min(100%, 330px); transform: none; }
+
+  .playbook-categories {
+    display: flex;
+    overflow-x: auto;
+    border-radius: 15px;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+  .playbook-categories::-webkit-scrollbar { display: none; }
+  .playbook-category {
+    flex: 0 0 106px;
+    min-height: 72px;
+    scroll-snap-align: start;
+  }
+  .playbook-category-description { padding-left: 14px; font-size: 10px; }
+
+  .playbook-stage { border-radius: 20px; }
+  .playbook-stage-top { padding: 12px 12px 0 15px; }
+  .playbook-controls button { width: 36px; }
+  .playbook-deck {
+    gap: 10px;
+    padding: 13px 12px 18px;
+    scroll-padding-inline: 12px;
+  }
+  .playbook-slide { flex-basis: 91%; }
+  .playbook-slide:last-child { margin-right: 9%; }
+  .playbook-card { min-height: 610px; border-radius: 18px 18px 6px 18px; }
+  .playbook-card-header { padding: 16px 16px 0 22px; }
+  .playbook-card-body { max-height: 68svh; padding: 18px 20px 24px 24px; }
+  .playbook-card-body h3 { font-size: 30px; }
+  .playbook-card-lead { margin-bottom: 20px; font-size: 11px; }
+  .playbook-card-footer { align-items: flex-start; flex-direction: column; min-height: 88px; padding: 11px 14px 12px 22px; }
+  .learned-button { align-self: flex-end; }
+  .playbook-footnote { grid-template-columns: 1fr; gap: 8px; }
+
+  .playbook-steps,
+  .manifesto-grid,
+  .loadout-list,
+  .decision-grid,
+  .comparison-grid,
+  .combo-facts,
+  .evidence-list,
+  .reference-list,
+  .code-grid { grid-template-columns: 1fr; }
+
+  .playbook-steps { gap: 22px; }
+  .playbook-steps li { min-height: auto; }
+  .playbook-steps li:not(:last-child)::after {
+    top: auto;
+    right: auto;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%) rotate(90deg);
+  }
+  .playbook-steps li:nth-child(3)::after { display: block; }
+
+  .loadout-list li { min-height: 120px; }
+  .distance-zones { grid-template-columns: 1fr; }
+  .distance-zone { min-height: auto; }
+  .distance-zone.zone-main { transform: none; }
+  .comparison-side { min-height: 220px; }
+  .combo-metrics { grid-template-columns: 1.25fr 1fr 1fr; }
+  .combo-metrics > div { min-height: 80px; padding: 12px; }
+  .combo-metrics b { font-size: 21px; }
+  .combo-inputs { display: grid; }
+  .combo-inputs span { justify-content: space-between; }
+  .combo-facts > div { grid-template-columns: 72px 1fr; }
+  .decision-grid > div { min-height: 145px; }
+  .verification-list > div { grid-template-columns: 82px 1fr; gap: 12px; }
+  .reference-list a { grid-template-columns: 72px 1fr; }
+  .reference-list span { grid-column: 2; }
+  .timeline-list > div { flex-basis: 130px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .playbook-dot,
+  .playbook-controls button { transition: none; }
+  .playbook-deck { scroll-behavior: auto; }
+}
