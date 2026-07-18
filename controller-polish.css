@@ -1,0 +1,56 @@
+.controller-grip {
+  z-index: 0;
+}
+
+.controller-topbar,
+.controller-body,
+.controller-footer {
+  position: relative;
+  z-index: 2;
+}
+
+.controller-lab button:focus-visible {
+  outline: 3px solid var(--controller-brass);
+  outline-offset: 3px;
+}
+
+.controller-screen button,
+.dpad-key,
+.action-button,
+.assist-button {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (hover: none) {
+  .assist-compare-card:hover,
+  .assist-compare-card.compare-main:hover,
+  .screen-home-grid > button:hover {
+    transform: none;
+  }
+}
+
+@media (max-width: 390px) {
+  .assist-controls {
+    margin-inline: 120px;
+  }
+
+  .assist-button {
+    min-width: 0;
+  }
+
+  .assist-button > small {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .controller-footer {
+    grid-template-columns: 72px minmax(0, 1fr) 72px;
+  }
+
+  .input-history > div span {
+    padding-inline: 6px;
+    font-size: 7px;
+  }
+}
