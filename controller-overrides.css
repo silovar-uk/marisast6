@@ -1,0 +1,27 @@
+.has-controller-lab #quick {
+  display: block;
+}
+
+.has-controller-lab #quick {
+  scroll-margin-top: 84px;
+}
+
+.has-controller-lab .site-header {
+  background: rgba(23, 19, 16, .88);
+  border-bottom-color: rgba(255,255,255,.09);
+  color: #fff;
+}
+
+.has-controller-lab .site-header .brand small {
+  color: #bcaea4;
+}
+
+.has-controller-lab .site-header .brand-mark {
+  background: #8f1d24;
+}
+
+@media (max-width: 720px) {
+  .has-controller-lab .header-nav a:first-child {
+    display: none;
+  }
+}
