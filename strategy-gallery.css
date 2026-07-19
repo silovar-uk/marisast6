@@ -1,7 +1,9 @@
-@import url("controller-shell.css");
-@import url("playbook-layout.css");
-@import url("playbook-cards.css");
-@import url("playbook-responsive.css");
-@import url("controller-overrides.css");
-@import url("controller-experience.css");
-@import url("controller-polish.css");
+@import url("controller-shell.css?v=0.8.0");
+@import url("playbook-layout.css?v=0.8.0");
+@import url("playbook-cards.css?v=0.8.0");
+@import url("playbook-responsive.css?v=0.8.0");
+@import url("controller-overrides.css?v=0.8.0");
+@import url("controller-experience.css?v=0.8.0");
+@import url("controller-polish.css?v=0.8.0");
+@import url("training-system.css?v=0.8.0");
+@import url("training-integration.css?v=0.8.0");
