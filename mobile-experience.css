@@ -1,0 +1,487 @@
+/* Mobile experience v0.9: a vertical training device, not a shrunken desktop controller. */
+@media (max-width: 760px) {
+  html { scroll-padding-top: 0; }
+  body.has-controller-lab { background: #100d0b; }
+  .has-controller-lab .site-header { display: none; }
+
+  .controller-lab {
+    min-height: 100svh;
+    padding: 0;
+    background: #100d0b;
+  }
+
+  .controller-frame {
+    width: 100%;
+    height: 100dvh;
+    min-height: 100svh;
+    max-width: none;
+    overflow: hidden;
+    border: 0;
+    border-radius: 0;
+    background: linear-gradient(180deg, #241c18, #171310 66%, #0f0d0b);
+    box-shadow: none;
+  }
+
+  .controller-grip { display: none; }
+
+  .controller-topbar {
+    grid-template-columns: 46px minmax(0, 1fr) 46px;
+    gap: 6px;
+    min-height: 78px;
+    padding: max(7px, env(safe-area-inset-top)) 8px 6px;
+    border-bottom-color: rgba(255,255,255,.07);
+    background: rgba(24,19,16,.96);
+  }
+
+  .shoulder-button {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0;
+    border-radius: 12px;
+  }
+  .shoulder-button span { font-size: 10px; }
+  .shoulder-button small { display: none; }
+
+  .controller-title > small { display: none; }
+  .controller-title > b {
+    margin: 0;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 950;
+    letter-spacing: .08em;
+  }
+
+  .controller-mode-strip {
+    justify-content: flex-start;
+    gap: 4px;
+    margin-top: 6px;
+    padding-bottom: 1px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .controller-mode-strip::-webkit-scrollbar { display: none; }
+  .controller-mode-strip button {
+    flex: 0 0 auto;
+    min-height: 29px;
+    padding: 5px 8px;
+    font-size: 7px;
+  }
+
+  .controller-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: minmax(0, 1fr) 146px 76px;
+    gap: 7px 8px;
+    min-height: 0;
+    padding: 7px 8px;
+    overflow: hidden;
+  }
+
+  .controller-left,
+  .controller-right { display: contents; }
+
+  .controller-screen-wrap {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  .screen-bezel {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+    border: 4px solid #0e0c0b;
+    border-radius: 18px;
+    box-shadow: 0 0 0 1px rgba(196,155,92,.3), 0 10px 24px rgba(0,0,0,.3);
+  }
+  .screen-bezel::before { display: none; }
+
+  .screen-statusbar {
+    min-height: 32px;
+    padding: 5px 8px;
+  }
+  .screen-statusbar > span:first-child { font-size: 6px; }
+  .screen-fullscreen { width: 24px; }
+
+  .controller-screen {
+    min-height: 0;
+    padding: 16px;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .controller-screen h1,
+  .screen-combo-head h1,
+  .screen-move-head h1 { font-size: clamp(27px, 8vw, 38px); }
+
+  .screen-actions {
+    grid-template-columns: .75fr 1.25fr .75fr;
+    min-height: 42px;
+    padding: 5px;
+    gap: 5px;
+  }
+  .screen-actions button {
+    min-height: 34px;
+    padding: 5px;
+    border-radius: 9px;
+    font-size: 7px;
+  }
+
+  .screen-home-grid {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    margin-top: 15px;
+  }
+  .screen-home-grid > button,
+  .screen-home-grid > div {
+    min-height: 62px;
+    padding: 10px 12px;
+  }
+  .screen-home-grid b { margin-top: 5px; }
+  .screen-hint { display: none; }
+
+  .dpad {
+    position: static;
+    z-index: auto;
+    grid-column: 1;
+    grid-row: 2;
+    place-self: center;
+    grid-template-columns: repeat(3, 44px);
+    grid-template-rows: repeat(3, 44px);
+    margin: 0;
+    filter: drop-shadow(0 8px 10px rgba(0,0,0,.32));
+  }
+  .dpad-key {
+    min-width: 44px;
+    min-height: 44px;
+    font-size: 17px;
+  }
+
+  .normal-controls {
+    position: static;
+    z-index: auto;
+    grid-column: 2;
+    grid-row: 2;
+    display: grid;
+    place-items: center;
+    min-width: 0;
+  }
+  .action-diamond {
+    grid-template-columns: repeat(3, 46px);
+    grid-template-rows: repeat(3, 46px);
+    margin: 0;
+  }
+  .action-button {
+    width: 43px;
+    min-width: 43px;
+    min-height: 43px;
+  }
+  .action-button b { font-size: 13px; }
+
+  .control-label,
+  .direction-readout { display: none; }
+
+  .assist-controls {
+    position: static;
+    z-index: auto;
+    grid-column: 1 / -1;
+    grid-row: 3;
+    min-width: 0;
+    margin: 0;
+    padding: 6px;
+    border-radius: 14px;
+    background: rgba(0,0,0,.18);
+  }
+  .assist-heading { display: none; }
+  .assist-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    margin: 0;
+  }
+  .assist-button {
+    grid-template-columns: 34px minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    gap: 1px 6px;
+    justify-items: start;
+    min-width: 0;
+    min-height: 62px;
+    padding: 6px 7px;
+    text-align: left;
+  }
+  .assist-button > span {
+    grid-row: 1 / span 2;
+    width: 32px;
+  }
+  .assist-button > small {
+    align-self: end;
+    min-height: 0;
+    overflow: hidden;
+    font-size: 7px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .assist-button em {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: start;
+    font-size: 12px;
+  }
+  .assist-button strong,
+  .assist-button kbd { display: none; }
+
+  .controller-footer,
+  .controller-footer:has(.training-footer-button) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    min-height: calc(56px + env(safe-area-inset-bottom));
+    padding: 6px 8px max(7px, env(safe-area-inset-bottom));
+    background: #15110f;
+  }
+  .input-history { display: none; }
+  .system-button {
+    min-width: 0;
+    min-height: 44px;
+    padding: 5px 4px;
+    border-radius: 12px;
+  }
+  .system-button span { font-size: 6px; }
+  .system-button b { font-size: 8px; }
+  .training-footer-button {
+    order: -1;
+    border-color: rgba(196,155,92,.5);
+    background: linear-gradient(145deg, #8f1d24, #541318);
+  }
+
+  .assist-compare-grid {
+    grid-template-columns: 1fr;
+    gap: 7px;
+    margin-top: 15px;
+    overflow: visible;
+    padding: 0;
+  }
+  .assist-compare-card,
+  .assist-compare-card.compare-main {
+    min-height: 0;
+    padding: 12px;
+    transform: none;
+  }
+  .assist-compare-card > strong { min-height: 0; margin-top: 9px; }
+  .assist-compare-card dl {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+    margin-top: 10px;
+  }
+  .assist-compare-card dl > div {
+    display: block;
+    padding-top: 5px;
+  }
+  .assist-compare-card em { position: static; display: block; margin-top: 8px; }
+  .assist-compare-answer { display: none; }
+
+  /* Training screens use the full display until a live drill actually needs controls. */
+  .training-screen-layer { inset: 32px 0 0; }
+  .training-layer-header {
+    min-height: 44px;
+    padding: 6px 8px;
+  }
+  .training-layer-actions span { display: none; }
+  .training-layer-actions button { min-height: 32px; }
+  .training-view {
+    padding: 10px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .training-active:not([data-training-view="drill"]) .controller-body {
+    grid-template-rows: minmax(0, 1fr);
+  }
+  .training-active:not([data-training-view="drill"]) .dpad,
+  .training-active:not([data-training-view="drill"]) .normal-controls,
+  .training-active:not([data-training-view="drill"]) .assist-controls {
+    display: none;
+  }
+
+  .training-active[data-training-view="drill"] .controller-body {
+    grid-template-rows: minmax(0, 1fr) 146px 76px;
+  }
+
+  .training-hero-panel,
+  .training-skill-head,
+  .training-skill-grid,
+  .training-dashboard-bottom { grid-template-columns: 1fr; }
+  .training-hero-panel { gap: 8px; }
+  .training-hero-panel > div { padding: 5px 2px 8px; }
+  .training-dashboard h1,
+  .training-skill-view h1,
+  .training-mission-view h1 { font-size: 29px; }
+  .training-hero-panel > div > p:last-child { margin-top: 8px; font-size: 8px; }
+  .training-recommendation { padding: 13px; border-radius: 13px; }
+  .training-recommendation b { font-size: 17px; }
+  .training-recommendation button { min-height: 38px; }
+
+  .training-section-block { margin-top: 14px; }
+  .training-issue-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .training-issue-grid button {
+    min-height: 82px;
+    padding: 11px 33px 10px 10px;
+    border-radius: 11px;
+  }
+  .training-issue-grid span { font-size: 9px; line-height: 1.35; }
+  .training-issue-grid small { margin-top: 3px; font-size: 6px; }
+  .training-issue-grid i { top: 8px; right: 7px; width: 25px; }
+
+  .training-mission-strip {
+    grid-template-columns: 1fr auto;
+    gap: 7px;
+    padding: 9px;
+  }
+  .training-mission-strip > div:nth-child(2),
+  .training-mission-strip > button:last-child { display: none; }
+  .training-mission-strip button { min-height: 36px; }
+
+  .training-trigger-response {
+    grid-template-columns: 1fr auto 1fr;
+    gap: 5px;
+    padding: 10px;
+  }
+  .training-trigger-response i { transform: none; }
+  .training-trigger-response b { font-size: 8px; }
+
+  .training-progress-ladder {
+    grid-template-columns: repeat(6, 72px);
+    margin-top: 12px;
+    overflow-x: auto;
+  }
+  .training-progress-ladder > div { min-height: 48px; }
+
+  .training-skill-grid { gap: 8px; margin-top: 10px; }
+  .training-setup-card,
+  .training-start-card { padding: 12px; border-radius: 12px; }
+  .training-setup-card h2,
+  .training-start-card h2 { margin-bottom: 9px; }
+  .training-level-button {
+    grid-template-columns: 62px 1fr;
+    min-height: 54px;
+    padding: 9px 10px;
+  }
+
+  .training-drill-top {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 7px;
+  }
+  .training-score-live {
+    gap: 4px;
+    margin-top: 6px;
+    overflow-x: auto;
+  }
+  .training-score-live span { flex: 0 0 auto; }
+  .training-prompt {
+    min-height: 0;
+    height: calc(100% - 58px);
+    margin-top: 8px;
+    border-radius: 14px;
+  }
+  .training-prompt h1 {
+    max-width: 94%;
+    margin-top: 8px;
+    font-size: clamp(25px, 7.2vw, 34px);
+  }
+  .training-prompt > span { padding-inline: 12px; font-size: 8px; }
+  .training-answer-instruction { display: none; }
+  .training-mobile-guide {
+    margin: 18px auto 0;
+    padding: 7px 11px;
+    border-radius: 999px;
+    background: rgba(33,25,20,.07);
+    color: #62574f;
+    font-size: 8px;
+    font-weight: 900;
+  }
+  .training-special-responses {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .training-special-responses button {
+    min-width: 104px;
+    min-height: 42px;
+    padding: 9px 12px;
+    border-radius: 12px;
+    font-size: 9px;
+  }
+  .training-special-responses [data-training-response="wait"] {
+    border-color: #776b62;
+    background: #fff;
+    color: #514740;
+  }
+
+  .training-result-grid { grid-template-columns: repeat(5, minmax(58px, 1fr)); overflow-x: auto; }
+  .training-result-grid > div { padding: 9px 6px; }
+  .training-result-actions { display: grid; grid-template-columns: 1fr; }
+  .training-result-actions button { min-height: 42px; }
+
+  /* Only show the answer family required by the current drill. */
+  .training-active[data-training-view="drill"][data-training-skill="hit-confirm-medium"] .dpad,
+  .training-active[data-training-view="drill"][data-training-skill="hit-confirm-medium"] .normal-controls,
+  .training-active[data-training-view="drill"][data-training-skill="close-defense"] .dpad,
+  .training-active[data-training-view="drill"][data-training-skill="close-defense"] .normal-controls,
+  .training-active[data-training-view="drill"][data-training-skill="punish-heavy"] .dpad,
+  .training-active[data-training-view="drill"][data-training-skill="punish-heavy"] .normal-controls,
+  .training-active[data-training-view="drill"][data-training-skill="assist-decision"] .dpad,
+  .training-active[data-training-view="drill"][data-training-skill="assist-decision"] .normal-controls {
+    display: none;
+  }
+  .training-active[data-training-view="drill"][data-training-skill="hit-confirm-medium"] .controller-body,
+  .training-active[data-training-view="drill"][data-training-skill="close-defense"] .controller-body,
+  .training-active[data-training-view="drill"][data-training-skill="punish-heavy"] .controller-body,
+  .training-active[data-training-view="drill"][data-training-skill="assist-decision"] .controller-body {
+    grid-template-rows: minmax(0, 1fr) 82px;
+  }
+  .training-active[data-training-view="drill"][data-training-skill="hit-confirm-medium"] .assist-controls,
+  .training-active[data-training-view="drill"][data-training-skill="close-defense"] .assist-controls,
+  .training-active[data-training-view="drill"][data-training-skill="punish-heavy"] .assist-controls,
+  .training-active[data-training-view="drill"][data-training-skill="assist-decision"] .assist-controls {
+    grid-row: 2;
+  }
+
+  .training-active[data-training-view="drill"][data-training-skill="impact-response"] .dpad,
+  .training-active[data-training-view="drill"][data-training-skill="impact-response"] .normal-controls,
+  .training-active[data-training-view="drill"][data-training-skill="impact-response"] .assist-controls {
+    display: none;
+  }
+  .training-active[data-training-view="drill"][data-training-skill="impact-response"] .controller-body {
+    grid-template-rows: minmax(0, 1fr);
+  }
+
+  .training-active[data-training-view="drill"][data-training-skill="anti-air-front"] .assist-controls {
+    display: none;
+  }
+  .training-active[data-training-view="drill"][data-training-skill="anti-air-front"] .controller-body {
+    grid-template-rows: minmax(0, 1fr) 146px;
+  }
+
+  #controller-lab:fullscreen { padding: 0; }
+  #controller-lab:fullscreen .controller-frame {
+    min-height: 100svh;
+    height: 100dvh;
+  }
+}
+
+@media (max-width: 380px) {
+  .controller-topbar { grid-template-columns: 42px minmax(0, 1fr) 42px; }
+  .controller-mode-strip button { padding-inline: 6px; }
+  .controller-body { grid-template-rows: minmax(0, 1fr) 134px 70px; }
+  .dpad { grid-template-columns: repeat(3, 40px); grid-template-rows: repeat(3, 40px); }
+  .dpad-key { min-width: 40px; min-height: 40px; }
+  .action-diamond { grid-template-columns: repeat(3, 42px); grid-template-rows: repeat(3, 42px); }
+  .action-button { width: 39px; min-width: 39px; min-height: 39px; }
+  .assist-button { grid-template-columns: 29px minmax(0,1fr); padding-inline: 5px; }
+  .assist-button > span { width: 28px; }
+  .training-issue-grid { grid-template-columns: 1fr; }
+}
