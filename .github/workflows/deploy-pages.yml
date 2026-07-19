@@ -33,6 +33,7 @@ jobs:
             training-data.js \
             training-engine.js \
             training-integration.js \
+            training-delight.js \
             data-core.js \
             situations.js \
             data-{1..6}.js; do
@@ -98,19 +99,24 @@ jobs:
           console.log(`Validated ${data.skills.length} skills, ${data.drills.length} drills, and ${data.drills.flatMap(item => item.prompts).length} prompts.`);
           NODE
 
-      - name: Validate mobile button experience
+      - name: Validate delight experience
         run: |
           test -s mobile-experience.css
           test -s mobile-answer-buttons.css
           test -s mobile-control-buttons.css
-          grep -q 'mobile-answer-buttons.css?v=0.9.1' strategy-gallery.css
-          grep -q 'mobile-control-buttons.css?v=0.9.1' strategy-gallery.css
+          test -s training-delight.css
+          test -s training-delight.js
+          grep -q 'mobile-answer-buttons.css?v=0.10.0' strategy-gallery.css
+          grep -q 'mobile-control-buttons.css?v=0.10.0' strategy-gallery.css
+          grep -q 'training-delight.css?v=0.10.0' strategy-gallery.css
           grep -q 'training-mobile-answer-grid' training-integration.js
-          grep -q 'button._trainingAnswer = answer' training-integration.js
-          grep -q 'strategy-gallery.css?v=0.9.1' index.html
-          grep -q 'training-integration.js?v=0.9.1' index.html
-          node -e "const fs=require('fs'); for(const file of ['mobile-experience.css','mobile-answer-buttons.css','mobile-control-buttons.css']){const css=fs.readFileSync(file,'utf8'); if((css.match(/{/g)||[]).length !== (css.match(/}/g)||[]).length) throw new Error('Unbalanced CSS braces: '+file);}"
-          node -e "const fs=require('fs'); const value=JSON.parse(fs.readFileSync('version.json','utf8')); if(value.appVersion!=='0.9.1') throw new Error('Unexpected app version');"
+          grep -q 'training-joy-meter' training-delight.js
+          grep -q 'training-achievements' training-delight.js
+          grep -q 'strategy-gallery.css?v=0.10.0' index.html
+          grep -q 'training-integration.js?v=0.10.0' index.html
+          grep -q 'training-delight.js?v=0.10.0' index.html
+          node -e "const fs=require('fs'); for(const file of ['mobile-experience.css','mobile-answer-buttons.css','mobile-control-buttons.css','training-delight.css']){const css=fs.readFileSync(file,'utf8'); if((css.match(/{/g)||[]).length !== (css.match(/}/g)||[]).length) throw new Error('Unbalanced CSS braces: '+file);}"
+          node -e "const fs=require('fs'); const value=JSON.parse(fs.readFileSync('version.json','utf8')); if(value.appVersion!=='0.10.0') throw new Error('Unexpected app version');"
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
