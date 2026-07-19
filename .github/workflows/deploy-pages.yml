@@ -98,14 +98,17 @@ jobs:
           console.log(`Validated ${data.skills.length} skills, ${data.drills.length} drills, and ${data.drills.flatMap(item => item.prompts).length} prompts.`);
           NODE
 
-      - name: Validate mobile experience
+      - name: Validate mobile answer experience
         run: |
           test -s mobile-experience.css
-          grep -q 'mobile-experience.css?v=0.9.0' strategy-gallery.css
-          grep -q 'wait.dataset.trainingResponse = "wait"' training-integration.js
-          grep -q 'data-training-skill' training-integration.js
-          node -e "const fs=require('fs'); const css=fs.readFileSync('mobile-experience.css','utf8'); if((css.match(/{/g)||[]).length !== (css.match(/}/g)||[]).length) throw new Error('Unbalanced mobile CSS braces');"
-          node -e "const fs=require('fs'); const value=JSON.parse(fs.readFileSync('version.json','utf8')); if(value.appVersion!=='0.9.0') throw new Error('Unexpected app version');"
+          test -s mobile-answer-buttons.css
+          grep -q 'mobile-answer-buttons.css?v=0.9.1' strategy-gallery.css
+          grep -q 'training-mobile-answer-grid' training-integration.js
+          grep -q 'button._trainingAnswer = answer' training-integration.js
+          grep -q 'strategy-gallery.css?v=0.9.1' index.html
+          grep -q 'training-integration.js?v=0.9.1' index.html
+          node -e "const fs=require('fs'); for(const file of ['mobile-experience.css','mobile-answer-buttons.css']){const css=fs.readFileSync(file,'utf8'); if((css.match(/{/g)||[]).length !== (css.match(/}/g)||[]).length) throw new Error('Unbalanced CSS braces: '+file);}"
+          node -e "const fs=require('fs'); const value=JSON.parse(fs.readFileSync('version.json','utf8')); if(value.appVersion!=='0.9.1') throw new Error('Unexpected app version');"
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
