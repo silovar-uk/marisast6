@@ -1,0 +1,35 @@
+.controller-footer:has(.training-footer-button) {
+  grid-template-columns: 150px minmax(0, 1fr) 150px 150px;
+}
+
+.training-footer-button {
+  min-width: 0;
+}
+
+@media (max-width: 1120px) {
+  .controller-footer:has(.training-footer-button) {
+    grid-template-columns: 125px minmax(0, 1fr) 125px 125px;
+  }
+}
+
+@media (max-width: 860px) {
+  .controller-footer:has(.training-footer-button) {
+    grid-template-columns: 70px minmax(0, 1fr) 70px 70px;
+    gap: 5px;
+  }
+
+  .training-footer-button {
+    padding-inline: 5px;
+  }
+}
+
+@media (max-width: 620px) {
+  .controller-footer:has(.training-footer-button) {
+    grid-template-columns: 60px minmax(0, 1fr) 60px 60px;
+    gap: 4px;
+  }
+
+  .training-footer-button span {
+    display: none;
+  }
+}
