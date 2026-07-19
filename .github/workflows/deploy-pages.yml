@@ -24,10 +24,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Validate JavaScript, moves, and situations
+      - name: Validate JavaScript syntax
         run: |
-          node --check app.js
-          for file in data-core.js situations.js data-{1..6}.js; do node --check "$file"; done
+          for file in \
+            app.js \
+            strategy-gallery.js \
+            controller-shell.js \
+            training-data.js \
+            training-engine.js \
+            training-integration.js \
+            data-core.js \
+            situations.js \
+            data-{1..6}.js; do
+            node --check "$file"
+          done
+
+      - name: Validate move and situation data
+        run: |
           node <<'NODE'
           const fs = require('fs');
           const vm = require('vm');
@@ -49,6 +62,48 @@ jobs:
           if (unknownRefs.length) throw new Error(`Unknown move references: ${unknownRefs.join(', ')}`);
           console.log(`Validated ${data.moves.length} moves and ${situations.length} situations.`);
           NODE
+
+      - name: Validate training data
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const context = { window: {} };
+          vm.createContext(context);
+          vm.runInContext(fs.readFileSync('training-data.js', 'utf8'), context, { filename: 'training-data.js' });
+          const data = context.window.MARISA_TRAINING;
+          if (!data) throw new Error('MARISA_TRAINING was not created');
+          if (data.skills.length !== 6) throw new Error(`Expected 6 skills, got ${data.skills.length}`);
+          if (data.drills.length !== 6) throw new Error(`Expected 6 drills, got ${data.drills.length}`);
+          if (new Set(data.skills.map(item => item.id)).size !== data.skills.length) throw new Error('Skill IDs must be unique');
+          if (new Set(data.drills.map(item => item.id)).size !== data.drills.length) throw new Error('Drill IDs must be unique');
+          const skillIds = new Set(data.skills.map(item => item.id));
+          const drillIds = new Set(data.drills.map(item => item.id));
+          for (const skill of data.skills) {
+            if (!drillIds.has(skill.drillId)) throw new Error(`Unknown drill for skill ${skill.id}: ${skill.drillId}`);
+          }
+          for (const drill of data.drills) {
+            if (!skillIds.has(drill.skillId)) throw new Error(`Unknown skill for drill ${drill.id}: ${drill.skillId}`);
+            const promptIds = new Set(drill.prompts.map(item => item.id));
+            if (promptIds.size !== drill.prompts.length) throw new Error(`Duplicate prompt ID in ${drill.id}`);
+            for (const id of drill.choicePromptIds) {
+              if (!promptIds.has(id)) throw new Error(`Unknown choice prompt ${id} in ${drill.id}`);
+            }
+            for (const prompt of drill.prompts) {
+              if (!['action', 'assist', 'impact', 'wait'].includes(prompt.expected.kind)) {
+                throw new Error(`Unknown expected kind in ${drill.id}:${prompt.id}`);
+              }
+            }
+          }
+          console.log(`Validated ${data.skills.length} skills, ${data.drills.length} drills, and ${data.drills.flatMap(item => item.prompts).length} prompts.`);
+          NODE
+
+      - name: Validate published entry points
+        run: |
+          grep -q 'training-data.js?v=0.8.0' index.html
+          grep -q 'training-engine.js?v=0.8.0' index.html
+          grep -q 'training-system.css?v=0.8.0' strategy-gallery.css
+          node -e "const fs=require('fs'); const value=JSON.parse(fs.readFileSync('version.json','utf8')); if(value.appVersion!=='0.8.0') throw new Error('Unexpected app version');"
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
