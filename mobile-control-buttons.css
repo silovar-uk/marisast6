@@ -1,0 +1,259 @@
+/* Mobile controller buttons v0.9.1: fewer visual tricks, larger thumb targets. */
+@media (max-width: 760px) {
+  #controller-lab[data-training-view="controller"] .controller-body {
+    grid-template-rows: minmax(0, 1fr) 154px 78px;
+  }
+
+  .controller-topbar .shoulder-button {
+    border: 0;
+    background: rgba(255,255,255,.055);
+    box-shadow: none;
+  }
+
+  .controller-topbar .shoulder-button span {
+    font-size: 0;
+  }
+
+  .controller-topbar [data-controller-prev] span::after,
+  .controller-topbar [data-controller-next] span::after {
+    display: block;
+    color: #fff;
+    font-family: system-ui, sans-serif;
+    font-size: 25px;
+    font-weight: 500;
+    line-height: 1;
+  }
+
+  .controller-topbar [data-controller-prev] span::after { content: "‹"; }
+  .controller-topbar [data-controller-next] span::after { content: "›"; }
+
+  .controller-mode-strip {
+    gap: 3px;
+    padding: 2px;
+    border-radius: 11px;
+    background: rgba(0,0,0,.18);
+  }
+
+  .controller-mode-strip button {
+    min-height: 28px;
+    padding: 5px 8px;
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    color: #a99c93;
+    box-shadow: none;
+    letter-spacing: .03em;
+  }
+
+  .controller-mode-strip button i { display: none; }
+
+  .controller-mode-strip button.is-active,
+  .controller-mode-strip button[aria-selected="true"] {
+    background: #8f1d24;
+    color: #fff;
+  }
+
+  .dpad {
+    grid-template-columns: repeat(3, 48px);
+    grid-template-rows: repeat(3, 48px);
+    gap: 3px;
+    filter: none;
+  }
+
+  .dpad-key {
+    min-width: 48px;
+    min-height: 48px;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 12px !important;
+    background: #302824;
+    color: #e5ddd7;
+    box-shadow: none;
+    font-size: 18px;
+  }
+
+  .dpad-key.is-active {
+    border-color: #a92c34;
+    background: #8f1d24;
+    color: #fff;
+  }
+
+  .action-diamond {
+    grid-template-columns: repeat(3, 50px);
+    grid-template-rows: repeat(3, 50px);
+    gap: 2px;
+  }
+
+  .action-button {
+    width: 48px;
+    min-width: 48px;
+    min-height: 48px;
+    border: 1px solid rgba(255,255,255,.09);
+    background: #302824;
+    color: #fff;
+    box-shadow: none;
+  }
+
+  .action-button b { font-size: 15px; }
+  .action-button small { display: none; }
+
+  .action-button.is-active,
+  .action-button:active {
+    border-color: #a92c34;
+    background: #8f1d24;
+  }
+
+  #controller-lab[data-training-view="controller"] .assist-controls {
+    padding: 5px;
+    border: 0;
+    background: transparent;
+  }
+
+  #controller-lab[data-training-view="controller"] .assist-buttons {
+    gap: 7px;
+  }
+
+  #controller-lab[data-training-view="controller"] .assist-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    min-height: 68px;
+    padding: 7px 5px;
+    border: 1px solid rgba(255,255,255,.09);
+    border-radius: 16px;
+    background: #28211e;
+    color: #fff;
+    text-align: center;
+    box-shadow: none;
+  }
+
+  #controller-lab[data-training-view="controller"] .assist-button > span {
+    display: inline-flex;
+    grid-row: auto;
+    align-items: baseline;
+    width: auto;
+    aspect-ratio: auto;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  #controller-lab[data-training-view="controller"] .assist-button i {
+    color: #c49b5c;
+    font-size: 12px;
+  }
+
+  #controller-lab[data-training-view="controller"] .assist-button > span b {
+    font-size: 21px;
+    line-height: 1;
+  }
+
+  #controller-lab[data-training-view="controller"] .assist-button > small {
+    width: 100%;
+    min-height: 0;
+    margin-top: 5px;
+    overflow: hidden;
+    color: #bfb3aa;
+    font-size: 7px;
+    line-height: 1.2;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  #controller-lab[data-training-view="controller"] .assist-button em,
+  #controller-lab[data-training-view="controller"] .assist-button strong,
+  #controller-lab[data-training-view="controller"] .assist-button kbd {
+    display: none;
+  }
+
+  #controller-lab[data-training-view="controller"] .assist-button.is-active {
+    border-color: #b43840;
+    background: #8f1d24;
+  }
+
+  .screen-actions {
+    gap: 6px;
+    padding: 6px;
+    background: #171310;
+  }
+
+  .screen-actions button {
+    min-height: 38px;
+    border: 0;
+    border-radius: 11px;
+    background: rgba(255,255,255,.08);
+    color: #ded5ce;
+    box-shadow: none;
+  }
+
+  .screen-actions button:nth-child(2) {
+    background: rgba(196,155,92,.14);
+    color: #e7c58e;
+  }
+
+  .screen-actions button:last-child:not(:disabled) {
+    background: #8f1d24;
+    color: #fff;
+  }
+
+  .controller-footer,
+  .controller-footer:has(.training-footer-button) {
+    gap: 7px;
+    padding-inline: 8px;
+    border-top: 1px solid rgba(255,255,255,.06);
+  }
+
+  .controller-footer .system-button {
+    min-height: 46px;
+    border: 0;
+    border-radius: 13px;
+    background: rgba(255,255,255,.07);
+    box-shadow: none;
+  }
+
+  .controller-footer .system-button span { display: none; }
+  .controller-footer .system-button b { font-size: 9px; }
+
+  .controller-footer .training-footer-button {
+    background: #8f1d24;
+  }
+
+  .screen-home-grid > button {
+    min-height: 66px;
+    border: 0;
+    border-radius: 14px;
+    background: rgba(255,255,255,.7);
+    box-shadow: 0 5px 14px rgba(33,25,20,.06);
+  }
+}
+
+@media (max-width: 380px) {
+  #controller-lab[data-training-view="controller"] .controller-body {
+    grid-template-rows: minmax(0, 1fr) 140px 72px;
+  }
+
+  .dpad {
+    grid-template-columns: repeat(3, 43px);
+    grid-template-rows: repeat(3, 43px);
+  }
+
+  .dpad-key {
+    min-width: 43px;
+    min-height: 43px;
+  }
+
+  .action-diamond {
+    grid-template-columns: repeat(3, 45px);
+    grid-template-rows: repeat(3, 45px);
+  }
+
+  .action-button {
+    width: 43px;
+    min-width: 43px;
+    min-height: 43px;
+  }
+
+  #controller-lab[data-training-view="controller"] .assist-button > span b {
+    font-size: 18px;
+  }
+}
