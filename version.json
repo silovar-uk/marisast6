@@ -1,5 +1,5 @@
 {
-  "appVersion": "0.9.1",
+  "appVersion": "0.10.0",
   "trainingDataVersion": "0.8.0",
   "updatedAt": "2026-07-19",
   "moveDataBasis": "2026-03-17",
@@ -13,6 +13,10 @@
     "mobile-vertical-device",
     "skill-adaptive-controls",
     "explicit-wait-response",
-    "semantic-mobile-answer-buttons"
+    "semantic-mobile-answer-buttons",
+    "positive-feedback-layer",
+    "decision-streaks",
+    "session-achievements",
+    "daily-practice-streak"
   ]
 }
