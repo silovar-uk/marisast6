@@ -1,0 +1,14 @@
+{
+  "appVersion": "0.8.0",
+  "trainingDataVersion": "0.8.0",
+  "updatedAt": "2026-07-19",
+  "moveDataBasis": "2026-03-17",
+  "features": [
+    "controller-ui",
+    "skill-diagnosis",
+    "random-decision-drills",
+    "attempt-scoring",
+    "spaced-review",
+    "match-missions"
+  ]
+}
