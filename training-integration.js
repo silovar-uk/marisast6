@@ -17,13 +17,14 @@
       }
     }, true);
 
+    let wasTraining = lab.classList.contains("training-active");
     const observer = new MutationObserver(() => {
-      if (lab.classList.contains("training-active")) return;
-      lab.querySelectorAll("[data-direction]").forEach(button => {
-        button.classList.toggle("is-active", button.dataset.direction === "neutral");
-      });
-      const readout = lab.querySelector("[data-direction-readout]");
-      if (readout) readout.textContent = "N";
+      const isTraining = lab.classList.contains("training-active");
+      if (wasTraining && !isTraining) {
+        const neutral = lab.querySelector('[data-direction="neutral"]');
+        neutral?.click();
+      }
+      wasTraining = isTraining;
     });
     observer.observe(lab, { attributes: true, attributeFilter: ["class"] });
     return true;
