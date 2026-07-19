@@ -1,4 +1,6 @@
 /* Training delight v1: celebrate progress without turning practice into a slot machine. */
+.controller-lab { position: relative; }
+
 .training-delight-overlay {
   position: absolute;
   z-index: 90;
