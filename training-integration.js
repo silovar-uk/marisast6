@@ -23,6 +23,14 @@
     "assist-decision": "A弱・A中・A強・待つから選ぶ"
   };
 
+  function enableSafeArea() {
+    const viewport = document.querySelector('meta[name="viewport"]');
+    if (!viewport) return;
+    const parts = viewport.content.split(",").map(value => value.trim()).filter(Boolean);
+    if (!parts.some(value => value.startsWith("viewport-fit="))) parts.push("viewport-fit=cover");
+    viewport.content = parts.join(", ");
+  }
+
   function detectView(lab) {
     if (!lab.classList.contains("training-active")) return "controller";
     if (lab.querySelector(".training-drill-view")) return "drill";
@@ -79,6 +87,7 @@
     if (!lab || !trainingButton) return false;
     if (lab.dataset.trainingIntegrated === "true") return true;
     lab.dataset.trainingIntegrated = "true";
+    enableSafeArea();
 
     const footer = lab.querySelector(".controller-footer");
     const startButton = lab.querySelector("[data-open-database]");
@@ -107,6 +116,7 @@
     return true;
   }
 
+  enableSafeArea();
   if (setup()) return;
   const observer = new MutationObserver(() => {
     if (!setup()) return;
