@@ -34,6 +34,8 @@ jobs:
             training-engine.js \
             training-integration.js \
             training-delight.js \
+            followups-data.js \
+            followups-engine.js \
             data-core.js \
             situations.js \
             data-{1..6}.js; do
@@ -62,6 +64,50 @@ jobs:
           const unknownRefs = situations.flatMap(item => item.moves.filter(id => !moveIds.has(id)).map(id => `${item.id}:${id}`));
           if (unknownRefs.length) throw new Error(`Unknown move references: ${unknownRefs.join(', ')}`);
           console.log(`Validated ${data.moves.length} moves and ${situations.length} situations.`);
+          NODE
+
+      - name: Validate follow-up recommendations
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const context = { window: {} };
+          vm.createContext(context);
+          for (const file of ['data-core.js', 'data-1.js', 'data-2.js', 'data-3.js', 'data-4.js', 'data-5.js', 'data-6.js', 'followups-data.js']) {
+            vm.runInContext(fs.readFileSync(file, 'utf8'), context, { filename: file });
+          }
+          const moves = context.window.MARISA_DATA.moves;
+          const followups = context.window.MARISA_FOLLOWUPS;
+          if (!followups) throw new Error('MARISA_FOLLOWUPS was not created');
+          if (followups.version !== '0.11.0') throw new Error(`Unexpected follow-up version: ${followups.version}`);
+          const actual = new Set(moves.map(move => move.id));
+          const declared = new Set(followups.allMoveIds);
+          const missing = [...actual].filter(id => !declared.has(id));
+          const unknown = [...declared].filter(id => !actual.has(id));
+          if (moves.length !== 48 || declared.size !== 48) throw new Error(`Expected 48 covered moves, got actual=${moves.length}, declared=${declared.size}`);
+          if (missing.length || unknown.length) throw new Error(`Coverage mismatch. Missing: ${missing.join(', ')} Unknown: ${unknown.join(', ')}`);
+          const validConditions = new Set(followups.conditions.map(item => item.id));
+          if (validConditions.size !== 4 || !['normal','counter','punish','rush'].every(id => validConditions.has(id))) {
+            throw new Error('Expected normal/counter/punish/rush conditions');
+          }
+          const sourceIds = new Set(Object.keys(followups.sources));
+          for (const [moveId, conditions] of Object.entries(followups.overrides)) {
+            if (!actual.has(moveId)) throw new Error(`Override references unknown move: ${moveId}`);
+            for (const [conditionId, recommendations] of Object.entries(conditions)) {
+              if (!validConditions.has(conditionId)) throw new Error(`Unknown condition ${moveId}:${conditionId}`);
+              if (!Array.isArray(recommendations) || recommendations.length < 1 || recommendations.length > 3) {
+                throw new Error(`Recommendations must contain 1-3 entries: ${moveId}:${conditionId}`);
+              }
+              for (const recommendation of recommendations) {
+                if (!recommendation.route || !recommendation.rank) throw new Error(`Incomplete recommendation: ${moveId}:${conditionId}`);
+                const badSources = (recommendation.sources || []).filter(id => !sourceIds.has(id));
+                if (badSources.length) throw new Error(`Unknown sources ${moveId}:${conditionId}: ${badSources.join(', ')}`);
+              }
+            }
+          }
+          const noFallback = moves.filter(move => !followups.overrides[move.id]?.normal && (!Array.isArray(move.follow) || !move.follow.length));
+          if (noFallback.length) throw new Error(`Moves without normal recommendations or fallback: ${noFallback.map(move => move.id).join(', ')}`);
+          console.log(`Validated follow-ups for all ${moves.length} Modern Marisa moves with ${Object.keys(followups.overrides).length} curated starters.`);
           NODE
 
       - name: Validate training data
@@ -99,24 +145,26 @@ jobs:
           console.log(`Validated ${data.skills.length} skills, ${data.drills.length} drills, and ${data.drills.flatMap(item => item.prompts).length} prompts.`);
           NODE
 
-      - name: Validate delight experience
+      - name: Validate published experience
         run: |
           test -s mobile-experience.css
           test -s mobile-answer-buttons.css
           test -s mobile-control-buttons.css
           test -s training-delight.css
           test -s training-delight.js
-          grep -q 'mobile-answer-buttons.css?v=0.10.0' strategy-gallery.css
-          grep -q 'mobile-control-buttons.css?v=0.10.0' strategy-gallery.css
-          grep -q 'training-delight.css?v=0.10.0' strategy-gallery.css
-          grep -q 'training-mobile-answer-grid' training-integration.js
-          grep -q 'training-joy-meter' training-delight.js
-          grep -q 'training-achievements' training-delight.js
-          grep -q 'strategy-gallery.css?v=0.10.0' index.html
-          grep -q 'training-integration.js?v=0.10.0' index.html
-          grep -q 'training-delight.js?v=0.10.0' index.html
-          node -e "const fs=require('fs'); for(const file of ['mobile-experience.css','mobile-answer-buttons.css','mobile-control-buttons.css','training-delight.css']){const css=fs.readFileSync(file,'utf8'); if((css.match(/{/g)||[]).length !== (css.match(/}/g)||[]).length) throw new Error('Unbalanced CSS braces: '+file);}"
-          node -e "const fs=require('fs'); const value=JSON.parse(fs.readFileSync('version.json','utf8')); if(value.appVersion!=='0.10.0') throw new Error('Unexpected app version');"
+          test -s followups.css
+          test -s followups-data.js
+          test -s followups-engine.js
+          grep -q 'followups.css?v=0.11.0' strategy-gallery.css
+          grep -q 'followups-data.js?v=0.11.0' index.html
+          grep -q 'followups-engine.js?v=0.11.0' index.html
+          grep -q 'strategy-gallery.css?v=0.11.0' index.html
+          grep -q 'training-integration.js?v=0.11.0' index.html
+          grep -q 'training-delight.js?v=0.11.0' index.html
+          grep -q 'data-followup-tab' followups-engine.js
+          grep -q 'followup-recommendation-grid' followups-engine.js
+          node -e "const fs=require('fs'); for(const file of ['mobile-experience.css','mobile-answer-buttons.css','mobile-control-buttons.css','training-delight.css','followups.css']){const css=fs.readFileSync(file,'utf8'); if((css.match(/{/g)||[]).length !== (css.match(/}/g)||[]).length) throw new Error('Unbalanced CSS braces: '+file);}"
+          node -e "const fs=require('fs'); const value=JSON.parse(fs.readFileSync('version.json','utf8')); if(value.appVersion!=='0.11.0'||value.followupDataVersion!=='0.11.0') throw new Error('Unexpected app version');"
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
