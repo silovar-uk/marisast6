@@ -1,0 +1,43 @@
+.strategy-page-intro { padding-bottom: 24px; border-bottom: 1px solid var(--line); }
+.strategy-page-note {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 14px;
+  align-items: start;
+  margin-top: 24px;
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 10px;
+}
+.strategy-page-note b { color: var(--red); font-size: 9px; letter-spacing: .1em; }
+
+.playbook-section { padding: 34px 0 90px !important; background: transparent !important; }
+.playbook-heading { display: none !important; }
+.playbook-category-wrap { margin-top: 0 !important; }
+.playbook-categories {
+  position: static !important;
+  display: flex !important;
+  gap: 5px !important;
+  overflow-x: auto !important;
+  padding: 0 0 7px !important;
+  scrollbar-width: none;
+}
+.playbook-categories::-webkit-scrollbar { display: none; }
+.playbook-category {
+  flex: 0 0 auto !important;
+  min-width: 128px !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+.playbook-category-description { max-width: 760px; }
+.playbook-stage { margin-top: 22px !important; }
+.playbook-card { box-shadow: 0 18px 48px rgba(48,34,24,.08) !important; }
+.playbook-footnote { border-top-color: var(--line-strong) !important; }
+
+@media (max-width: 620px) {
+  .strategy-page-note { grid-template-columns: 1fr; gap: 4px; }
+  .playbook-section { padding-top: 18px !important; }
+  .playbook-category { min-width: 116px !important; }
+  .playbook-stage-top { position: static !important; }
+}
