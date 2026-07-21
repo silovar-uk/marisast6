@@ -1,5 +1,5 @@
 {
-  "appVersion": "0.12.0",
+  "appVersion": "0.13.0",
   "trainingDataVersion": "0.8.0",
   "followupDataVersion": "0.11.0",
   "updatedAt": "2026-07-21",
@@ -17,6 +17,11 @@
     "normal-counter-punish-rush-tabs",
     "ranked-followup-recommendations",
     "per-route-citations",
-    "designmd-editorial-hierarchy"
+    "designmd-editorial-hierarchy",
+    "marisa-arena-theme",
+    "fight-lab-hud",
+    "hit-state-color-personality",
+    "css-only-impact-motion",
+    "reduced-motion-support"
   ]
 }
