@@ -29,6 +29,7 @@ jobs:
           for file in \
             moves-page.js \
             situations-page.js \
+            strategy-page.js \
             strategy-gallery.js \
             followups-data.js \
             followups-engine.js \
@@ -125,6 +126,7 @@ jobs:
           grep -q 'followups-engine.js?v=0.12.0' moves.html
           grep -q 'situations-page.js?v=0.12.0' situations.html
           grep -q 'strategy-gallery.js?v=0.12.0' strategy.html
+          grep -q 'strategy-page.js?v=0.12.0' strategy.html
           grep -q 'position: static' moves-page.css
 
           node <<'NODE'
