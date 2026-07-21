@@ -1,0 +1,330 @@
+/* High-specificity page adapters. Loaded by site-shell.css before page CSS,
+   so selectors intentionally include body:has() to retain theme priority. */
+
+html body:has(.home-hero) .home-hero {
+  min-height: 64vh;
+  display: grid;
+  align-content: center;
+  padding-block: 92px 54px;
+}
+html body:has(.home-hero) .home-hero h1 {
+  animation: arena-title-in .58s cubic-bezier(.16,.8,.2,1) both;
+}
+html body:has(.home-hero) .home-hero::after {
+  content: "FIGHT LAB / 48 MOVES";
+  position: absolute;
+  z-index: -1;
+  right: 4vw;
+  bottom: 8%;
+  padding: 5px 12px;
+  border: 1px solid rgba(24,215,208,.42);
+  color: rgba(24,215,208,.78);
+  font-family: var(--display);
+  font-size: 11px;
+  font-style: italic;
+  letter-spacing: .18em;
+  transform: rotate(-4deg);
+}
+html body:has(.home-hero) .entry-grid { gap: 8px; }
+html body:has(.home-hero) .entry-link {
+  border-color: rgba(255,255,255,.16);
+  background: linear-gradient(145deg, rgba(27,29,34,.96), rgba(11,12,15,.96));
+  clip-path: polygon(0 0, calc(100% - 28px) 0, 100% 28px, 100% 100%, 0 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+  transition: transform .18s ease, border-color .18s ease, filter .18s ease;
+  animation: arena-card-in .48s cubic-bezier(.16,.8,.2,1) both;
+}
+html body:has(.home-hero) .entry-link:nth-child(2) { animation-delay: .07s; }
+html body:has(.home-hero) .entry-link:nth-child(3) { animation-delay: .14s; }
+html body:has(.home-hero) .entry-link:hover {
+  transform: translateY(-4px) skewX(-.5deg);
+  border-color: rgba(255,122,26,.65);
+  filter: brightness(1.08);
+}
+html body:has(.home-hero) .entry-link-primary {
+  background:
+    linear-gradient(150deg, rgba(213,32,47,.30), transparent 45%),
+    linear-gradient(145deg, #181a1f, #08090b);
+}
+html body:has(.home-hero) .entry-link-situations { background: linear-gradient(145deg, rgba(24,215,208,.13), rgba(15,18,21,.96)); }
+html body:has(.home-hero) .entry-link-playbook { background: linear-gradient(145deg, rgba(229,183,92,.12), rgba(20,18,17,.96)); }
+html body:has(.home-hero) .home-method {
+  border-color: rgba(255,255,255,.12);
+  background: linear-gradient(115deg, rgba(213,32,47,.10), rgba(255,255,255,.018));
+}
+html body:has(.home-hero) .method-steps,
+html body:has(.home-hero) .method-steps article,
+html body:has(.home-hero) .first-six-list,
+html body:has(.home-hero) .first-six-list a { border-color: rgba(255,255,255,.12); }
+html body:has(.home-hero) .first-six-list a { background: rgba(255,255,255,.025); }
+html body:has(.home-hero) .first-six-list a:hover { background: rgba(24,215,208,.07); box-shadow: inset 4px 0 0 var(--hud-cyan); }
+html body:has(.home-hero) .site-footer span { font-size: 0; }
+html body:has(.home-hero) .site-footer span::after { content: "v0.13.0 / MARISA ARENA × FIGHT LAB HUD"; font-size: 10px; }
+
+/* Moves */
+html body:has(.moves-workspace) .moves-intro { border-color: rgba(255,255,255,.12); }
+html body:has(.moves-workspace) .moves-status-bar,
+html body:has(.moves-workspace) .move-group-heading { border-color: rgba(255,255,255,.22); }
+html body:has(.moves-workspace) .moves-status-count b {
+  color: var(--impact-orange);
+  font-family: var(--display);
+  font-style: italic;
+}
+html body:has(.moves-workspace) .moves-status-bar > button,
+html body:has(.moves-workspace) .clear-button,
+html body:has(.moves-workspace) .filter-button,
+html body:has(.moves-workspace) .category-tabs button {
+  border-radius: 3px;
+  border-color: rgba(255,255,255,.15);
+  background: rgba(255,255,255,.025);
+  color: #a7abb2;
+  text-transform: uppercase;
+}
+html body:has(.moves-workspace) .category-tabs button.is-active {
+  border-color: var(--hud-cyan);
+  background: rgba(24,215,208,.13);
+  color: white;
+  box-shadow: inset 0 -3px 0 var(--hud-cyan);
+}
+html body:has(.moves-workspace) .filter-button.active {
+  border-color: var(--marisa-red);
+  background: rgba(213,32,47,.18);
+  color: white;
+  box-shadow: inset 3px 0 0 var(--marisa-red);
+}
+html body:has(.moves-workspace) .move-tools {
+  position: static;
+  border-color: rgba(255,255,255,.14);
+  background: rgba(19,21,25,.82);
+  clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%);
+}
+html body:has(.moves-workspace) .move-tools > summary i { border-radius: 2px; background: var(--marisa-red); }
+html body:has(.moves-workspace) .move-tools-body { border-color: rgba(255,255,255,.11); }
+html body:has(.moves-workspace) .search-box { border-color: rgba(24,215,208,.35); background: rgba(5,7,9,.72); }
+html body:has(.moves-workspace) .search-box:focus-within { border-color: var(--hud-cyan); box-shadow: 0 0 0 3px rgba(24,215,208,.08); }
+html body:has(.moves-workspace) .search-box input { color: white; }
+html body:has(.moves-workspace) .search-box input::placeholder { color: #6e747c; }
+html body:has(.moves-workspace) .active-situation {
+  border-left-color: var(--hud-cyan);
+  background: linear-gradient(100deg, rgba(24,215,208,.12), rgba(15,17,20,.88));
+}
+html body:has(.moves-workspace) .active-situation small { color: var(--hud-cyan); }
+html body:has(.moves-workspace) .move-group-heading span {
+  color: var(--impact-orange);
+  font-family: var(--display);
+  font-style: italic;
+}
+html body:has(.moves-workspace) .move-card {
+  position: relative;
+  border-color: rgba(255,255,255,.11);
+  background: linear-gradient(110deg, rgba(25,27,31,.97), rgba(12,13,16,.96));
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
+}
+html body:has(.moves-workspace) .move-card::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: rgba(255,255,255,.12);
+  transition: width .18s ease, background .18s ease;
+}
+html body:has(.moves-workspace) .move-card > * { position: relative; z-index: 1; }
+html body:has(.moves-workspace) .move-card.is-open {
+  border-color: rgba(255,122,26,.55);
+  background: linear-gradient(115deg, rgba(213,32,47,.13), rgba(18,20,24,.98) 34%);
+  box-shadow: 0 24px 60px rgba(0,0,0,.34);
+  animation: arena-impact .34s cubic-bezier(.2,.8,.2,1);
+}
+html body:has(.moves-workspace) .move-card.is-open::before { width: 6px; background: linear-gradient(var(--impact-orange), var(--marisa-red)); }
+html body:has(.moves-workspace) .move-summary:hover { background: rgba(255,255,255,.035); }
+html body:has(.moves-workspace) .move-command {
+  color: var(--impact-orange);
+  font-family: var(--display);
+  font-size: 21px;
+  font-style: italic;
+  letter-spacing: .02em;
+}
+html body:has(.moves-workspace) .move-category { color: #818790; }
+html body:has(.moves-workspace) .move-name {
+  color: white;
+  font-family: var(--display);
+  font-size: 20px;
+  font-style: italic;
+  letter-spacing: .025em;
+  text-transform: uppercase;
+}
+html body:has(.moves-workspace) .move-purpose-summary,
+html body:has(.moves-workspace) .move-damage-summary { color: #8d9299; }
+html body:has(.moves-workspace) .move-damage-summary b { color: var(--hud-cyan); font-family: var(--display); font-size: 19px; }
+html body:has(.moves-workspace) .expand-icon { border-radius: 2px; background: #2a2e34; color: white; }
+html body:has(.moves-workspace) .move-card.is-open .expand-icon { background: var(--marisa-red); box-shadow: 4px 4px 0 rgba(255,122,26,.28); }
+html body:has(.moves-workspace) .move-detail { border-color: rgba(255,255,255,.10); }
+html body:has(.moves-workspace) .detail-kicker { color: var(--hud-cyan); font-family: var(--display); }
+html body:has(.moves-workspace) .detail-lead h3 { color: white; font-family: var(--display); font-style: italic; text-transform: uppercase; }
+html body:has(.moves-workspace) .detail-lead > p { color: #bbb7b1; }
+html body:has(.moves-workspace) .purpose-tags span { border: 1px solid rgba(229,183,92,.22); border-radius: 2px; background: rgba(229,183,92,.08); color: #e4c88e; }
+html body:has(.moves-workspace) .stats-grid { border-color: rgba(255,255,255,.13); background: #0c0e11; }
+html body:has(.moves-workspace) .stat { border-color: rgba(255,255,255,.09); background: linear-gradient(180deg, rgba(255,255,255,.035), transparent); }
+html body:has(.moves-workspace) .stat small { color: #818790; letter-spacing: .08em; }
+html body:has(.moves-workspace) .stat b { color: white; font-family: var(--display); font-size: 20px; font-style: italic; }
+html body:has(.moves-workspace) .stat-rating { border-radius: 2px; }
+html body:has(.moves-workspace) .detail-columns section { border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.025); }
+html body:has(.moves-workspace) .detail-columns h4 { color: var(--hud-cyan); font-family: var(--display); font-size: 12px; font-style: italic; text-transform: uppercase; }
+html body:has(.moves-workspace) .detail-columns ul { color: #b9b5af; }
+html body:has(.moves-workspace) .input-notes { border-left-color: var(--victory-gold); background: rgba(229,183,92,.07); color: #aaa59e; }
+html body:has(.moves-workspace) .reference-drawer { border-color: rgba(255,255,255,.22); }
+html body:has(.moves-workspace) .reference-drawer details,
+html body:has(.moves-workspace) .notation-list div { border-color: rgba(255,255,255,.1); }
+html body:has(.moves-workspace) .source-list a { border-color: rgba(255,255,255,.11); background: rgba(255,255,255,.025); }
+html body:has(.moves-workspace) .source-list a:hover { border-color: var(--hud-cyan); }
+html body:has(.moves-workspace) .site-footer span { font-size: 0; }
+html body:has(.moves-workspace) .site-footer span::after { content: "v0.13.0 / FIGHT LAB HUD"; font-size: 10px; }
+
+/* Follow-up state themes. :has() turns the tab state into a color token. */
+html body:has(.moves-workspace) .hit-followups { --state-color: #e9e7e3; border-color: rgba(255,255,255,.14); border-radius: 3px; background: #0d0f12; }
+html body:has(.moves-workspace) .hit-followups:has([data-followup-tab="counter"].is-active) { --state-color: var(--victory-gold); }
+html body:has(.moves-workspace) .hit-followups:has([data-followup-tab="punish"].is-active) { --state-color: var(--marisa-red); }
+html body:has(.moves-workspace) .hit-followups:has([data-followup-tab="rush"].is-active) { --state-color: var(--hud-cyan); }
+html body:has(.moves-workspace) .hit-followups > summary { border-radius: 0; background: linear-gradient(105deg, rgba(213,32,47,.24), transparent 48%), #111318; }
+html body:has(.moves-workspace) .hit-followups > summary small { color: var(--hud-cyan); }
+html body:has(.moves-workspace) .hit-followups > summary > i { border-radius: 2px; background: rgba(255,122,26,.15); color: #ffc18c; }
+html body:has(.moves-workspace) .followup-caution { border-left-color: var(--hud-cyan); border-radius: 0; background: rgba(24,215,208,.07); color: #aaaeb2; }
+html body:has(.moves-workspace) .followup-tabs { border-radius: 2px; background: #080a0c; }
+html body:has(.moves-workspace) .followup-tabs button { border-radius: 2px; color: #8a9097; }
+html body:has(.moves-workspace) .followup-tabs button.is-active {
+  background: var(--state-color);
+  color: #08090b;
+  box-shadow: 0 0 24px color-mix(in srgb, var(--state-color) 23%, transparent);
+}
+html body:has(.moves-workspace) .hit-followups:has([data-followup-tab="normal"].is-active) .followup-panel { animation: state-normal .22s ease; }
+html body:has(.moves-workspace) .hit-followups:has([data-followup-tab="counter"].is-active) .followup-panel { animation: state-counter .22s ease; }
+html body:has(.moves-workspace) .hit-followups:has([data-followup-tab="punish"].is-active) .followup-panel { animation: state-punish .28s ease; }
+html body:has(.moves-workspace) .hit-followups:has([data-followup-tab="rush"].is-active) .followup-panel { animation: state-rush .22s ease; }
+html body:has(.moves-workspace) .followup-condition-summary { border-color: color-mix(in srgb, var(--state-color) 28%, transparent); border-radius: 2px; background: rgba(255,255,255,.025); }
+html body:has(.moves-workspace) .followup-condition-summary b { color: var(--state-color); }
+html body:has(.moves-workspace) .followup-recommendation { border-color: rgba(255,255,255,.11); border-radius: 2px; background: linear-gradient(155deg, #1a1c20, #0e1013); box-shadow: 0 14px 34px rgba(0,0,0,.24); }
+html body:has(.moves-workspace) .followup-recommendation:first-child {
+  position: relative;
+  border-color: color-mix(in srgb, var(--state-color) 65%, transparent);
+  transform: translateY(-4px);
+  box-shadow: 0 18px 42px rgba(0,0,0,.38), inset 4px 0 0 var(--state-color);
+}
+html body:has(.moves-workspace) .followup-recommendation:first-child::before {
+  content: "RECOMMENDED";
+  position: absolute;
+  top: -10px;
+  right: 10px;
+  padding: 3px 7px;
+  background: var(--state-color);
+  color: #07080a;
+  font-family: var(--display);
+  font-size: 8px;
+  font-style: italic;
+  letter-spacing: .08em;
+}
+html body:has(.moves-workspace) .followup-recommendation > header b { color: var(--state-color); font-family: var(--display); font-size: 12px; font-style: italic; }
+html body:has(.moves-workspace) .followup-verification { border-radius: 2px; background: rgba(255,255,255,.07); color: #aab0b7; }
+html body:has(.moves-workspace) .followup-route { color: white; font-family: var(--display); font-size: 17px; font-style: italic; letter-spacing: .015em; }
+html body:has(.moves-workspace) .followup-metrics span { border-radius: 2px; background: rgba(255,255,255,.045); }
+html body:has(.moves-workspace) .followup-metrics b { color: var(--state-color); }
+html body:has(.moves-workspace) .followup-resource-grid > div { border-color: rgba(255,255,255,.08); }
+html body:has(.moves-workspace) .followup-resource-grid dd { color: #e5e1db; }
+html body:has(.moves-workspace) .followup-result { border-radius: 2px; background: color-mix(in srgb, var(--state-color) 8%, transparent); color: #c2beb8; }
+html body:has(.moves-workspace) .followup-result small,
+html body:has(.moves-workspace) .followup-recommendation footer a { color: var(--state-color); }
+html body:has(.moves-workspace) .followup-reason { color: #979ca2; }
+html body:has(.moves-workspace) .followup-conditions span { border-radius: 2px; background: rgba(255,255,255,.06); color: #b4b0aa; }
+html body:has(.moves-workspace) .followup-recommendation footer a { border-color: color-mix(in srgb, var(--state-color) 24%, transparent); border-radius: 2px; }
+
+/* Situations */
+html body:has(.situations-index) .situation-group-header span { color: var(--impact-orange); font-family: var(--display); font-style: italic; }
+html body:has(.situations-index) .situation-group-header h2 { color: white; font-family: var(--display); font-style: italic; text-transform: uppercase; }
+html body:has(.situations-index) .situation-group-header p,
+html body:has(.situations-index) .situation-link-copy,
+html body:has(.situations-index) .situations-note p { color: #999ea5; }
+html body:has(.situations-index) .situation-list,
+html body:has(.situations-index) .situations-note { border-color: rgba(255,255,255,.22); }
+html body:has(.situations-index) .situation-link { border-color: rgba(255,255,255,.10); transition: background .16s ease, transform .16s ease; }
+html body:has(.situations-index) .situation-link:hover { background: linear-gradient(90deg, rgba(24,215,208,.10), transparent); transform: translateX(4px); }
+html body:has(.situations-index) .situation-link-title small { color: var(--hud-cyan); font-family: var(--display); font-style: italic; }
+html body:has(.situations-index) .situation-link-title b { color: white; font-family: var(--display); font-size: 19px; font-style: italic; text-transform: uppercase; }
+html body:has(.situations-index) .situation-link-choice { border-left-color: var(--impact-orange); background: rgba(255,122,26,.045); }
+html body:has(.situations-index) .situation-link-choice small { color: #8e949b; }
+html body:has(.situations-index) .situation-link-choice b { color: #f0d7bd; }
+html body:has(.situations-index) .situation-link-arrow { color: var(--hud-cyan); font-family: var(--display); }
+html body:has(.situations-index) .situation-link-risk { color: #c07d75; }
+html body:has(.situations-index) .site-footer span { font-size: 0; }
+html body:has(.situations-index) .site-footer span::after { content: "v0.13.0 / DECISION HUD"; font-size: 10px; }
+
+/* Strategy */
+html body:has(#strategy-gallery) .strategy-page-note { border-color: rgba(255,255,255,.12); color: #999ea5; }
+html body:has(#strategy-gallery) .strategy-page-note b { color: var(--victory-gold); }
+html body:has(#strategy-gallery) .playbook-category { border-color: rgba(255,255,255,.10); background: rgba(255,255,255,.025); color: #aaaeb4; }
+html body:has(#strategy-gallery) .playbook-category:hover { background: rgba(255,255,255,.06); }
+html body:has(#strategy-gallery) .playbook-category.is-active { background: linear-gradient(110deg, rgba(213,32,47,.28), rgba(15,17,20,.96)); color: white; box-shadow: inset 4px 0 0 var(--marisa-red); }
+html body:has(#strategy-gallery) .playbook-category.is-active small,
+html body:has(#strategy-gallery) .playbook-category.is-active span { color: var(--impact-orange); }
+html body:has(#strategy-gallery) .playbook-category-description { border-left-color: var(--hud-cyan); color: #979ca3; }
+html body:has(#strategy-gallery) .playbook-stage {
+  border-color: rgba(255,255,255,.14);
+  border-radius: 3px;
+  background: linear-gradient(rgba(14,16,19,.92), rgba(14,16,19,.92)), repeating-linear-gradient(0deg, transparent 0 31px, rgba(24,215,208,.05) 32px);
+  box-shadow: 0 28px 70px rgba(0,0,0,.4);
+}
+html body:has(#strategy-gallery) .playbook-controls button { border-color: rgba(255,255,255,.15); border-radius: 2px; background: #1b1e23; color: white; }
+html body:has(#strategy-gallery) .playbook-position span:first-child { color: var(--impact-orange); font-family: var(--display); font-style: italic; }
+html body:has(#strategy-gallery) .playbook-card { border-radius: 2px !important; background: linear-gradient(150deg, #1c1e22, #0d0f12) !important; color: white; box-shadow: 0 18px 48px rgba(0,0,0,.3) !important; }
+html body:has(#strategy-gallery) .playbook-card h3 { color: white; font-family: var(--display); font-style: italic; text-transform: uppercase; }
+html body:has(#strategy-gallery) .playbook-card-lead,
+html body:has(#strategy-gallery) .playbook-card p,
+html body:has(#strategy-gallery) .playbook-card span,
+html body:has(#strategy-gallery) .playbook-card li,
+html body:has(#strategy-gallery) .playbook-card dd { color: #aaaeb4; }
+html body:has(#strategy-gallery) .playbook-card b,
+html body:has(#strategy-gallery) .playbook-card strong { color: #f2eee7; }
+html body:has(#strategy-gallery) .playbook-card-number span { color: var(--impact-orange); font-family: var(--display); font-style: italic; }
+html body:has(#strategy-gallery) .playbook-card-footer { border-color: rgba(255,255,255,.09); }
+html body:has(#strategy-gallery) .playbook-related button,
+html body:has(#strategy-gallery) .playbook-related a,
+html body:has(#strategy-gallery) .learned-button { border-color: rgba(255,255,255,.14); border-radius: 2px; background: rgba(255,255,255,.03); color: #b8bcc2; }
+html body:has(#strategy-gallery) .playbook-related button:hover,
+html body:has(#strategy-gallery) .playbook-related a:hover { border-color: var(--hud-cyan); color: var(--hud-cyan); }
+html body:has(#strategy-gallery) .site-footer span { font-size: 0; }
+html body:has(#strategy-gallery) .site-footer span::after { content: "v0.13.0 / TACTICAL ROOM"; font-size: 10px; }
+
+@keyframes arena-title-in {
+  from { opacity: 0; transform: translateY(22px) skewX(-4deg); filter: blur(5px); }
+  to { opacity: 1; transform: skewX(-4deg); filter: blur(0); }
+}
+@keyframes arena-card-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes arena-impact {
+  0% { transform: translateX(0); filter: brightness(1); }
+  24% { transform: translateX(-4px) skewX(-.4deg); filter: brightness(1.35); }
+  48% { transform: translateX(3px); }
+  100% { transform: translateX(0); filter: brightness(1); }
+}
+@keyframes state-normal { from { opacity: .55; } to { opacity: 1; } }
+@keyframes state-counter { 0% { filter: brightness(1); } 35% { filter: brightness(1.25) sepia(.25); } 100% { filter: none; } }
+@keyframes state-punish { 0% { transform: translateX(0); filter: brightness(1); } 30% { transform: translateX(-3px); filter: brightness(1.5) saturate(1.4); } 60% { transform: translateX(2px); } 100% { transform: none; filter: none; } }
+@keyframes state-rush { from { opacity: .55; transform: translateX(-7px); } to { opacity: 1; transform: none; } }
+
+@media (max-width: 820px) {
+  html body:has(.home-hero) .home-hero { min-height: auto; }
+  html body:has(.moves-workspace) .followup-recommendation:first-child { transform: none; }
+}
+@media (max-width: 560px) {
+  html body:has(.home-hero) .entry-link { clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 0 100%); }
+  html body:has(.moves-workspace) .move-card { clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%); }
+  html body:has(.moves-workspace) .move-command { font-size: 16px; }
+  html body:has(.moves-workspace) .move-name { font-size: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html body:has(.home-hero) .home-hero h1,
+  html body:has(.home-hero) .entry-link,
+  html body:has(.moves-workspace) .move-card.is-open,
+  html body:has(.moves-workspace) .followup-panel { animation: none !important; }
+}
