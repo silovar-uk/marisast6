@@ -33,6 +33,7 @@ jobs:
             strategy-gallery.js \
             followups-data.js \
             followups-engine.js \
+            marisa-arena.js \
             data-core.js \
             situations.js \
             data-{1..6}.js; do
@@ -103,14 +104,17 @@ jobs:
           console.log(`Validated follow-ups for all ${moves.length} Modern Marisa moves.`);
           NODE
 
-      - name: Validate multi-page information architecture
+      - name: Validate multi-page information architecture and arena theme
         run: |
-          for file in index.html moves.html situations.html strategy.html site-shell.css moves-page.css situations-page.css strategy-page.css followups.css; do
+          for file in \
+            index.html moves.html situations.html strategy.html \
+            site-shell.css site-shell-base.css theme-marisa.css theme-marisa-runtime.css \
+            moves-page.css situations-page.css strategy-page.css followups.css; do
             test -s "$file"
           done
 
           for page in index.html moves.html situations.html strategy.html; do
-            grep -q 'site-shell.css?v=0.12.0' "$page"
+            grep -q 'site-shell.css?v=' "$page"
             grep -q 'href="index.html"' "$page"
             grep -q 'href="situations.html"' "$page"
             grep -q 'href="moves.html"' "$page"
@@ -121,12 +125,15 @@ jobs:
             fi
           done
 
-          grep -q 'id="move-tools"' moves.html
-          grep -q 'moves-page.js?v=0.12.0' moves.html
-          grep -q 'followups-engine.js?v=0.12.0' moves.html
-          grep -q 'situations-page.js?v=0.12.0' situations.html
-          grep -q 'strategy-gallery.js?v=0.12.0' strategy.html
-          grep -q 'strategy-page.js?v=0.12.0' strategy.html
+          grep -q 'site-shell-base.css?v=0.13.0' site-shell.css
+          grep -q 'theme-marisa.css?v=0.13.0' site-shell.css
+          grep -q 'theme-marisa-runtime.css?v=0.13.0' site-shell.css
+          grep -q 'body:has(.home-hero)' theme-marisa-runtime.css
+          grep -q 'body:has(.moves-workspace)' theme-marisa-runtime.css
+          grep -q 'body:has(.situations-index)' theme-marisa-runtime.css
+          grep -q 'body:has(#strategy-gallery)' theme-marisa-runtime.css
+          grep -q 'data-followup-tab="punish"' theme-marisa-runtime.css
+          grep -q 'prefers-reduced-motion' theme-marisa-runtime.css
           grep -q 'position: static' moves-page.css
 
           node <<'NODE'
@@ -139,13 +146,13 @@ jobs:
               if (!fs.existsSync(ref)) throw new Error(`${page} references missing file: ${ref}`);
             }
           }
-          for (const file of ['site-shell.css','moves-page.css','situations-page.css','strategy-page.css','followups.css']) {
+          for (const file of ['site-shell.css','site-shell-base.css','theme-marisa.css','theme-marisa-runtime.css','moves-page.css','situations-page.css','strategy-page.css','followups.css']) {
             const css = fs.readFileSync(file, 'utf8');
             if ((css.match(/{/g) || []).length !== (css.match(/}/g) || []).length) throw new Error(`Unbalanced CSS braces: ${file}`);
           }
           const version = JSON.parse(fs.readFileSync('version.json','utf8'));
-          if (version.appVersion !== '0.12.0') throw new Error('Unexpected app version');
-          console.log('Validated four public pages with no controller UI.');
+          if (version.appVersion !== '0.13.0') throw new Error('Unexpected app version');
+          console.log('Validated four public pages with MARISA ARENA theme and no controller UI.');
           NODE
 
       - name: Configure Pages
