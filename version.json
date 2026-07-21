@@ -1,7 +1,8 @@
 {
-  "appVersion": "0.10.0",
+  "appVersion": "0.11.0",
   "trainingDataVersion": "0.8.0",
-  "updatedAt": "2026-07-19",
+  "followupDataVersion": "0.11.0",
+  "updatedAt": "2026-07-21",
   "moveDataBasis": "2026-03-17",
   "features": [
     "controller-ui",
@@ -17,6 +18,10 @@
     "positive-feedback-layer",
     "decision-streaks",
     "session-achievements",
-    "daily-practice-streak"
+    "daily-practice-streak",
+    "all-modern-move-followups",
+    "normal-counter-punish-rush-tabs",
+    "ranked-followup-recommendations",
+    "per-route-citations"
   ]
 }
