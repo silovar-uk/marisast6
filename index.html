@@ -4,11 +4,11 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#171310" />
-  <meta name="description" content="モダンマリーザの判断・入力・実戦課題を、コントローラー型UIで練習できるトレーニングシステム。" />
+  <meta name="description" content="モダンマリーザの全技を、通常・カウンター・パニッシュカウンター・ラッシュ別のヒット後おすすめまで確認できる実戦データベース。" />
   <title>MODERN MARISA LAB｜判断から鍛える練習システム</title>
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="enhancements.css" />
-  <link rel="stylesheet" href="strategy-gallery.css?v=0.10.0" />
+  <link rel="stylesheet" href="strategy-gallery.css?v=0.11.0" />
 </head>
 <body>
   <header class="site-header">
@@ -31,11 +31,11 @@
       <div class="hero-copy">
         <p class="eyebrow">STREET FIGHTER 6 / MODERN</p>
         <h1>その技、<br><em>いつ出す？</em></h1>
-        <p class="hero-lead">技名を覚えるためではなく、対戦中の判断を速くするためのマリーザ技図鑑。入力、ダメージ、発生・持続・硬直、ヒット後の派生まで一画面で確認できる。</p>
+        <p class="hero-lead">技名を覚えるためではなく、対戦中の判断を速くするためのマリーザ技図鑑。入力、性能に加え、通常・カウンター・パニカン・ラッシュごとの次の行動まで一画面で確認できる。</p>
         <div class="hero-meta">
           <span>基準日：2026.03.17調整</span>
           <span>モダン操作専用</span>
-          <span>全技検索対応</span>
+          <span>全48技・条件別対応</span>
         </div>
       </div>
       <aside class="hero-card" aria-label="最初に覚える技">
@@ -114,7 +114,7 @@
       <div class="shell">
         <div class="section-heading moves-heading">
           <div><p class="eyebrow">MOVE DATABASE</p><h2>全技データ</h2></div>
-          <p><b id="result-count">0</b>技を表示中。カードを開くと、用途・性能・次の行動まで確認できる。</p>
+          <p><b id="result-count">0</b>技を表示中。カード内で通常・カウンター・パニカン・ラッシュ別のおすすめを比較できる。</p>
         </div>
 
         <div class="tool-panel" aria-label="技の絞り込み">
@@ -173,6 +173,14 @@
             <div><dt>CR</dt><dd>キャンセルドライブラッシュ。</dd></div>
           </dl>
         </div>
+        <div class="notation-copy">
+          <dl>
+            <div><dt>通常</dt><dd>通常ヒット時。まず安定ルートを表示。</dd></div>
+            <div><dt>カウンター</dt><dd>相手の技の出始めに当てた状態。通常より原則+2F。</dd></div>
+            <div><dt>パニカン</dt><dd>相手の技の硬直へ当てた状態。通常より原則+4F。</dd></div>
+            <div><dt>ラッシュ</dt><dd>ドライブラッシュ中の通常技。ヒット・ガード有利が原則+4F。</dd></div>
+          </dl>
+        </div>
       </div>
     </section>
 
@@ -181,12 +189,12 @@
         <article>
           <p class="eyebrow">HOW TO READ</p>
           <h2>数値より、役割を先に見る。</h2>
-          <p>発生が速くても届かなければ意味がない。ガードで有利でも、距離が離れれば攻めは続かない。各カードでは、数値の横に「どんな距離・読み合いで強いか」を必ず記載している。</p>
+          <p>発生が速くても届かなければ意味がない。ガードで有利でも、距離が離れれば攻めは続かない。条件別おすすめでは、火力・継続・簡単さを分けて示している。</p>
         </article>
         <article>
-          <p class="eyebrow">DAMAGE RULE</p>
-          <h2>簡易入力は80％。</h2>
-          <p>SP、A＋SP、SP＋強による簡易入力は、原則として本来の80％ダメージ。コマンド入力できる技は100％。通常技はモダンでも同じダメージ。</p>
+          <p class="eyebrow">VERIFICATION RULE</p>
+          <h2>推定と確認済みを混ぜない。</h2>
+          <p>距離や持続当てで成立が変わるルートは「距離依存」「フレーム差分推定」と表示する。ゲーム内トレーニングで成立条件を最終確認する。</p>
         </article>
       </div>
     </section>
@@ -205,21 +213,21 @@
       </div>
     </section>
 
-    <section class="sources shell">
+    <section id="sources" class="sources shell">
       <p class="eyebrow">SOURCES</p>
       <h2>参照元</h2>
       <div class="source-list">
         <a href="https://www.streetfighter.com/6/ja-jp/character/marisa/frame" target="_blank" rel="noreferrer"><b>CAPCOM公式</b><span>マリーザ フレームデータ</span></a>
         <a href="https://www.streetfighter.com/6/ja-jp/character/marisa/movelist" target="_blank" rel="noreferrer"><b>CAPCOM公式</b><span>マリーザ コマンドリスト</span></a>
         <a href="https://www.streetfighter.com/6/buckler/ja-jp/battle_change/20260317/marisa" target="_blank" rel="noreferrer"><b>CAPCOM公式</b><span>2026年3月17日 調整内容</span></a>
-        <a href="https://ultimateframedata.com/sf6/marisa" target="_blank" rel="noreferrer"><b>Ultimate Frame Data</b><span>数値・持続・硬直の照合</span></a>
-        <a href="https://www.sukoreru.com/sf6-modern-marisa" target="_blank" rel="noreferrer"><b>すこれるブログ</b><span>モダン固有の技構成・実戦用途</span></a>
+        <a href="https://kamigame.jp/streetfighter6/page/271002230109263938.html" target="_blank" rel="noreferrer"><b>神ゲー攻略</b><span>モダンマリーザの主要コンボ・ダメージ</span></a>
+        <a href="https://www.sukoreru.com/sf6-modern-marisa" target="_blank" rel="noreferrer"><b>すこれるブログ</b><span>現行モダン固有ルート・起き攻め</span></a>
       </div>
-      <p class="source-note">※フレームやダメージはアップデートで変わる。ゲーム内表示とCAPCOM公式を最終確認先とする。コンボ補正、カウンター、パニッシュカウンター、ドライブゲージ状況により実戦ダメージは変動。</p>
+      <p class="source-note">※各おすすめカードにも出典を個別表示。フレームやダメージはアップデート、距離、持続当て、相手状態、補正、ゲージ状況で変動する。ゲーム内表示とCAPCOM公式を最終確認先とする。</p>
     </section>
   </main>
 
-  <footer><div class="shell"><b>MODERN MARISA LAB</b><span>v0.10.0 / 非公式ファンメイド練習システム</span></div></footer>
+  <footer><div class="shell"><b>MODERN MARISA LAB</b><span>v0.11.0 / 非公式ファンメイド練習システム</span></div></footer>
 
   <dialog id="strategy-dialog" class="strategy-dialog" aria-labelledby="strategy-dialog-title">
     <div class="strategy-dialog-panel">
@@ -262,12 +270,14 @@
   <script src="data-4.js"></script>
   <script src="data-5.js"></script>
   <script src="data-6.js"></script>
+  <script src="followups-data.js?v=0.11.0"></script>
   <script src="app.js"></script>
-  <script src="strategy-gallery.js?v=0.10.0"></script>
-  <script src="controller-shell.js?v=0.10.0"></script>
-  <script src="training-data.js?v=0.10.0"></script>
-  <script src="training-engine.js?v=0.10.0"></script>
-  <script src="training-integration.js?v=0.10.0"></script>
-  <script src="training-delight.js?v=0.10.0"></script>
+  <script src="followups-engine.js?v=0.11.0"></script>
+  <script src="strategy-gallery.js?v=0.11.0"></script>
+  <script src="controller-shell.js?v=0.11.0"></script>
+  <script src="training-data.js?v=0.11.0"></script>
+  <script src="training-engine.js?v=0.11.0"></script>
+  <script src="training-integration.js?v=0.11.0"></script>
+  <script src="training-delight.js?v=0.11.0"></script>
 </body>
 </html>
