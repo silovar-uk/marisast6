@@ -1,27 +1,22 @@
 {
-  "appVersion": "0.11.0",
+  "appVersion": "0.12.0",
   "trainingDataVersion": "0.8.0",
   "followupDataVersion": "0.11.0",
   "updatedAt": "2026-07-21",
   "moveDataBasis": "2026-03-17",
   "features": [
-    "controller-ui",
-    "skill-diagnosis",
-    "random-decision-drills",
-    "attempt-scoring",
-    "spaced-review",
-    "match-missions",
-    "mobile-vertical-device",
-    "skill-adaptive-controls",
-    "explicit-wait-response",
-    "semantic-mobile-answer-buttons",
-    "positive-feedback-layer",
-    "decision-streaks",
-    "session-achievements",
-    "daily-practice-streak",
+    "multi-page-information-architecture",
+    "controller-free-public-pages",
+    "home-entry-page",
+    "situations-dedicated-page",
+    "moves-dedicated-page",
+    "strategy-dedicated-page",
+    "non-sticky-collapsible-move-search",
+    "url-persistent-move-filters",
     "all-modern-move-followups",
     "normal-counter-punish-rush-tabs",
     "ranked-followup-recommendations",
-    "per-route-citations"
+    "per-route-citations",
+    "designmd-editorial-hierarchy"
   ]
 }
