@@ -18,6 +18,14 @@
       .replace(/'/g, "&#039;");
   }
 
+  function isStance(move) {
+    return String(move.damage || "").includes("構えのみ");
+  }
+
+  function isThrow(move) {
+    return move.category === "投げ" || String(move.attribute || "").includes("投げ") || move.id === "enfold";
+  }
+
   function parseHitNumber(value) {
     const text = String(value || "").split("/")[0];
     if (/ダウン|バウンド|追撃|着地|高度|構え|—/.test(text)) return null;
@@ -79,6 +87,33 @@
     const override = DATA.overrides[move.id]?.[conditionId];
     if (override) return { unavailable: false, note: "", recommendations: override.slice(0, 3) };
 
+    if (isStance(move)) {
+      if (conditionId === "normal") return { unavailable: false, note: "攻撃を受けた後の派生候補を表示。", recommendations: baseRecommendations(move, conditionId) };
+      return {
+        unavailable: true,
+        note: "構え自体には攻撃判定がないため、カウンター・パニッシュカウンター・ラッシュヒットの区分はありません。受け成功後は通常タブの派生を参照。",
+        recommendations: []
+      };
+    }
+
+    if (isThrow(move) && conditionId === "counter") {
+      return {
+        unavailable: true,
+        note: "投げには通常技のカウンターヒット+2Fを使ったリンクはありません。投げ成立後の行動は通常タブを参照。",
+        recommendations: []
+      };
+    }
+
+    if (isThrow(move) && conditionId === "punish") {
+      const recommendations = baseRecommendations(move, conditionId).map(item => ({
+        ...item,
+        reason: "相手の硬直を投げたパニッシュカウンター。通常技の+4Fリンクではなく、投げ後の起き攻め・位置状況を評価。",
+        verification: "投げパニカン・起き攻め共通",
+        sources: ["system-rules", "lab-data"]
+      }));
+      return { unavailable: false, note: "投げパニカンはダメージ補正が変わり得るが、投げ後の基本行動は通常タブと共通。", recommendations };
+    }
+
     if (conditionId === "normal") {
       return { unavailable: false, note: "", recommendations: baseRecommendations(move, conditionId) };
     }
@@ -107,6 +142,13 @@
 
   function frameSummary(move, conditionId) {
     const condition = DATA.conditions.find(item => item.id === conditionId);
+    if (isStance(move)) return conditionId === "normal" ? "構え成功後の派生を比較" : "攻撃判定がないため対象外";
+    if (isThrow(move)) {
+      if (conditionId === "normal") return "投げ成立後の起き攻め・位置状況を比較";
+      if (conditionId === "counter") return "通常技のカウンターリンク対象外";
+      if (conditionId === "punish") return "投げパニカン。+4Fリンク計算の対象外";
+      return "生ラッシュからの投げ択。投げ自体に+4Fは付かない";
+    }
     if (conditionId === "rush" && !rushEligible.has(move.id)) return "ラッシュ補正対象外";
     const base = parseHitNumber(move.hit);
     if (base === null) {
@@ -125,7 +167,8 @@
     const unique = [...new Set(ids)].filter(id => DATA.sources[id]);
     return unique.map(id => {
       const source = DATA.sources[id];
-      return `<a href="${escapeHtml(source.url)}" target="_blank" rel="noreferrer" title="${escapeHtml(source.note)}">${escapeHtml(source.label)}</a>`;
+      const external = !String(source.url).startsWith("#");
+      return `<a href="${escapeHtml(source.url)}"${external ? ' target="_blank" rel="noreferrer"' : ""} title="${escapeHtml(source.note)}">${escapeHtml(source.label)}</a>`;
     }).join("");
   }
 
