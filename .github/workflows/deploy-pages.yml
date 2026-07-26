@@ -36,7 +36,9 @@ jobs:
             marisa-arena.js \
             data-core.js \
             situations.js \
-            data-{1..6}.js; do
+            data-{1..6}.js \
+            drill-data.js \
+            drill-engine.js; do
             node --check "$file"
           done
 
@@ -107,13 +109,13 @@ jobs:
       - name: Validate multi-page information architecture and arena theme
         run: |
           for file in \
-            index.html moves.html situations.html strategy.html \
+            index.html moves.html situations.html strategy.html drill.html \
             site-shell.css site-shell-base.css theme-marisa.css theme-marisa-runtime.css \
-            moves-page.css situations-page.css strategy-page.css followups.css; do
+            moves-page.css situations-page.css strategy-page.css followups.css drill.css; do
             test -s "$file"
           done
 
-          for page in index.html moves.html situations.html strategy.html; do
+          for page in index.html moves.html situations.html strategy.html drill.html; do
             grep -q 'site-shell.css?v=' "$page"
             grep -q 'href="index.html"' "$page"
             grep -q 'href="situations.html"' "$page"
@@ -132,13 +134,14 @@ jobs:
           grep -q 'body:has(.moves-workspace)' theme-marisa-runtime.css
           grep -q 'body:has(.situations-index)' theme-marisa-runtime.css
           grep -q 'body:has(#strategy-gallery)' theme-marisa-runtime.css
+          grep -q 'body:has(.drill-stage)' theme-marisa-runtime.css
           grep -q 'data-followup-tab="punish"' theme-marisa-runtime.css
           grep -q 'prefers-reduced-motion' theme-marisa-runtime.css
           grep -q 'position: static' moves-page.css
 
           node <<'NODE'
           const fs = require('fs');
-          const pages = ['index.html','moves.html','situations.html','strategy.html'];
+          const pages = ['index.html','moves.html','situations.html','strategy.html','drill.html'];
           for (const page of pages) {
             const html = fs.readFileSync(page, 'utf8');
             const refs = [...html.matchAll(/(?:href|src)="([^"]+\.(?:css|js))(?:\?[^\"]*)?"/g)].map(match => match[1]).filter(path => !/^https?:/.test(path));
@@ -146,7 +149,7 @@ jobs:
               if (!fs.existsSync(ref)) throw new Error(`${page} references missing file: ${ref}`);
             }
           }
-          for (const file of ['site-shell.css','site-shell-base.css','theme-marisa.css','theme-marisa-runtime.css','moves-page.css','situations-page.css','strategy-page.css','followups.css']) {
+          for (const file of ['site-shell.css','site-shell-base.css','theme-marisa.css','theme-marisa-runtime.css','moves-page.css','situations-page.css','strategy-page.css','followups.css','drill.css']) {
             const css = fs.readFileSync(file, 'utf8');
             if ((css.match(/{/g) || []).length !== (css.match(/}/g) || []).length) throw new Error(`Unbalanced CSS braces: ${file}`);
           }

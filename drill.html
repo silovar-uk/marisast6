@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f3efe7" />
+  <meta name="description" content="モダンマリーザのコンボリンクを3択と制限時間で反復するドリル。猶予フレームとダメージを毎回表示。" />
+  <title>コンボドリル｜MODERN MARISA LAB</title>
+  <link rel="stylesheet" href="site-shell.css?v=0.13.0" />
+  <link rel="stylesheet" href="drill.css?v=0.13.0" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner shell">
+      <a class="site-brand" href="index.html">
+        <span class="site-brand-mark">M</span>
+        <span><b>MODERN MARISA LAB</b><small>技・判断・実戦の攻略資料</small></span>
+      </a>
+      <nav class="site-tabs" aria-label="ページ">
+        <a href="index.html">ホーム</a>
+        <a href="situations.html">状況から探す</a>
+        <a href="moves.html">技と派生</a>
+        <a href="strategy.html">実戦攻略</a>
+        <a href="drill.html" aria-current="page">コンボドリル</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero shell">
+      <div class="page-hero-grid">
+        <div>
+          <p class="page-kicker">COMBO DRILL / LINK TIMING</p>
+          <h1>次の技を、<em>体で覚える。</em></h1>
+          <p class="page-lead">始動技から3択で連続出題。実際の猶予フレームに応じた制限時間内に選べないと失敗です。リンクとキャンセルの違い、なぜつながるのかを毎回表示します。</p>
+        </div>
+        <dl class="page-meta">
+          <div><dt>判定</dt><dd>正解・判断違い・間に合わず・見逃し</dd></div>
+          <div><dt>条件</dt><dd>通常・カウンター・パニカン</dd></div>
+          <div><dt>表示</dt><dd>猶予フレームと総ダメージ</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="drill-stage shell">
+      <div class="drill-setup" data-screen="setup"></div>
+      <div class="drill-quiz" data-screen="quiz" hidden></div>
+      <div class="drill-result" data-screen="result" hidden></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer-inner shell"><b>MODERN MARISA LAB</b><span>v0.13.0 / MARISA ARENA × FIGHT LAB HUD</span></div>
+  </footer>
+
+  <script src="data-core.js?v=0.13.0"></script>
+  <script src="data-1.js?v=0.13.0"></script>
+  <script src="data-2.js?v=0.13.0"></script>
+  <script src="data-3.js?v=0.13.0"></script>
+  <script src="data-4.js?v=0.13.0"></script>
+  <script src="data-5.js?v=0.13.0"></script>
+  <script src="data-6.js?v=0.13.0"></script>
+  <script src="drill-data.js?v=0.13.0"></script>
+  <script src="drill-engine.js?v=0.13.0"></script>
+</body>
+</html>
