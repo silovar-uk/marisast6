@@ -14,6 +14,16 @@
   const key = "marisa-decision-drill-v2";
   let previousSettings = { category: "all", speed: "standard", questionCount: 10 };
 
+  function restoreSettings() {
+    try {
+      const stored = JSON.parse(localStorage.getItem(key) || "{}");
+      stored.settings = previousSettings;
+      localStorage.setItem(key, JSON.stringify(stored));
+    } catch {
+      // 次回設定の復元に失敗しても、現在の1問練習は続行する。
+    }
+  }
+
   try {
     const stored = JSON.parse(localStorage.getItem(key) || "{}");
     if (stored.settings) previousSettings = stored.settings;
@@ -23,19 +33,17 @@
     // 保存できなくても、下の自動開始を試す。
   }
 
+  document.addEventListener("click", event => {
+    if (!event.target.closest(".drill-retry-button")) return;
+    setTimeout(restoreSettings, 0);
+  });
+
   document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.add("is-focused-drill");
     setTimeout(() => {
       const start = document.querySelector(".drill-start-button");
       if (start && !start.disabled) start.click();
-
-      try {
-        const stored = JSON.parse(localStorage.getItem(key) || "{}");
-        stored.settings = previousSettings;
-        localStorage.setItem(key, JSON.stringify(stored));
-      } catch {
-        // 次回設定の復元に失敗しても、現在の1問練習は続行する。
-      }
+      restoreSettings();
     }, 0);
   });
 })();
