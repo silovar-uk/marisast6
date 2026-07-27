@@ -20,10 +20,21 @@
     corner: "画面端"
   };
   const SUMMARY_KEY = "modern-marisa-combo-route-summary-v1";
+  const items = registry.families.flatMap((family, familyIndex) =>
+    family.routes.map((item, routeIndex) => ({ ...item, family, familyIndex, routeIndex }))
+  );
+  const itemByRoute = Object.fromEntries(items.map(item => [item.routeId, item]));
+  const dependentRoutes = {};
+  items.forEach(item => {
+    (item.prerequisites || []).forEach(prerequisiteId => {
+      (dependentRoutes[prerequisiteId] ||= []).push(item.routeId);
+    });
+  });
 
   let learned = loadLearned();
   let panel = null;
   let scheduled = false;
+  normalizeLearned();
 
   function escapeHtml(value) {
     return String(value ?? "")
@@ -51,6 +62,32 @@
     }
   }
 
+  function normalizeLearned() {
+    let changed = true;
+    while (changed) {
+      changed = false;
+      [...learned].forEach(routeId => {
+        const item = itemByRoute[routeId];
+        if (!item || (item.prerequisites || []).some(id => !learned.has(id))) {
+          learned.delete(routeId);
+          changed = true;
+        }
+      });
+    }
+  }
+
+  function removeWithDependents(routeId) {
+    const queue = [routeId];
+    const removing = new Set();
+    while (queue.length) {
+      const current = queue.shift();
+      if (removing.has(current)) continue;
+      removing.add(current);
+      (dependentRoutes[current] || []).forEach(id => queue.push(id));
+    }
+    removing.forEach(id => learned.delete(id));
+  }
+
   function saveLearned() {
     try {
       localStorage.setItem(registry.storageKey, JSON.stringify([...learned]));
@@ -67,12 +104,8 @@
     }).join(" → ");
   }
 
-  function prerequisites(item) {
-    return item.prerequisites || [];
-  }
-
   function isUnlocked(item) {
-    return prerequisites(item).every(id => learned.has(id));
+    return (item.prerequisites || []).every(id => learned.has(id));
   }
 
   function itemState(item, nextRouteId) {
@@ -82,12 +115,8 @@
     return "available";
   }
 
-  function flattenedItems() {
-    return registry.families.flatMap((family, familyIndex) => family.routes.map((item, routeIndex) => ({ ...item, family, familyIndex, routeIndex })));
-  }
-
   function nextRouteItem() {
-    return flattenedItems()
+    return items
       .filter(item => !learned.has(item.routeId) && isUnlocked(item))
       .sort((a, b) => {
         const tierDiff = tierRank[routeById[a.routeId]?.tier] - tierRank[routeById[b.routeId]?.tier];
@@ -131,13 +160,12 @@
   }
 
   function prerequisiteText(item) {
-    const ids = prerequisites(item).filter(id => !learned.has(id));
+    const ids = (item.prerequisites || []).filter(id => !learned.has(id));
     if (!ids.length) return "";
     return ids.map(id => `${drill.tierMeta?.[routeById[id]?.tier]?.label || "前段階"}「${routeById[id]?.label || id}」`).join("、");
   }
 
   function routeActions(item, state) {
-    const route = routeById[item.routeId];
     const scenarioId = registry.scenarioByRoute[item.routeId];
     const toggle = state === "locked"
       ? `<button type="button" class="combo-route-toggle" disabled>先に前段階を習得</button>`
@@ -200,6 +228,7 @@
       panel = document.createElement("section");
       panel.id = "combo-learning-panel";
       panel.className = "combo-learning-panel";
+      panel.setAttribute("aria-label", "コンボ習得ロードマップ");
       filters.insertAdjacentElement("afterend", panel);
     }
     return panel;
@@ -241,16 +270,17 @@
   function cardRouteBlock(cardId) {
     const ids = registry.cardToRoutes[cardId] || [];
     if (!ids.length) return "";
+    const nextRouteId = nextRouteItem()?.routeId || null;
     const rows = ids.map(routeId => {
       const route = routeById[routeId];
-      const itemRef = registry.families.flatMap(family => family.routes).find(item => item.routeId === routeId);
-      const state = itemRef ? itemState(itemRef, nextRouteItem()?.routeId || null) : "available";
+      const item = itemByRoute[routeId];
+      const state = item ? itemState(item, nextRouteId) : "available";
       const meta = drill.tierMeta[route.tier];
       return `<div class="combo-card-route is-${state}" data-tier="${escapeHtml(route.tier)}">
         <span>${escapeHtml(meta.label)}</span>
         <b>${escapeHtml(route.label)}</b>
         <i>${state === "learned" ? "習得済み" : state === "locked" ? "前段階を先に" : state === "next" ? "次に覚える" : "練習可能"}</i>
-        ${state === "locked" ? "" : `<button type="button" data-combo-route-toggle="${escapeHtml(routeId)}">${state === "learned" ? "✓" : "○"}</button>`}
+        ${state === "locked" ? "" : `<button type="button" data-combo-route-toggle="${escapeHtml(routeId)}" aria-label="${escapeHtml(route.label)}を${state === "learned" ? "未習得へ戻す" : "習得済みにする"}">${state === "learned" ? "✓" : "○"}</button>`}
       </div>`;
     }).join("");
     return `<section class="combo-card-learning-block"><header><small>LEARNING LEVEL</small><b>対応する習得ルート</b></header>${rows}</section>`;
@@ -265,8 +295,7 @@
       card.classList.remove("is-route-complete");
       const markup = cardRouteBlock(cardId);
       if (!markup) return;
-      const body = card.querySelector(".playbook-card-body");
-      body?.insertAdjacentHTML("beforeend", markup);
+      card.querySelector(".playbook-card-body")?.insertAdjacentHTML("beforeend", markup);
       const ids = registry.cardToRoutes[cardId] || [];
       card.classList.toggle("is-route-complete", ids.length > 0 && ids.every(id => learned.has(id)));
     });
@@ -299,9 +328,9 @@
     if (toggle) {
       event.preventDefault();
       const routeId = toggle.dataset.comboRouteToggle;
-      const item = registry.families.flatMap(family => family.routes).find(value => value.routeId === routeId);
+      const item = itemByRoute[routeId];
       if (!item) return;
-      if (learned.has(routeId)) learned.delete(routeId);
+      if (learned.has(routeId)) removeWithDependents(routeId);
       else if (isUnlocked(item)) learned.add(routeId);
       scheduleSync();
       return;
@@ -317,7 +346,12 @@
     sync();
     const deck = document.querySelector("#playbook-deck");
     if (deck) {
-      const observer = new MutationObserver(scheduleSync);
+      const observer = new MutationObserver(records => {
+        const deckWasRedrawn = records.some(record => [...record.addedNodes].some(node =>
+          node.nodeType === Node.ELEMENT_NODE && (node.matches?.(".playbook-slide") || node.querySelector?.(".playbook-slide"))
+        ));
+        if (deckWasRedrawn) scheduleSync();
+      });
       observer.observe(deck, { childList: true });
     }
   });
