@@ -1,0 +1,330 @@
+.page-strategy .playbook-section {
+  --playbook-surface-base: var(--readable-surface-base, #0d1014);
+  --playbook-surface-raised: var(--readable-surface-raised, #15191f);
+  --playbook-surface-soft: var(--readable-surface-soft, #1b2027);
+  --playbook-text: var(--readable-text-primary, #f7f4ee);
+  --playbook-text-soft: var(--readable-text-secondary, #d9d4cc);
+  --playbook-muted: var(--readable-text-muted, #b8b2aa);
+  --playbook-line: var(--readable-line, rgba(255,255,255,.17));
+  --playbook-line-strong: var(--readable-line-strong, rgba(255,255,255,.29));
+  color: var(--playbook-text);
+}
+
+.page-strategy .strategy-page-note {
+  border-color: var(--playbook-line, rgba(255,255,255,.17));
+  color: var(--readable-text-secondary, #d9d4cc);
+  font-size: 12px;
+  line-height: 1.7;
+}
+.page-strategy .strategy-page-note b { color: var(--hud-cyan); font-size: 10px; }
+
+.page-strategy .playbook-categories {
+  border: 1px solid var(--playbook-line-strong);
+  background: var(--playbook-surface-base);
+}
+.page-strategy .playbook-category {
+  min-height: 88px !important;
+  border-color: var(--playbook-line) !important;
+  background: transparent;
+  color: var(--playbook-text);
+}
+.page-strategy .playbook-category:hover {
+  background: var(--playbook-surface-soft);
+  color: #fff;
+}
+.page-strategy .playbook-category small {
+  color: var(--playbook-muted);
+  font-size: 9px;
+}
+.page-strategy .playbook-category b { font-size: 15px; line-height: 1.25; }
+.page-strategy .playbook-category span { color: var(--playbook-muted); font-size: 10px; }
+.page-strategy .playbook-category.is-active {
+  background: linear-gradient(145deg, #d5202f, #84101b);
+  color: #fff;
+  box-shadow: inset 0 -4px 0 var(--hud-cyan);
+}
+.page-strategy .playbook-category.is-active small,
+.page-strategy .playbook-category.is-active span { color: rgba(255,255,255,.9); }
+.page-strategy .playbook-category-description {
+  border-left-color: var(--hud-cyan);
+  color: var(--playbook-text-soft);
+  font-size: 13px;
+}
+
+.page-strategy .playbook-filter {
+  border-color: var(--playbook-line-strong);
+  background: var(--playbook-surface-base);
+  color: var(--playbook-text-soft);
+  font-size: 11px;
+}
+.page-strategy .playbook-filter:hover { border-color: var(--hud-cyan); color: #fff; }
+.page-strategy .playbook-filter.is-active {
+  border-color: #ff6975;
+  background: rgba(213,32,47,.25);
+  color: #fff;
+}
+
+.page-strategy .playbook-stage {
+  border-color: var(--playbook-line-strong);
+  background: var(--playbook-surface-base);
+  box-shadow: 0 28px 70px rgba(0,0,0,.36);
+}
+.page-strategy .playbook-stage-top { padding-top: 18px; }
+.page-strategy .playbook-position span:first-child { color: var(--impact-orange); }
+.page-strategy .playbook-position i,
+.page-strategy .playbook-position span:last-child { color: var(--playbook-muted); font-size: 12px; }
+.page-strategy .playbook-controls button {
+  border-color: var(--playbook-line-strong);
+  background: var(--playbook-surface-raised);
+  color: #fff;
+}
+.page-strategy .playbook-controls button:hover:not(:disabled) {
+  border-color: var(--hud-cyan);
+  background: rgba(24,215,208,.16);
+  color: #fff;
+}
+.page-strategy .playbook-controls button:disabled { opacity: .42; }
+.page-strategy .playbook-deck:focus-visible { outline-color: var(--hud-cyan); }
+
+.page-strategy .playbook-card {
+  border-color: var(--playbook-line-strong);
+  background: var(--playbook-surface-raised);
+  color: var(--playbook-text);
+  box-shadow: 0 18px 48px rgba(0,0,0,.3) !important;
+}
+.page-strategy .playbook-card.is-learned { border-color: rgba(24,215,208,.6); }
+.page-strategy .playbook-card-header { padding-top: 22px; }
+.page-strategy .playbook-card-number span { color: var(--impact-orange); }
+.page-strategy .playbook-card-number small {
+  color: var(--playbook-muted);
+  font-size: 9px;
+}
+.page-strategy .playbook-status {
+  border-color: var(--playbook-line-strong);
+  background: var(--playbook-surface-base);
+  color: var(--playbook-text-soft);
+  font-size: 10px;
+}
+.page-strategy .playbook-card-body {
+  scrollbar-color: rgba(255,255,255,.32) transparent;
+}
+.page-strategy .playbook-card-body h3 {
+  color: #fff;
+  font-size: clamp(30px, 4vw, 48px);
+  line-height: 1.15;
+}
+.page-strategy .playbook-card-lead {
+  color: var(--playbook-text-soft);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.page-strategy .playbook-action-cue {
+  display: grid;
+  grid-template-columns: 116px minmax(0, 1fr);
+  gap: 16px;
+  align-items: center;
+  margin: -6px 0 24px;
+  padding: 15px 17px;
+  border: 1px solid rgba(24,215,208,.35);
+  border-left: 5px solid var(--hud-cyan);
+  background: linear-gradient(100deg, rgba(24,215,208,.13), rgba(13,16,20,.82));
+}
+.page-strategy .playbook-action-cue small {
+  color: var(--hud-cyan);
+  font-size: 9px;
+  font-weight: 950;
+  letter-spacing: .1em;
+}
+.page-strategy .playbook-action-cue b {
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.page-strategy .playbook-card-footer {
+  border-color: var(--playbook-line);
+  background: var(--playbook-surface-base);
+}
+.page-strategy .playbook-related button,
+.page-strategy .playbook-related a,
+.page-strategy .learned-button {
+  border-color: var(--playbook-line-strong);
+  background: var(--playbook-surface-raised);
+  color: var(--playbook-text-soft);
+  font-size: 10px;
+}
+.page-strategy .playbook-related button:hover,
+.page-strategy .playbook-related a:hover {
+  border-color: var(--hud-cyan);
+  color: #fff;
+}
+.page-strategy .learned-button.is-active {
+  border-color: var(--hud-cyan);
+  background: rgba(24,215,208,.18);
+  color: #fff;
+}
+.page-strategy .playbook-dot { background: rgba(255,255,255,.28); }
+.page-strategy .playbook-dot.is-active { background: var(--hud-cyan); }
+.page-strategy .playbook-footnote { color: var(--playbook-muted); font-size: 11px; line-height: 1.65; }
+.page-strategy .playbook-footnote b { color: var(--playbook-text); }
+
+.page-strategy .playbook-steps li,
+.page-strategy .evidence-list blockquote,
+.page-strategy .loadout-list li,
+.page-strategy .distance-zone,
+.page-strategy .practice-tasks > div,
+.page-strategy .decision-grid > div,
+.page-strategy .code-grid > div,
+.page-strategy .reference-list a {
+  border-color: var(--playbook-line);
+  background: var(--playbook-surface-soft);
+  color: var(--playbook-text);
+}
+.page-strategy .playbook-steps li > span {
+  background: #080a0d;
+  color: #fff;
+  font-size: 9px;
+}
+.page-strategy .playbook-steps li b { font-size: 13px; }
+.page-strategy .playbook-judgment,
+.page-strategy .timeline-result {
+  border-left-color: var(--impact-orange);
+  background: rgba(255,122,26,.1);
+  color: var(--playbook-text);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.page-strategy .evidence-list p { color: #ffb4ba; }
+.page-strategy .evidence-list span,
+.page-strategy .playbook-source-note,
+.page-strategy .loadout-list span,
+.page-strategy .distance-zone ul,
+.page-strategy .priority-list p,
+.page-strategy .comparison-side ul,
+.page-strategy .practice-tasks span,
+.page-strategy .decision-grid span,
+.page-strategy .timeline-list span,
+.page-strategy .code-grid span,
+.page-strategy .reference-list span { color: var(--playbook-text-soft); }
+.page-strategy .playbook-source-note { font-size: 10px; line-height: 1.65; }
+
+.page-strategy .playbook-card-manifesto { background: #0a0c0f; }
+.page-strategy .manifesto-grid div { border-color: var(--playbook-line); background: rgba(255,255,255,.035); }
+.page-strategy .manifesto-grid span { color: var(--playbook-text-soft); font-size: 12px; }
+.page-strategy .avoid-strip span { color: var(--playbook-text-soft); }
+
+.page-strategy .loadout-list li { border-top-color: var(--marisa-red); }
+.page-strategy .loadout-list small { color: #ff8f98; font-size: 10px; }
+.page-strategy .loadout-list span { font-size: 11px; line-height: 1.55; }
+
+.page-strategy .distance-zone { border-color: var(--playbook-line-strong); }
+.page-strategy .distance-zone > div small { color: var(--playbook-muted); font-size: 10px; }
+.page-strategy .distance-zone ul { font-size: 12px; line-height: 1.6; }
+.page-strategy .distance-zone.zone-main {
+  border-color: #ff6975;
+  background: linear-gradient(145deg, #b41825, #681019);
+  color: #fff;
+}
+.page-strategy .distance-zone.zone-main > div small,
+.page-strategy .distance-zone.zone-main ul { color: #fff0f1; }
+.page-strategy .distance-zone.zone-danger {
+  border-color: rgba(255,105,117,.45);
+  background: rgba(213,32,47,.12);
+}
+
+.page-strategy .priority-list li { border-color: var(--playbook-line); }
+.page-strategy .priority-list li > span { background: #080a0d; color: var(--victory-gold); }
+.page-strategy .priority-list b { font-size: 15px; }
+.page-strategy .priority-list p { font-size: 11px; line-height: 1.55; }
+.page-strategy .playbook-warning {
+  border-color: rgba(255,105,117,.45);
+  background: rgba(213,32,47,.13);
+  color: #ffd8db;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.page-strategy .comparison-side { border: 1px solid var(--playbook-line-strong); }
+.page-strategy .comparison-left { background: #0a0c0f; color: #fff; }
+.page-strategy .comparison-right { background: rgba(213,32,47,.1); color: var(--playbook-text); }
+.page-strategy .comparison-right small { color: #ff8f98; }
+.page-strategy .comparison-side ul { font-size: 12px; line-height: 1.6; }
+
+.page-strategy .practice-tasks small,
+.page-strategy .decision-grid small,
+.page-strategy .verification-list dt,
+.page-strategy .timeline-list small,
+.page-strategy .reference-list small { color: #ff8f98; }
+.page-strategy .practice-tasks b { font-size: 14px; }
+.page-strategy .practice-tasks span { font-size: 10px; line-height: 1.55; }
+.page-strategy .playbook-checklist span {
+  border: 1px solid var(--playbook-line);
+  background: var(--playbook-surface-soft);
+  color: var(--playbook-text-soft);
+  font-size: 10px;
+}
+
+.page-strategy .combo-metrics { border-color: var(--playbook-line-strong); }
+.page-strategy .combo-metrics > div {
+  border-color: var(--playbook-line);
+  background: var(--playbook-surface-soft);
+  color: var(--playbook-text);
+}
+.page-strategy .combo-metrics > div:first-child { background: #090b0e; }
+.page-strategy .combo-metrics small { color: var(--playbook-muted); font-size: 9px; }
+.page-strategy .combo-metrics > div:first-child small { color: var(--victory-gold); }
+.page-strategy .combo-inputs { background: var(--playbook-surface-base); }
+.page-strategy .combo-inputs span {
+  border: 1px solid var(--playbook-line);
+  background: var(--playbook-surface-soft);
+  color: #fff;
+  font-size: 11px;
+}
+.page-strategy .combo-facts > div,
+.page-strategy .verification-list,
+.page-strategy .verification-list > div { border-color: var(--playbook-line); }
+.page-strategy .combo-facts dt { color: var(--playbook-muted); font-size: 10px; }
+.page-strategy .combo-facts dd { color: var(--playbook-text); font-size: 11px; }
+
+.page-strategy .decision-origin { background: #080a0d; color: #fff; }
+.page-strategy .decision-grid > div:nth-child(2) {
+  border-color: #ff6975;
+  background: rgba(213,32,47,.14);
+}
+.page-strategy .decision-grid b { font-size: 17px; }
+.page-strategy .decision-grid span { font-size: 11px; line-height: 1.6; }
+.page-strategy .verification-list dd { color: var(--playbook-text); font-size: 13px; }
+
+.page-strategy .timeline-list > div { border-color: var(--playbook-line-strong); }
+.page-strategy .timeline-list > div::before { border-color: var(--playbook-surface-raised); }
+.page-strategy .timeline-list b { font-size: 14px; }
+.page-strategy .timeline-list span { font-size: 10px; line-height: 1.55; }
+.page-strategy .code-grid b { font-size: 13px; }
+.page-strategy .code-grid span { font-size: 10px; line-height: 1.5; }
+.page-strategy .reference-list b { color: var(--playbook-text); font-size: 12px; }
+.page-strategy .reference-list span { font-size: 9px; }
+.page-strategy .reference-list a:hover { border-color: var(--hud-cyan); background: rgba(24,215,208,.08); }
+.page-strategy .playbook-empty span { color: var(--playbook-text-soft); }
+
+.page-strategy :where(a, button, [tabindex]):focus-visible {
+  outline: 3px solid var(--readable-focus, #18d7d0);
+  outline-offset: 3px;
+}
+
+@media (max-width: 760px) {
+  .page-strategy .playbook-action-cue { grid-template-columns: 1fr; gap: 5px; }
+  .page-strategy .playbook-card-body { padding-inline: 20px; }
+  .page-strategy .playbook-card-header { padding-inline: 22px 18px; }
+  .page-strategy .playbook-card-footer { align-items: flex-start; padding-left: 22px; }
+  .page-strategy .playbook-card-lead { font-size: 13px; }
+}
+
+@media (prefers-contrast: more) {
+  .page-strategy .playbook-card,
+  .page-strategy .playbook-stage,
+  .page-strategy .playbook-categories { border-color: rgba(255,255,255,.5); }
+  .page-strategy .playbook-text-soft,
+  .page-strategy .playbook-muted { color: #fff; }
+}
