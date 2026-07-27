@@ -1,5 +1,5 @@
 {
-  "appVersion": "0.15.2",
+  "appVersion": "0.15.3",
   "trainingDataVersion": "0.8.0",
   "followupDataVersion": "0.11.0",
   "situationDataVersion": "2.0.0",
@@ -19,6 +19,9 @@
     "reusable-readability-tokens",
     "high-contrast-focus-visible",
     "moves-dedicated-page",
+    "moves-readability-pass",
+    "moves-practical-action-cues",
+    "moves-purpose-first-order",
     "strategy-dedicated-page",
     "strategy-readability-pass",
     "strategy-practical-action-cues",

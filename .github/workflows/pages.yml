@@ -29,6 +29,10 @@ jobs:
           set -euo pipefail
           for file in \
             app.js \
+            moves-page.js \
+            moves-practical-cues.js \
+            followups-data.js \
+            followups-engine.js \
             strategy-gallery.js \
             strategy-practical-cues.js \
             playbook-data.js \
