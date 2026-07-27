@@ -42,6 +42,7 @@ jobs:
             drill-data.js \
             drill-route-schema.js \
             drill-scenarios.js \
+            drill-result-analysis.js \
             drill-focus.js \
             drill-decision-engine.js \
             drill-tier-explanation.js \
@@ -164,6 +165,91 @@ jobs:
           if (Object.values(tierCounts).some(count => count === 0)) throw new Error(`Every tier needs routes: ${JSON.stringify(tierCounts)}`);
 
           console.log(`Route schema passed: ${routes.length} routes (${JSON.stringify(tierCounts)}) and ${scenarios.length} query-built scenarios.`);
+          NODE
+
+      - name: Validate tier-based drill analysis
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const context = { window: {} };
+          vm.createContext(context);
+          const run = file => vm.runInContext(fs.readFileSync(file, 'utf8'), context, { filename: file });
+
+          for (const file of [
+            'data-core.js',
+            'data-1.js',
+            'data-2.js',
+            'data-3.js',
+            'data-4.js',
+            'data-5.js',
+            'data-6.js',
+            'drill-data.js',
+            'drill-route-schema.js',
+            'drill-scenarios.js',
+            'drill-result-analysis.js'
+          ]) run(file);
+
+          const analysis = context.window.MARISA_DRILL_ANALYSIS;
+          if (!analysis) throw new Error('MARISA_DRILL_ANALYSIS was not created');
+          if (analysis.version !== '1.0.0') throw new Error(`Unexpected analysis version: ${analysis.version}`);
+
+          const cases = [
+            {
+              label: 'stable correct, maximum selected',
+              result: { scenarioId: 'stable-amp-normal', routeId: 'aMP-normal-power', correctRouteId: 'aMP-normal-basic', type: 'wrong', elapsedMs: 2100 },
+              flags: ['foundationGap', 'overextend']
+            },
+            {
+              label: 'maximum correct, stable selected',
+              result: { scenarioId: 'power-amp-carry', routeId: 'aMP-normal-basic', correctRouteId: 'aMP-normal-power', type: 'wrong', elapsedMs: 2300 },
+              flags: ['underconvert']
+            },
+            {
+              label: 'same tier, wrong condition',
+              result: { scenarioId: 'confirm-amp-counter', routeId: 'aMP-punish-basic', correctRouteId: 'aMP-counter-basic', type: 'wrong', elapsedMs: 1800 },
+              flags: ['conditionMiss']
+            },
+            {
+              label: 'stable timeout',
+              result: { scenarioId: 'stable-crlp-normal', routeId: null, correctRouteId: 'crLP-normal-basic', type: 'timeout', elapsedMs: 8000 },
+              flags: ['foundationGap', 'timeout']
+            }
+          ];
+
+          const enriched = cases.map(test => {
+            const value = analysis.enrichResult(test.result);
+            if (JSON.stringify(value.diagnosticFlags) !== JSON.stringify(test.flags)) {
+              throw new Error(`${test.label}: expected ${test.flags.join('+')}, got ${(value.diagnosticFlags || []).join('+')}`);
+            }
+            return value;
+          });
+
+          const scenarioById = Object.fromEntries(context.window.MARISA_DECISION_DRILL.scenarios.map(item => [item.id, item]));
+          const summary = analysis.summarizeSession(enriched, scenarioById);
+          const expected = { foundationGap: 2, overextend: 1, underconvert: 1, conditionMiss: 1, timeout: 1 };
+          for (const [key, count] of Object.entries(expected)) {
+            if (summary.diagnostics[key] !== count) throw new Error(`Diagnostic count mismatch: ${key}=${summary.diagnostics[key]}, expected ${count}`);
+          }
+          if (summary.tierStats.stable.total !== 2 || summary.tierStats.standard.total !== 1 || summary.tierStats.maximum.total !== 1) {
+            throw new Error(`Tier totals are wrong: ${JSON.stringify(summary.tierStats)}`);
+          }
+          if (summary.tierStats.stable.averageMs !== 2100) throw new Error(`Stable average should exclude timeout: ${summary.tierStats.stable.averageMs}`);
+
+          const attempt = analysis.createAttempt({
+            at: 1,
+            config: { category: 'all', speed: 'standard', questionCount: 4 },
+            total: 4,
+            accuracy: 0,
+            averageMs: 2067,
+            totals: { correct: 0, wrong: 3, timeout: 1 },
+            analysis: summary
+          });
+          const history = analysis.buildHistorySummary([attempt]);
+          if (history.attempts !== 1 || history.recentMisses.length !== 4) throw new Error('History summary did not retain detailed misses');
+          if (history.suggestedScenarioIds.length !== 4) throw new Error('History summary did not build suggested scenarios');
+
+          console.log(`Drill analysis passed: ${Object.entries(summary.diagnostics).map(([key, value]) => `${key}=${value}`).join(', ')}.`);
           NODE
 
       - name: Validate strategy combo learning roadmap
