@@ -5,13 +5,12 @@ Street Fighter 6「モダンマリーザ」の技・状況判断・実戦攻略�
 ## 公開ページ
 
 - `index.html`：入口。何を調べるかを選ぶ
-- `situations.html`：対空、暴れ、弾抜け、起き攻めなど40状況から逆引き
+- `situations.html`：距離、画面位置、相手行動から次の判断を逆引き
 - `moves.html`：モダンで使用できる全48技の性能とヒット後派生
 - `strategy.html`：距離、守り、起き攻め、コンボ、失敗修正の実戦攻略デッキ
-- `drill.html`：コンボリンクを3択と制限時間で反復するドリル。猶予フレームと実際のダメージを表示
+- `drill.html`：状況・ゲージ・目的を読み、完成コンボ3択から適切なルートを選ぶ判断ドリル
 
-公開HTMLでは旧コントローラー型UIを読み込みません。`drill.html`は既存の技データベースを
-読み込みつつ、独自の判定エンジン(`drill-engine.js`)で動作する新しいドリルモードです。
+公開HTMLでは旧コントローラー型UIを読み込みません。各ページはID付きURLで相互に接続し、状況、攻略、技、判断ドリルを一周できます。
 
 ## 情報設計
 
@@ -19,10 +18,11 @@ Street Fighter 6「モダンマリーザ」の技・状況判断・実戦攻略�
 
 1. ホームで入口を選ぶ
 2. 困り方が明確なら状況ページを使う
-3. 技の数値と派生は技ページで確認する
-4. 試合全体の組み立ては実戦攻略で読む
+3. 試合の理由と選択基準は実戦攻略で読む
+4. 技の数値と派生は技ページで確認する
+5. 状況に合うコンボ選択をドリルで反復する
 
-`designmd`の方針に従い、すべてを同じカードへ入れず、入口、一覧、比較、読み物で密度とレイアウトを変えています。
+`designmd`の方針に従い、すべてを同じカードへ入れず、入口、一覧、比較、読み物、反復練習で密度とレイアウトを変えています。
 
 ## 技ページ
 
@@ -68,48 +68,84 @@ Street Fighter 6「モダンマリーザ」の技・状況判断・実戦攻略�
 
 推定ルートを確認済みルートとして扱いません。
 
-## コンボドリル
+## コンボ判断ドリル
 
-`drill.html`は、始動技から次の一手を3択で連続出題し、実際の猶予フレームに応じた
-制限時間内に選べないと失敗にするモードです。
+`drill.html`は、毎問3→2→1の後に状況を表示し、同じ始動技から始まる3つの完成コンボを比較するモードです。制限時間はフレーム猶予ではなく、全問題共通の12秒・8秒・5秒から選びます。
 
-### つながり方の種別
+### 判断する情報
 
-- `リンク`：前の技が終わってから次を出す。猶予F＝(前技のヒット時有利F＋条件加算)－(次技の発生F)＋1で算出
-- `キャンセル`：前の技の動作中に必殺技・SAで上書き。発生Fは無関係で、固定のヒット確認時間を使う
-- `ターゲット`：ターゲットコンボの派生入力。固定の受付時間を使う
-- `追撃`：打ち上げ・バウンド中への追撃。固定の追撃時間を使う
+- 通常／カウンター／パニカン
+- 中央／画面端
+- ドライブ・SAの使用可否
+- 長押しや立ち限定などの成立条件
+- 安定、起き攻め、火力、運び、倒し切りなどの目的
 
-条件による加算(`通常+0F` / `カウンター+2F` / `パニカン+4F`)は、コンボの最初のリンクにのみ適用します。
+### 安定・標準・最大
 
-### データ
+全24ルートへ共通スキーマを付けています。
 
-`drill-data.js`に`window.MARISA_DRILL.routes[]`として、始動技・条件・技IDの並び・
-総ダメージを収録しています。猶予フレームはデータに持たず、既存の技データ(`data-1.js`〜
-`data-6.js`)から実行時に計算します。誤答2択は技データから自動生成します。
+- `stable`：完走率、短い入力、ゲージ温存を優先する安定ルート
+- `standard`：火力、起き攻め、ゲージ効率を両立する実戦の標準ルート
+- `maximum`：パニカン、長押し、端、十分なゲージ、倒し切りなど条件付きの最大ルート
 
-ダメージは`damageStatus: "measured"`(実測・引用元に明記あり)と`"estimated"`
-(技ごとの数値から概算)を区別し、`estimated`のルートは画面に「概算」と表示します。
-`input: "command"`のルートはコマンド入力が必要な技を含むことを示します。
+選択前には段階名を表示しません。答え合わせ後に、正解ルートの段階、使う条件、一段下へ戻す条件、次へ進む条件を表示します。
+
+### ルートデータ
+
+`drill-data.js`の`window.MARISA_DRILL.routes[]`へ、始動技、ヒット条件、技IDの並び、ダメージ、入力方式を収録します。
+
+`drill-route-schema.js`が各ルートへ次を追加します。
+
+- `tier`
+- `objectives[]`
+- `positions[]`
+- `resources.driveCost / saCost`
+- `inputDifficulty`
+- `reliability`
+- `requirements`
+- `learning.use / fallback / upgrade`
+
+ダメージは`damageStatus: "measured"`と`"estimated"`を区別し、概算ルートは画面にも明示します。
+
+### 問題データ
+
+`drill-scenarios.js`ではルートIDを直接3件並べません。たとえば、
+
+```js
+{
+  starter: "aMP",
+  condition: "normal",
+  tier: "standard",
+  objectivesAll: ["oki"]
+}
+```
+
+のような条件を書き、`drill-route-schema.js`が一致するルートを一意に選びます。ルートを更新しても、問題側の目的と条件が維持される構成です。
+
+### 直接練習
+
+`drill.html?scenario=stable-amp-normal`のように問題IDを指定すると、その問題だけを3→2→1から練習できます。通常ドリルの保存設定は変更しません。
 
 ### 自己チェック
 
-`drill.html?selftest`でアクセスすると、フレーム計算とデータ整合性の自己チェックが
-画面上部に表示されます。ルートを追加・変更したら必ず実行してください。
+`drill.html?selftest`で、各問題が3択であること、正解を含むこと、同じ始動技であること、参照ルートが存在することを画面上部に表示します。
 
 ## 主なファイル
 
 - `site-shell.css`：全ページ共通のヘッダー、余白、編集型レイアウト
 - `moves-page.css` / `moves-page.js`：技専用ページ
 - `situations-page.css` / `situations-page.js`：状況逆引きページ
-- `strategy-page.css`：実戦攻略ページの調整
+- `strategy-page.css` / `strategy-gallery.js`：実戦攻略ページ
 - `data-core.js`、`data-1.js`〜`data-6.js`：全48技の基本データ
-- `situations.js`：8分野×5状況
-- `followups-data.js`：条件別の推奨ルート、評価、出典、検証状態
-- `followups-engine.js` / `followups.css`：ヒット後おすすめ比較UI
-- `playbook-data.js` / `strategy-gallery.js`：実戦攻略デッキ
-- `drill-data.js`：コンボドリルのルート定義
-- `drill-engine.js` / `drill.css`：コンボドリルのフレーム計算・出題・判定UI
+- `situations.js` / `situations-data-v2.js`：既存40状況と詳細状況
+- `followups-data.js` / `followups-engine.js`：条件別の推奨ルート比較
+- `playbook-data.js` / `playbook-expanded.js`：実戦攻略デッキ
+- `drill-data.js`：完成コンボのルート定義
+- `drill-route-schema.js`：安定・標準・最大、目的、ゲージ、難度の共通スキーマ
+- `drill-scenarios.js`：条件検索型の18判断問題
+- `drill-decision-engine.js`：3→2→1、3択、結果記録
+- `drill-tier-explanation.js`：答え合わせ後の段階説明
+- `learning-links.js` / `learning-flow-enhancer.js`：ページ間の学習導線
 - `version.json`：公開版とデータ基準
 
 旧コントローラー・練習関連ファイルはリポジトリ内に残っていますが、公開HTMLからは参照していません。
@@ -127,26 +163,21 @@ python -m http.server 8000
 - 状況：`http://localhost:8000/situations.html`
 - 実戦攻略：`http://localhost:8000/strategy.html`
 - コンボドリル：`http://localhost:8000/drill.html`
+- ドリル自己チェック：`http://localhost:8000/drill.html?selftest`
 
 ## 自動検査
 
 GitHub Pages公開前に次を検査します。
 
-- 公開JavaScriptの構文(ドリルのJSを含む)
-- 基本技データ48件とID重複
-- 状況データ40件と技参照
-- 条件別データの対象48件との完全一致
-- `normal / counter / punish / rush`の4条件
-- 一条件あたり1〜3件という上限
-- 存在しない技ID、条件ID、出典IDの参照
-- 5つの公開HTMLと参照CSS・JSの存在
-- 公開HTMLへコントローラー／練習UIが混入していないこと
-- 技検索パネルが非固定であること
-- CSSの括弧対応
-- 公開バージョン
-
-ドリルのルートデータ(猶予フレーム計算、技ID参照、誤答生成)は`drill.html?selftest`の
-自己チェックで検証します。CIには自己チェック自体の自動実行は組み込んでいません。
+- 公開JavaScriptの構文
+- 基本技データ48件と既存状況40件
+- 完成コンボ24ルートのID、段階、目的、位置、ゲージ、難度、安定度
+- `stable / standard / maximum`の各段階にルートが存在すること
+- 18問が条件検索型で生成されること
+- 各問題が3択、正解を含む、同じ始動技、参照ルート実在であること
+- 状況・攻略・技・ドリル間のリンク先ID
+- faviconと公開5ページからの参照
+- 詳細な攻略カード・状況参照は警告扱いの監査
 
 ## データ基準
 
