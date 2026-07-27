@@ -3,6 +3,77 @@
   const playbook = window.MARISA_PLAYBOOK;
   if (!drill || !playbook) return;
 
+  const assistEntryCards = [
+    {
+      id: "assist-light-1320",
+      category: "combo",
+      type: "combo",
+      number: "A1",
+      title: "入口：A弱コンボ",
+      lead: "近距離では、まずアシスト完走でダウンまで取る。",
+      damage: 1320,
+      drive: 0,
+      sa: 0,
+      position: "中央・画面端",
+      condition: "A弱が近距離でヒット",
+      inputs: ["A弱", "アシストコンボ完走"],
+      use: "暴れ、小さい確定反撃、近距離の安定択",
+      next: "完走が安定したら、↓弱×n→弱ディマへ移る",
+      filters: ["starter", "no-meter"],
+      status: "measured",
+      statusLabel: "入口ルート",
+      relatedMoves: ["crLK", "crLP"],
+      sourceNote: "既存の実測1,320を、手動ルートへ移るための入口として再登録。"
+    },
+    {
+      id: "assist-medium-2660",
+      category: "combo",
+      type: "combo",
+      number: "A2",
+      title: "入口：A中コンボ",
+      lead: "A中が当たった後の完走感覚を、先にアシストで固定する。",
+      damage: 2660,
+      drive: "アシスト依存",
+      sa: "アシスト依存",
+      position: "中央",
+      condition: "A中が通常ヒット",
+      inputs: ["A中", "アシストコンボ完走"],
+      use: "中距離のヒット確認を、まず一つの入力へ固定",
+      next: "A中×2→中ディマへ移り、OD起き攻めと最大を分ける",
+      filters: ["starter"],
+      status: "measured",
+      statusLabel: "入口ルート",
+      relatedMoves: ["aMP"],
+      sourceNote: "実測2,660。ゲージ内訳はアシスト設定と実戦条件で再確認。"
+    },
+    {
+      id: "assist-heavy-3020",
+      category: "combo",
+      type: "combo",
+      number: "A3",
+      title: "入口：A強コンボ",
+      lead: "大きな隙では、最初に落とさない確定反撃を持つ。",
+      damage: 3020,
+      drive: 0,
+      sa: 0,
+      position: "中央・画面端",
+      condition: "大きな隙へのA強始動",
+      inputs: ["A強", "アシストコンボ完走"],
+      use: "無敵技などの大きな確定反撃",
+      next: "N強・膝の始動条件を確認し、手動の標準と最大へ移る",
+      filters: ["starter", "punish", "no-meter"],
+      status: "measured",
+      statusLabel: "入口ルート",
+      relatedMoves: ["fHK", "stHP"],
+      sourceNote: "既存の実測3,020を、手動確定反撃へ移る入口として再登録。"
+    }
+  ];
+
+  const existingCardIds = new Set(playbook.cards.map(card => card.id));
+  assistEntryCards.forEach(card => {
+    if (!existingCardIds.has(card.id)) playbook.cards.push(card);
+  });
+
   const routeIds = new Set(drill.routes.map(route => route.id));
   const cardIds = new Set(playbook.cards.map(card => card.id));
 
@@ -46,10 +117,10 @@
       entry: { cardId: "assist-medium-2660", label: "入口：A中コンボ", type: "assist" },
       routes: [
         { routeId: "aMP-normal-basic", cardId: "starter-assist-medium-dima", prerequisites: [] },
-        { routeId: "aMP-normal-od", cardId: "amp-od-dima-route", prerequisites: ["aMP-normal-basic"] },
+        { routeId: "aMP-normal-od", cardId: "sa1-medium-assist", prerequisites: ["aMP-normal-basic"] },
         { routeId: "aMP-counter-basic", cardId: "starter-assist-medium-dima", prerequisites: ["aMP-normal-basic"] },
-        { routeId: "aMP-punish-basic", cardId: "amp-od-dima-route", prerequisites: ["aMP-normal-basic"] },
-        { routeId: "aMP-normal-power", cardId: "amp-od-dima-route", prerequisites: ["aMP-normal-od"] }
+        { routeId: "aMP-punish-basic", cardId: "sa1-medium-assist", prerequisites: ["aMP-normal-basic"] },
+        { routeId: "aMP-normal-power", cardId: "sa1-medium-assist", prerequisites: ["aMP-normal-od"] }
       ]
     },
     {
@@ -90,9 +161,9 @@
       id: "knee",
       label: "膝・A強始動",
       description: "通常ヒットの主力を固定し、長押しパニカンを確認できる時だけ最大へ進む。",
-      entry: { cardId: "starter-assist-heavy-sa3", label: "入口：A強の確定反撃", type: "assist" },
+      entry: { cardId: "assist-heavy-3020", label: "入口：A強コンボ", type: "assist" },
       routes: [
-        { routeId: "fHK-normal-basic", cardId: "assist-heavy-3020", prerequisites: [] },
+        { routeId: "fHK-normal-basic", cardId: "starter-assist-heavy-sa3", prerequisites: [] },
         { routeId: "fHK-punish-charge", cardId: "starter-charged-heavy-punish", prerequisites: ["fHK-normal-basic"] }
       ]
     },
@@ -100,10 +171,10 @@
       id: "od-dima",
       label: "ODディマ対空",
       description: "短い起き攻めルートを先に安定させ、高度とゲージを確認できる時だけ運びへ進む。",
-      entry: { cardId: "light-od-dima-2584", label: "入口：ODディマの追撃確認", type: "manual" },
+      entry: { cardId: "sa1-medium-assist", label: "入口：A中からODディマ", type: "manual" },
       routes: [
-        { routeId: "dimachaerusOD-normal-basic", cardId: "light-od-dima-2584", prerequisites: [] },
-        { routeId: "dimachaerusOD-normal-power", cardId: "amp-od-dima-route", prerequisites: ["dimachaerusOD-normal-basic"] }
+        { routeId: "dimachaerusOD-normal-basic", cardId: "sa1-medium-assist", prerequisites: [] },
+        { routeId: "dimachaerusOD-normal-power", cardId: "punish-heavy-sa2", prerequisites: ["dimachaerusOD-normal-basic"] }
       ]
     },
     {
@@ -144,6 +215,7 @@
   window.MARISA_COMBO_LEARNING = {
     version: "1.0.0",
     storageKey: "modern-marisa-combo-route-learning-v1",
+    assistEntryCards: assistEntryCards.map(card => card.id),
     families,
     scenarioByRoute,
     routeToFamily,
