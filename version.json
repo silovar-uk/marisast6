@@ -1,5 +1,5 @@
 {
-  "appVersion": "0.15.0",
+  "appVersion": "0.15.1",
   "trainingDataVersion": "0.8.0",
   "followupDataVersion": "0.11.0",
   "situationDataVersion": "2.0.0",
@@ -15,6 +15,9 @@
     "legacy-situation-adapter",
     "detailed-okizeme-decisions",
     "situation-selftest",
+    "situation-readability-pass",
+    "reusable-readability-tokens",
+    "high-contrast-focus-visible",
     "moves-dedicated-page",
     "strategy-dedicated-page",
     "non-sticky-collapsible-move-search",

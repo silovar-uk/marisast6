@@ -1,0 +1,27 @@
+:root {
+  --readable-surface-base: #0d1014;
+  --readable-surface-raised: #15191f;
+  --readable-surface-soft: #1b2027;
+  --readable-text-primary: #f7f4ee;
+  --readable-text-secondary: #d9d4cc;
+  --readable-text-muted: #b8b2aa;
+  --readable-line: rgba(255,255,255,.17);
+  --readable-line-strong: rgba(255,255,255,.29);
+  --readable-focus: #18d7d0;
+}
+
+.page-situations :where(a, button, input, summary):focus-visible {
+  outline: 3px solid var(--readable-focus);
+  outline-offset: 3px;
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --readable-surface-raised: #111419;
+    --readable-surface-soft: #1c2229;
+    --readable-text-secondary: #eee9e1;
+    --readable-text-muted: #d2ccc3;
+    --readable-line: rgba(255,255,255,.3);
+    --readable-line-strong: rgba(255,255,255,.48);
+  }
+}
