@@ -30,6 +30,7 @@ jobs:
           for file in \
             app.js \
             strategy-gallery.js \
+            strategy-practical-cues.js \
             playbook-data.js \
             playbook-expanded.js \
             situations.js \
