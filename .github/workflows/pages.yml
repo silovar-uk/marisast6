@@ -38,9 +38,11 @@ jobs:
             playbook-data.js \
             playbook-expanded.js \
             drill-data.js \
+            drill-route-schema.js \
             drill-scenarios.js \
             drill-focus.js \
             drill-decision-engine.js \
+            drill-tier-explanation.js \
             situations.js \
             situations-data-v2.js \
             situations-adapter.js \
@@ -95,7 +97,7 @@ jobs:
           console.log(`Core validation passed: ${data.moves.length} moves and ${situations.length} situations.`);
           NODE
 
-      - name: Validate combo decision drill
+      - name: Validate combo route schema and decision drill
         run: |
           node <<'NODE'
           const fs = require('fs');
@@ -113,17 +115,38 @@ jobs:
             'data-5.js',
             'data-6.js',
             'drill-data.js',
+            'drill-route-schema.js',
             'drill-scenarios.js'
           ]) run(file);
 
-          const routes = context.window.MARISA_DRILL?.routes || [];
+          const drill = context.window.MARISA_DRILL;
+          const routes = drill?.routes || [];
           const scenarios = context.window.MARISA_DECISION_DRILL?.scenarios || [];
           const routeById = new Map(routes.map(route => [route.id, route]));
+          const tiers = new Set(['stable', 'standard', 'maximum']);
 
+          if (drill.schemaVersion !== 2) throw new Error(`Expected route schema v2, got ${drill.schemaVersion}`);
+          if (drill.schemaErrors?.length) throw new Error(`Route schema errors: ${drill.schemaErrors.join(', ')}`);
+          if (routes.length !== 24) throw new Error(`Expected 24 combo routes, got ${routes.length}`);
+          if (new Set(routes.map(route => route.id)).size !== routes.length) throw new Error('Route IDs must be unique');
+
+          for (const route of routes) {
+            if (!tiers.has(route.tier)) throw new Error(`${route.id} has invalid tier: ${route.tier}`);
+            if (!Array.isArray(route.objectives) || !route.objectives.length) throw new Error(`${route.id} needs objectives`);
+            if (!Array.isArray(route.positions) || !route.positions.length) throw new Error(`${route.id} needs positions`);
+            if (!Number.isInteger(route.resources?.driveCost) || route.resources.driveCost < 0) throw new Error(`${route.id} has invalid driveCost`);
+            if (!Number.isInteger(route.resources?.saCost) || route.resources.saCost < 0) throw new Error(`${route.id} has invalid saCost`);
+            if (![1, 2, 3].includes(route.inputDifficulty)) throw new Error(`${route.id} has invalid inputDifficulty`);
+            if (![1, 2, 3].includes(route.reliability)) throw new Error(`${route.id} has invalid reliability`);
+            if (!route.learning?.use || !route.learning?.fallback || !route.learning?.upgrade) throw new Error(`${route.id} needs learning guidance`);
+          }
+
+          if (context.window.MARISA_DECISION_DRILL?.definitionMode !== 'query') throw new Error('Decision drill must use query definitions');
           if (scenarios.length !== 18) throw new Error(`Expected 18 decision scenarios, got ${scenarios.length}`);
           if (new Set(scenarios.map(item => item.id)).size !== scenarios.length) throw new Error('Decision scenario IDs must be unique');
 
           for (const scenario of scenarios) {
+            if (scenario.definitionMode !== 'query' || !scenario.selection) throw new Error(`${scenario.id} is not query-built`);
             if (scenario.choices.length !== 3) throw new Error(`${scenario.id} must have exactly 3 choices`);
             if (!scenario.choices.includes(scenario.correct)) throw new Error(`${scenario.id} does not include its correct route`);
             if (new Set(scenario.choices).size !== 3) throw new Error(`${scenario.id} has duplicate choices`);
@@ -131,9 +154,14 @@ jobs:
             if (missing.length) throw new Error(`${scenario.id} has missing routes: ${missing.join(', ')}`);
             const starters = new Set(scenario.choices.map(id => routeById.get(id).starter));
             if (starters.size !== 1) throw new Error(`${scenario.id} choices must share the same starter`);
+            const correctRoute = routeById.get(scenario.correct);
+            if (scenario.resolvedSelection?.correctTier !== correctRoute.tier) throw new Error(`${scenario.id} resolved tier mismatch`);
           }
 
-          console.log(`Decision drill validation passed: ${scenarios.length} scenarios, all with comparable 3-choice routes.`);
+          const tierCounts = Object.fromEntries([...tiers].map(tier => [tier, routes.filter(route => route.tier === tier).length]));
+          if (Object.values(tierCounts).some(count => count === 0)) throw new Error(`Every tier needs routes: ${JSON.stringify(tierCounts)}`);
+
+          console.log(`Route schema passed: ${routes.length} routes (${JSON.stringify(tierCounts)}) and ${scenarios.length} query-built scenarios.`);
           NODE
 
       - name: Validate learning flow links
@@ -159,6 +187,7 @@ jobs:
             'situations-data-v2.js',
             'situations-adapter.js',
             'drill-data.js',
+            'drill-route-schema.js',
             'drill-scenarios.js',
             'learning-links.js'
           ]) run(file);
