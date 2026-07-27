@@ -11,9 +11,12 @@
   data.scenarios = [scenario];
   window.MARISA_DRILL_FOCUS = scenario;
 
+  const key = "marisa-decision-drill-v2";
+  let previousSettings = { category: "all", speed: "standard", questionCount: 10 };
+
   try {
-    const key = "marisa-decision-drill-v2";
     const stored = JSON.parse(localStorage.getItem(key) || "{}");
+    if (stored.settings) previousSettings = stored.settings;
     stored.settings = { category: "all", speed: "standard", questionCount: 1 };
     localStorage.setItem(key, JSON.stringify(stored));
   } catch {
@@ -25,6 +28,14 @@
     setTimeout(() => {
       const start = document.querySelector(".drill-start-button");
       if (start && !start.disabled) start.click();
+
+      try {
+        const stored = JSON.parse(localStorage.getItem(key) || "{}");
+        stored.settings = previousSettings;
+        localStorage.setItem(key, JSON.stringify(stored));
+      } catch {
+        // 次回設定の復元に失敗しても、現在の1問練習は続行する。
+      }
     }, 0);
   });
 })();
