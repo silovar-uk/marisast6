@@ -35,6 +35,8 @@ jobs:
             followups-engine.js \
             strategy-gallery.js \
             strategy-practical-cues.js \
+            strategy-combo-learning.js \
+            combo-learning-data.js \
             playbook-data.js \
             playbook-expanded.js \
             drill-data.js \
@@ -162,6 +164,107 @@ jobs:
           if (Object.values(tierCounts).some(count => count === 0)) throw new Error(`Every tier needs routes: ${JSON.stringify(tierCounts)}`);
 
           console.log(`Route schema passed: ${routes.length} routes (${JSON.stringify(tierCounts)}) and ${scenarios.length} query-built scenarios.`);
+          NODE
+
+      - name: Validate strategy combo learning roadmap
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const context = { window: {} };
+          vm.createContext(context);
+          const run = file => vm.runInContext(fs.readFileSync(file, 'utf8'), context, { filename: file });
+
+          for (const file of [
+            'data-core.js',
+            'data-1.js',
+            'data-2.js',
+            'data-3.js',
+            'data-4.js',
+            'data-5.js',
+            'data-6.js',
+            'playbook-data.js',
+            'playbook-expanded.js',
+            'drill-data.js',
+            'drill-route-schema.js',
+            'drill-scenarios.js',
+            'combo-learning-data.js'
+          ]) run(file);
+
+          const drill = context.window.MARISA_DRILL;
+          const playbook = context.window.MARISA_PLAYBOOK;
+          const scenarios = context.window.MARISA_DECISION_DRILL?.scenarios || [];
+          const learning = context.window.MARISA_COMBO_LEARNING;
+
+          if (!learning) throw new Error('MARISA_COMBO_LEARNING was not created');
+          if (learning.errors?.length) throw new Error(`Combo learning registry errors: ${learning.errors.join(', ')}`);
+          if (learning.families.length !== 8) throw new Error(`Expected 8 learning families, got ${learning.families.length}`);
+
+          const routeById = new Map(drill.routes.map(route => [route.id, route]));
+          const cardById = new Map(playbook.cards.map(card => [card.id, card]));
+          const scenarioIds = new Set(scenarios.map(item => item.id));
+          const familyIds = new Set();
+          const assignedRoutes = [];
+          const tierRank = { stable: 0, standard: 1, maximum: 2 };
+          const graph = new Map();
+
+          for (const family of learning.families) {
+            if (familyIds.has(family.id)) throw new Error(`Duplicate learning family: ${family.id}`);
+            familyIds.add(family.id);
+
+            const entryCard = cardById.get(family.entry?.cardId);
+            if (!entryCard) throw new Error(`Unknown entry card: ${family.id}:${family.entry?.cardId}`);
+            if (entryCard.category !== 'combo') throw new Error(`Entry card must be a combo card: ${family.entry.cardId}`);
+            if (!family.routes.length) throw new Error(`Learning family has no routes: ${family.id}`);
+
+            for (const item of family.routes) {
+              const route = routeById.get(item.routeId);
+              const card = cardById.get(item.cardId);
+              if (!route) throw new Error(`Unknown learning route: ${item.routeId}`);
+              if (!card) throw new Error(`Unknown learning card: ${item.routeId}:${item.cardId}`);
+              if (card.category !== 'combo') throw new Error(`Learning card must be in combo category: ${item.cardId}`);
+              if (learning.routeToCard[item.routeId] !== item.cardId) throw new Error(`routeToCard mismatch: ${item.routeId}`);
+
+              assignedRoutes.push(item.routeId);
+              graph.set(item.routeId, item.prerequisites || []);
+
+              for (const prerequisiteId of item.prerequisites || []) {
+                const prerequisite = routeById.get(prerequisiteId);
+                if (!prerequisite) throw new Error(`Unknown prerequisite: ${item.routeId}:${prerequisiteId}`);
+                if (prerequisiteId === item.routeId) throw new Error(`Route cannot depend on itself: ${item.routeId}`);
+                if (tierRank[prerequisite.tier] > tierRank[route.tier]) throw new Error(`Tier goes backwards: ${item.routeId} <- ${prerequisiteId}`);
+              }
+
+              const scenarioId = learning.scenarioByRoute[item.routeId];
+              if (scenarioId && !scenarioIds.has(scenarioId)) throw new Error(`Unknown practice scenario: ${item.routeId}:${scenarioId}`);
+            }
+          }
+
+          if (assignedRoutes.length !== drill.routes.length) throw new Error(`Expected ${drill.routes.length} assigned routes, got ${assignedRoutes.length}`);
+          if (new Set(assignedRoutes).size !== assignedRoutes.length) throw new Error('Learning routes must be assigned exactly once');
+          const missingRoutes = drill.routes.map(route => route.id).filter(id => !assignedRoutes.includes(id));
+          if (missingRoutes.length) throw new Error(`Unassigned learning routes: ${missingRoutes.join(', ')}`);
+
+          for (const [cardId, routeIds] of Object.entries(learning.cardToRoutes)) {
+            if (!cardById.has(cardId)) throw new Error(`Unknown reverse-mapped card: ${cardId}`);
+            for (const routeId of routeIds) {
+              if (learning.routeToCard[routeId] !== cardId) throw new Error(`cardToRoutes mismatch: ${cardId}:${routeId}`);
+            }
+          }
+
+          const visiting = new Set();
+          const visited = new Set();
+          const visit = routeId => {
+            if (visiting.has(routeId)) throw new Error(`Prerequisite cycle detected at ${routeId}`);
+            if (visited.has(routeId)) return;
+            visiting.add(routeId);
+            for (const prerequisiteId of graph.get(routeId) || []) visit(prerequisiteId);
+            visiting.delete(routeId);
+            visited.add(routeId);
+          };
+          for (const routeId of assignedRoutes) visit(routeId);
+
+          console.log(`Combo learning roadmap passed: ${learning.families.length} families and ${assignedRoutes.length} routes.`);
           NODE
 
       - name: Validate learning flow links
