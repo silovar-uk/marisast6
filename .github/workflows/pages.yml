@@ -24,38 +24,151 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Validate JavaScript, moves, situations, and beginner flow
+      - name: Validate JavaScript and site data
         run: |
-          node --check app.js
-          node --check strategy-gallery.js
-          for file in data-core.js situations.js data-{1..6}.js; do node --check "$file"; done
+          for file in \
+            app.js \
+            strategy-gallery.js \
+            playbook-data.js \
+            playbook-expanded.js \
+            situations.js \
+            situations-data-v2.js \
+            situations-adapter.js \
+            situations-page.js \
+            data-core.js \
+            data-{1..6}.js; do
+            node --check "$file"
+          done
+
           node <<'NODE'
           const fs = require('fs');
           const vm = require('vm');
           const context = { window: {} };
           vm.createContext(context);
-          for (const file of ['data-core.js', 'situations.js', 'data-1.js', 'data-2.js', 'data-3.js', 'data-4.js', 'data-5.js', 'data-6.js']) {
+
+          const run = file => {
             vm.runInContext(fs.readFileSync(file, 'utf8'), context, { filename: file });
-          }
+          };
+
+          for (const file of [
+            'data-core.js',
+            'situations.js',
+            'data-1.js',
+            'data-2.js',
+            'data-3.js',
+            'data-4.js',
+            'data-5.js',
+            'data-6.js'
+          ]) run(file);
+
           const data = context.window.MARISA_DATA;
+          if (!data) throw new Error('MARISA_DATA was not created');
+
           const moveIds = new Set(data.moves.map(move => move.id));
-          const situations = data.situationGroups.flatMap(group => group.situations);
+          const legacySituations = data.situationGroups.flatMap(group => group.situations);
+
           if (data.moves.length !== 48) throw new Error(`Expected 48 moves, got ${data.moves.length}`);
           if (moveIds.size !== 48) throw new Error('Move IDs must be unique');
           if (!data.firstSix.every(id => moveIds.has(id))) throw new Error('FIRST 6 contains an unknown move');
-          if (data.situationGroups.length !== 8) throw new Error(`Expected 8 situation groups, got ${data.situationGroups.length}`);
-          if (situations.length !== 40) throw new Error(`Expected 40 situations, got ${situations.length}`);
-          if (new Set(situations.map(item => item.id)).size !== 40) throw new Error('Situation IDs must be unique');
-          const unknownRefs = situations.flatMap(item => item.moves.filter(id => !moveIds.has(id)).map(id => `${item.id}:${id}`));
-          if (unknownRefs.length) throw new Error(`Unknown move references: ${unknownRefs.join(', ')}`);
-          const beginnerFlow = fs.readFileSync('strategy-gallery.js', 'utf8');
-          for (const requiredText of ['初心者実戦チャート', 'A中 → A中', 'A←SP', 'A強', 'コマ投げ', 'インパクト', '壁ドン']) {
-            if (!beginnerFlow.includes(requiredText)) throw new Error(`Beginner flow is missing: ${requiredText}`);
+          if (data.situationGroups.length !== 8) throw new Error(`Expected 8 legacy situation groups, got ${data.situationGroups.length}`);
+          if (legacySituations.length !== 40) throw new Error(`Expected 40 legacy situations, got ${legacySituations.length}`);
+          if (new Set(legacySituations.map(item => item.id)).size !== legacySituations.length) throw new Error('Legacy situation IDs must be unique');
+
+          const unknownLegacyMoveRefs = legacySituations.flatMap(item =>
+            item.moves.filter(id => !moveIds.has(id)).map(id => `${item.id}:${id}`)
+          );
+          if (unknownLegacyMoveRefs.length) {
+            throw new Error(`Unknown legacy move references: ${unknownLegacyMoveRefs.join(', ')}`);
           }
-          for (const legacyText of ['A＋中が届く距離', 'A＋中 → A＋中', 'A＋←＋SP', '→＋強／A＋強']) {
-            if (beginnerFlow.includes(legacyText)) throw new Error(`Legacy assist notation remains: ${legacyText}`);
+
+          run('playbook-data.js');
+          run('playbook-expanded.js');
+
+          const playbook = context.window.MARISA_PLAYBOOK;
+          if (!playbook) throw new Error('MARISA_PLAYBOOK was not created');
+
+          const requiredCategories = ['core', 'neutral', 'combo', 'oki', 'defense', 'practice'];
+          const categoryIds = new Set(playbook.categories.map(category => category.id));
+          const missingCategories = requiredCategories.filter(id => !categoryIds.has(id));
+          if (missingCategories.length) throw new Error(`Missing playbook categories: ${missingCategories.join(', ')}`);
+
+          const playbookCardIds = new Set(playbook.cards.map(card => card.id));
+          if (playbookCardIds.size !== playbook.cards.length) throw new Error('Playbook card IDs must be unique');
+
+          const requiredCards = [
+            'round-order',
+            'distance-map',
+            'distance-lab',
+            'starter-light-dima',
+            'oki-center-light-dima',
+            'punish-heavy-lethal',
+            'shimmy-back-heavy'
+          ];
+          const missingCards = requiredCards.filter(id => !playbookCardIds.has(id));
+          if (missingCards.length) throw new Error(`Missing playbook cards: ${missingCards.join(', ')}`);
+
+          run('situations-data-v2.js');
+          run('situations-adapter.js');
+
+          const finder = context.window.MARISA_SITUATIONS;
+          if (!finder) throw new Error('MARISA_SITUATIONS was not created');
+          if (finder.schemaVersion !== 2) throw new Error(`Expected situation schema v2, got ${finder.schemaVersion}`);
+          if (finder.categories.length !== 5) throw new Error(`Expected 5 finder categories, got ${finder.categories.length}`);
+          if (finder.items.length !== 48) throw new Error(`Expected 48 finder situations, got ${finder.items.length}`);
+
+          const finderIds = new Set(finder.items.map(item => item.id));
+          if (finderIds.size !== finder.items.length) throw new Error('Finder situation IDs must be unique');
+
+          const detailedItems = finder.items.filter(item => !item.legacy);
+          if (detailedItems.length !== 8) throw new Error(`Expected 8 detailed finder situations, got ${detailedItems.length}`);
+
+          const incompleteItems = detailedItems.filter(item =>
+            !item.phase ||
+            !item.title ||
+            !item.summary ||
+            !item.conditions ||
+            !item.answers?.primary ||
+            !item.matchup ||
+            !item.verification?.status
+          );
+          if (incompleteItems.length) {
+            throw new Error(`Incomplete detailed situations: ${incompleteItems.map(item => item.id).join(', ')}`);
           }
-          console.log(`Validated ${data.moves.length} moves, ${situations.length} situations, and compact assist notation.`);
+
+          const unknownFinderMoveRefs = finder.items.flatMap(item =>
+            (item.links?.moves || [])
+              .map(move => typeof move === 'string' ? move : move.id)
+              .filter(id => id && !moveIds.has(id))
+              .map(id => `${item.id}:${id}`)
+          );
+          if (unknownFinderMoveRefs.length) {
+            throw new Error(`Unknown finder move references: ${unknownFinderMoveRefs.join(', ')}`);
+          }
+
+          const unknownStrategyRefs = finder.items.flatMap(item =>
+            (item.links?.strategyCards || [])
+              .map(card => typeof card === 'string' ? card : card.id)
+              .filter(id => id && !playbookCardIds.has(id))
+              .map(id => `${item.id}:${id}`)
+          );
+          if (unknownStrategyRefs.length) {
+            throw new Error(`Unknown strategy card references: ${unknownStrategyRefs.join(', ')}`);
+          }
+
+          const sourceIds = new Set((finder.sources || []).map(source => source.id));
+          const unknownSourceRefs = finder.items.flatMap(item =>
+            (item.verification?.sourceIds || [])
+              .filter(id => !sourceIds.has(id))
+              .map(id => `${item.id}:${id}`)
+          );
+          if (unknownSourceRefs.length) {
+            throw new Error(`Unknown situation source references: ${unknownSourceRefs.join(', ')}`);
+          }
+
+          console.log(
+            `Validated ${data.moves.length} moves, ${legacySituations.length} legacy situations, ` +
+            `${playbook.cards.length} playbook cards, and ${finder.items.length} finder situations.`
+          );
           NODE
 
       - name: Configure Pages
