@@ -4,6 +4,7 @@
   if (!data || !root) return;
 
   const cards = new Map((data.cards || []).map(card => [card.id, card]));
+  const slideSelector = ".playbook-slide[data-playbook-card]";
 
   function cueFor(card) {
     if (!card) return null;
@@ -61,7 +62,11 @@
   }
 
   function enhance(scope = root) {
-    scope.querySelectorAll?.(".playbook-slide[data-playbook-card]").forEach(slide => {
+    const slides = [];
+    if (scope.matches?.(slideSelector)) slides.push(scope);
+    scope.querySelectorAll?.(slideSelector).forEach(slide => slides.push(slide));
+
+    slides.forEach(slide => {
       if (slide.querySelector(".playbook-action-cue")) return;
       const card = cards.get(slide.dataset.playbookCard);
       const cue = cueFor(card);
