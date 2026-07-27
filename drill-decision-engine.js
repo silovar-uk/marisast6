@@ -2,12 +2,14 @@
   const MOVES = window.MARISA_DATA;
   const ROUTES = window.MARISA_DRILL;
   const DATA = window.MARISA_DECISION_DRILL;
+  const ANALYSIS = window.MARISA_DRILL_ANALYSIS;
   if (!MOVES || !ROUTES || !DATA) return;
 
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
   const moveById = Object.fromEntries(MOVES.moves.map(move => [move.id, move]));
   const routeById = Object.fromEntries(ROUTES.routes.map(route => [route.id, route]));
+  const scenarioById = Object.fromEntries(DATA.scenarios.map(scenario => [scenario.id, scenario]));
   const categoryById = Object.fromEntries(DATA.categories.map(category => [category.id, category]));
   const STORE_KEY = "marisa-decision-drill-v2";
   const HIDDEN_TAGS = new Set(["カウンター確認", "パニカン確認", "最大反撃"]);
@@ -97,6 +99,18 @@
 
   function routeTags(route) {
     return (route.tags || []).filter(tag => !HIDDEN_TAGS.has(tag)).slice(0, 3);
+  }
+
+  function tierLabel(tier) {
+    return ROUTES.tierMeta?.[tier]?.label || tier || "—";
+  }
+
+  function diagnosticLabel(flag) {
+    return ANALYSIS?.diagnosticMeta?.[flag]?.label || flag;
+  }
+
+  function formatSeconds(milliseconds) {
+    return milliseconds == null ? "—" : `${(milliseconds / 1000).toFixed(1)}秒`;
   }
 
   function renderChoice(routeId, index) {
@@ -233,7 +247,9 @@
     const scenario = session.questions[session.index];
     const type = routeId === null ? "timeout" : routeId === scenario.correct ? "correct" : "wrong";
     const elapsedMs = Math.round(performance.now() - questionStartedAt);
-    session.results.push({ scenarioId: scenario.id, routeId, correctRouteId: scenario.correct, type, elapsedMs });
+    const rawResult = { scenarioId: scenario.id, routeId, correctRouteId: scenario.correct, type, elapsedMs };
+    const result = ANALYSIS ? ANALYSIS.enrichResult(rawResult) : rawResult;
+    session.results.push(result);
 
     $$(".decision-choice", screens.quiz).forEach(button => {
       button.disabled = true;
@@ -264,6 +280,16 @@
     else beginCountdown();
   }
 
+  function fallbackAnalysis(results) {
+    return {
+      diagnostics: {},
+      dominantDiagnostic: null,
+      dominantMeta: null,
+      tierStats: {},
+      results
+    };
+  }
+
   function finishSession() {
     clearTimers();
     const totals = { correct: 0, wrong: 0, timeout: 0 };
@@ -274,7 +300,7 @@
 
     session.results.forEach(result => {
       totals[result.type] += 1;
-      const scenario = DATA.scenarios.find(item => item.id === result.scenarioId);
+      const scenario = scenarioById[result.scenarioId];
       categoryStats[scenario.category] ||= { correct: 0, total: 0 };
       categoryStats[scenario.category].total += 1;
       if (result.type === "correct") categoryStats[scenario.category].correct += 1;
@@ -282,15 +308,73 @@
         decisionSum += result.elapsedMs;
         decisionCount += 1;
       }
-      if (result.type !== "correct") misses.push({ scenario, correctRoute: routeById[result.correctRouteId], type: result.type });
+      if (result.type !== "correct") {
+        misses.push({
+          scenario,
+          result,
+          correctRoute: routeById[result.correctRouteId],
+          selectedRoute: result.routeId ? routeById[result.routeId] : null,
+          type: result.type
+        });
+      }
     });
 
     const accuracy = Math.round((totals.correct / session.results.length) * 100);
     const averageMs = decisionCount ? Math.round(decisionSum / decisionCount) : null;
+    const analysis = ANALYSIS ? ANALYSIS.summarizeSession(session.results, scenarioById) : fallbackAnalysis(session.results);
     const store = loadStore();
-    store.attempts.push({ at: Date.now(), config: session.config, total: session.results.length, accuracy, averageMs, totals });
+    const attempt = ANALYSIS
+      ? ANALYSIS.createAttempt({ at: Date.now(), config: session.config, total: session.results.length, accuracy, averageMs, totals, analysis })
+      : { at: Date.now(), config: session.config, total: session.results.length, accuracy, averageMs, totals };
+    store.attempts.push(attempt);
     saveStore(store);
-    renderResult({ totals, categoryStats, misses, accuracy, averageMs });
+    const historySummary = ANALYSIS ? ANALYSIS.saveHistorySummary(store.attempts) : null;
+    renderResult({ totals, categoryStats, misses, accuracy, averageMs, analysis, historySummary });
+  }
+
+  function renderTierStats(tierStats = {}) {
+    const order = ANALYSIS?.tierOrder || ["stable", "standard", "maximum"];
+    return `<section class="decision-result-tiers">
+      <div class="decision-result-section-heading"><small>ROUTE LEVEL</small><h2>段階別の判断</h2><p>正解として求められた段階ごとに、正答・時間切れ・判断時間を分けます。</p></div>
+      <div class="decision-tier-stat-grid">${order.map(tier => {
+        const stat = tierStats[tier] || { total: 0, correct: 0, timeout: 0, averageMs: null };
+        const rate = stat.total ? Math.round((stat.correct / stat.total) * 100) : 0;
+        return `<article data-tier="${escapeHtml(tier)}">
+          <header><small>${escapeHtml(tierLabel(tier))}</small><b>${stat.correct}<span>/${stat.total}</span></b></header>
+          <i style="--tier-rate:${rate}%"></i>
+          <dl><div><dt>正答率</dt><dd>${stat.total ? rate + "%" : "—"}</dd></div><div><dt>時間切れ</dt><dd>${stat.timeout || 0}</dd></div><div><dt>平均判断</dt><dd>${formatSeconds(stat.averageMs)}</dd></div></dl>
+        </article>`;
+      }).join("")}</div>
+    </section>`;
+  }
+
+  function renderDiagnostics(analysis) {
+    const diagnostics = analysis?.diagnostics || {};
+    const entries = Object.entries(ANALYSIS?.diagnosticMeta || {})
+      .map(([key, meta]) => ({ key, meta, count: diagnostics[key] || 0 }))
+      .filter(item => item.count > 0);
+    const dominant = analysis?.dominantMeta;
+
+    return `<section class="decision-result-diagnostics">
+      <div class="decision-result-section-heading"><small>DECISION HABIT</small><h2>今回の判断傾向</h2><p>ミスを、火力不足ではなく「どちらへ外したか」で分類します。</p></div>
+      ${dominant ? `<article class="decision-dominant-diagnostic" data-diagnostic="${escapeHtml(analysis.dominantDiagnostic)}"><small>優先して直す</small><h3>${escapeHtml(dominant.label)}</h3><b>${escapeHtml(dominant.short)}</b><p>${escapeHtml(dominant.description)}</p></article>` : `<article class="decision-dominant-diagnostic is-clear"><small>今回の傾向</small><h3>段階選択は安定</h3><p>明確な判断の偏りは出ていません。速度を上げる前に、同じ条件で再現できるかを確認します。</p></article>`}
+      <div class="decision-diagnostic-grid">${entries.length ? entries.map(item => `<div data-diagnostic="${escapeHtml(item.key)}"><b>${item.count}</b><span>${escapeHtml(item.meta.label)}</span><small>${escapeHtml(item.meta.short)}</small></div>`).join("") : `<p class="decision-no-diagnostics">選択違い・時間切れはありませんでした。</p>`}</div>
+    </section>`;
+  }
+
+  function renderMiss(item) {
+    const flags = item.result.diagnosticFlags || [];
+    const correctTier = tierLabel(item.result.correctTier);
+    const selectedTier = item.type === "timeout" ? "未選択" : tierLabel(item.result.selectedTier);
+    return `<article>
+      <small>${item.type === "timeout" ? "時間切れ" : "選択違い"}</small>
+      <h3>${escapeHtml(item.scenario.title)}</h3>
+      <div class="decision-review-comparison"><span>正解：<b>${escapeHtml(correctTier)}</b></span><span>選択：<b>${escapeHtml(selectedTier)}</b></span></div>
+      ${flags.length ? `<div class="decision-review-diagnostics">${flags.map(flag => `<i>${escapeHtml(diagnosticLabel(flag))}</i>`).join("")}</div>` : ""}
+      <p>${escapeHtml(item.scenario.prompt)}</p>
+      <strong>${escapeHtml(routeSequence(item.correctRoute))}</strong>
+      <span>${escapeHtml(item.scenario.why)}</span>
+    </article>`;
   }
 
   function renderResult(summary) {
@@ -305,10 +389,12 @@
         <div><small>適切</small><b>${summary.totals.correct}</b></div>
         <div><small>選択違い</small><b>${summary.totals.wrong}</b></div>
         <div><small>時間切れ</small><b>${summary.totals.timeout}</b></div>
-        <div><small>平均判断</small><b>${summary.averageMs == null ? "—" : (summary.averageMs / 1000).toFixed(1) + "秒"}</b></div>
+        <div><small>平均判断</small><b>${formatSeconds(summary.averageMs)}</b></div>
       </div>
+      ${renderDiagnostics(summary.analysis)}
+      ${renderTierStats(summary.analysis?.tierStats)}
       <section class="decision-result-categories"><h2>判断テーマ別</h2>${categoryRows.map(item => `<div><span>${escapeHtml(categoryById[item.id]?.label || item.id)}</span><b>${item.correct}/${item.total}</b><i style="--rate:${item.rate}%"></i></div>`).join("")}</section>
-      ${summary.misses.length ? `<section class="decision-result-review"><h2>もう一度見る判断</h2>${summary.misses.map(item => `<article><small>${item.type === "timeout" ? "時間切れ" : "選択違い"}</small><h3>${escapeHtml(item.scenario.title)}</h3><p>${escapeHtml(item.scenario.prompt)}</p><strong>${escapeHtml(routeSequence(item.correctRoute))}</strong><span>${escapeHtml(item.scenario.why)}</span></article>`).join("")}</section>` : ""}
+      ${summary.misses.length ? `<section class="decision-result-review"><h2>もう一度見る判断</h2>${summary.misses.map(renderMiss).join("")}</section>` : ""}
       <div class="drill-result-actions"><button type="button" class="drill-retry-button primary">同じ設定でもう一度</button><button type="button" class="drill-back-button">設定に戻る</button></div>`;
 
     $(".drill-retry-button", screens.result)?.addEventListener("click", startSession);
@@ -331,8 +417,10 @@
       results.push([`${scenario.id}: ルート実在`, scenario.choices.every(id => routeIds.has(id))]);
       results.push([`${scenario.id}: 同じ始動技`, new Set(scenario.choices.map(id => routeById[id]?.starter)).size === 1]);
       results.push([`${scenario.id}: ID重複なし`, !scenarioIds.has(scenario.id)]);
+      results.push([`${scenario.id}: 正解段階あり`, Boolean(routeById[scenario.correct]?.tier)]);
       scenarioIds.add(scenario.id);
     });
+    results.push(["段階診断モジュール", Boolean(ANALYSIS)]);
     return results;
   }
 
@@ -348,6 +436,7 @@
   document.addEventListener("DOMContentLoaded", () => {
     const stored = loadStore();
     if (stored.settings) Object.assign(setupState, stored.settings);
+    if (ANALYSIS) ANALYSIS.saveHistorySummary(stored.attempts);
     showScreen("setup");
     renderSetup();
     document.addEventListener("keydown", handleKeyboard);
