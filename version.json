@@ -1,5 +1,5 @@
 {
-  "appVersion": "0.15.1",
+  "appVersion": "0.15.2",
   "trainingDataVersion": "0.8.0",
   "followupDataVersion": "0.11.0",
   "situationDataVersion": "2.0.0",
@@ -20,6 +20,9 @@
     "high-contrast-focus-visible",
     "moves-dedicated-page",
     "strategy-dedicated-page",
+    "strategy-readability-pass",
+    "strategy-practical-action-cues",
+    "strategy-conclusion-first-order",
     "non-sticky-collapsible-move-search",
     "url-persistent-move-filters",
     "all-modern-move-followups",
