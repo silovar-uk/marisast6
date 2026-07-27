@@ -65,7 +65,11 @@
 .learning-flow-link[data-link-type="situation"] { border-left: 4px solid #d5202f; }
 .learning-flow-link[data-link-type="move"] { border-left: 4px solid #e5b75c; }
 
+.playbook-card-footer {
+  flex-wrap: wrap;
+}
 .playbook-card-footer .learning-flow {
+  flex: 0 0 100%;
   width: 100%;
   margin-top: 12px;
 }
