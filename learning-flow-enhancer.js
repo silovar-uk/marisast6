@@ -16,30 +16,40 @@
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 
-  function uniqueLinks(links = []) {
-    const seen = new Set();
+  function normalizedHref(value) {
+    try {
+      return new URL(value, location.href).href;
+    } catch {
+      return value;
+    }
+  }
+
+  function uniqueLinks(links = [], excluded = new Set()) {
+    const seen = new Set(excluded);
     return links.filter(link => {
-      if (!link?.href || seen.has(link.href)) return false;
-      seen.add(link.href);
+      const href = normalizedHref(link?.href);
+      if (!link?.href || seen.has(href)) return false;
+      seen.add(href);
       return true;
     });
   }
 
   function flowMarkup(links, title = "次へ進む") {
-    const items = uniqueLinks(links);
-    if (!items.length) return "";
+    if (!links.length) return "";
     return `<aside class="learning-flow" data-learning-flow>
       <small>LEARNING FLOW</small>
       <h4>${escapeHtml(title)}</h4>
       <div class="learning-flow-links">
-        ${items.map(link => `<a class="learning-flow-link" data-link-type="${escapeHtml(link.type)}" href="${escapeHtml(link.href)}"><small>${escapeHtml(typeLabels[link.type] || "関連ページ")}</small><b>${escapeHtml(link.label)}</b><span>→</span></a>`).join("")}
+        ${links.map(link => `<a class="learning-flow-link" data-link-type="${escapeHtml(link.type)}" href="${escapeHtml(link.href)}"><small>${escapeHtml(typeLabels[link.type] || "関連ページ")}</small><b>${escapeHtml(link.label)}</b><span>→</span></a>`).join("")}
       </div>
     </aside>`;
   }
 
   function appendFlow(container, links, title) {
     if (!container || container.querySelector(":scope > [data-learning-flow]")) return;
-    const markup = flowMarkup(links, title);
+    const existing = new Set([...container.querySelectorAll("a[href]")].map(anchor => normalizedHref(anchor.getAttribute("href"))));
+    const items = uniqueLinks(links, existing);
+    const markup = flowMarkup(items, title);
     if (markup) container.insertAdjacentHTML("beforeend", markup);
   }
 
