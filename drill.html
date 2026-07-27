@@ -3,14 +3,16 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#f3efe7" />
-  <meta name="description" content="モダンマリーザのコンボリンクを3択と制限時間で反復するドリル。猶予フレームとダメージを毎回表示。" />
-  <title>コンボドリル｜MODERN MARISA LAB</title>
+  <meta name="theme-color" content="#07080a" />
+  <meta name="description" content="モダンマリーザの状況、ゲージ、目的を読み、3つの完成コンボから適切なルートを選ぶ判断ドリル。" />
+  <title>コンボ判断ドリル｜MODERN MARISA LAB</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="site-shell.css?v=0.13.0" />
-  <link rel="stylesheet" href="drill.css?v=0.13.0" />
+  <link rel="stylesheet" href="site-shell.css?v=0.16.0" />
+  <link rel="stylesheet" href="readability-tokens.css?v=0.16.0" />
+  <link rel="stylesheet" href="drill.css?v=0.16.0" />
+  <link rel="stylesheet" href="drill-decision.css?v=0.16.0" />
 </head>
-<body>
+<body class="page-drill">
   <header class="site-header">
     <div class="site-header-inner shell">
       <a class="site-brand" href="index.html">
@@ -31,14 +33,14 @@
     <section class="page-hero shell">
       <div class="page-hero-grid">
         <div>
-          <p class="page-kicker">COMBO DRILL / LINK TIMING</p>
-          <h1>次の技を、<em>体で覚える。</em></h1>
-          <p class="page-lead">始動技から3択で連続出題。実際の猶予フレームに応じた制限時間内に選べないと失敗です。リンクとキャンセルの違い、なぜつながるのかを毎回表示します。</p>
+          <p class="page-kicker">COMBO DRILL / DECISION MAKING</p>
+          <h1>速さではなく、<em>選び方を鍛える。</em></h1>
+          <p class="page-lead">ヒット状況、ドライブ・SA、位置、目的を読み、同じ始動技から始まる3つの完成コンボから最適な1本を選びます。毎問3→2→1で区切り、判断時間は全問題で統一します。</p>
         </div>
         <dl class="page-meta">
-          <div><dt>判定</dt><dd>正解・判断違い・間に合わず・見逃し</dd></div>
-          <div><dt>条件</dt><dd>通常・カウンター・パニカン</dd></div>
-          <div><dt>表示</dt><dd>猶予フレームと総ダメージ</dd></div>
+          <div><dt>形式</dt><dd>完成コンボ3択</dd></div>
+          <div><dt>判断軸</dt><dd>安定・ゲージ・火力・運び</dd></div>
+          <div><dt>時間</dt><dd>5秒・8秒・12秒</dd></div>
         </dl>
       </div>
     </section>
@@ -51,17 +53,18 @@
   </main>
 
   <footer class="site-footer">
-    <div class="site-footer-inner shell"><b>MODERN MARISA LAB</b><span>v0.13.0 / MARISA ARENA × FIGHT LAB HUD</span></div>
+    <div class="site-footer-inner shell"><b>MODERN MARISA LAB</b><span>v0.16.0 / COMBO DECISION DRILL</span></div>
   </footer>
 
-  <script src="data-core.js?v=0.13.0"></script>
-  <script src="data-1.js?v=0.13.0"></script>
-  <script src="data-2.js?v=0.13.0"></script>
-  <script src="data-3.js?v=0.13.0"></script>
-  <script src="data-4.js?v=0.13.0"></script>
-  <script src="data-5.js?v=0.13.0"></script>
-  <script src="data-6.js?v=0.13.0"></script>
-  <script src="drill-data.js?v=0.13.0"></script>
-  <script src="drill-engine.js?v=0.13.0"></script>
+  <script src="data-core.js?v=0.16.0"></script>
+  <script src="data-1.js?v=0.16.0"></script>
+  <script src="data-2.js?v=0.16.0"></script>
+  <script src="data-3.js?v=0.16.0"></script>
+  <script src="data-4.js?v=0.16.0"></script>
+  <script src="data-5.js?v=0.16.0"></script>
+  <script src="data-6.js?v=0.16.0"></script>
+  <script src="drill-data.js?v=0.16.0"></script>
+  <script src="drill-scenarios.js?v=0.16.0"></script>
+  <script src="drill-decision-engine.js?v=0.16.0"></script>
 </body>
 </html>

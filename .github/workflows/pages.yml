@@ -37,6 +37,9 @@ jobs:
             strategy-practical-cues.js \
             playbook-data.js \
             playbook-expanded.js \
+            drill-data.js \
+            drill-scenarios.js \
+            drill-decision-engine.js \
             situations.js \
             situations-data-v2.js \
             situations-adapter.js \
@@ -87,6 +90,47 @@ jobs:
           if (unknownRefs.length) throw new Error(`Unknown move references: ${unknownRefs.join(', ')}`);
 
           console.log(`Core validation passed: ${data.moves.length} moves and ${situations.length} situations.`);
+          NODE
+
+      - name: Validate combo decision drill
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const context = { window: {} };
+          vm.createContext(context);
+          const run = file => vm.runInContext(fs.readFileSync(file, 'utf8'), context, { filename: file });
+
+          for (const file of [
+            'data-core.js',
+            'data-1.js',
+            'data-2.js',
+            'data-3.js',
+            'data-4.js',
+            'data-5.js',
+            'data-6.js',
+            'drill-data.js',
+            'drill-scenarios.js'
+          ]) run(file);
+
+          const routes = context.window.MARISA_DRILL?.routes || [];
+          const scenarios = context.window.MARISA_DECISION_DRILL?.scenarios || [];
+          const routeById = new Map(routes.map(route => [route.id, route]));
+
+          if (scenarios.length !== 18) throw new Error(`Expected 18 decision scenarios, got ${scenarios.length}`);
+          if (new Set(scenarios.map(item => item.id)).size !== scenarios.length) throw new Error('Decision scenario IDs must be unique');
+
+          for (const scenario of scenarios) {
+            if (scenario.choices.length !== 3) throw new Error(`${scenario.id} must have exactly 3 choices`);
+            if (!scenario.choices.includes(scenario.correct)) throw new Error(`${scenario.id} does not include its correct route`);
+            if (new Set(scenario.choices).size !== 3) throw new Error(`${scenario.id} has duplicate choices`);
+            const missing = scenario.choices.filter(id => !routeById.has(id));
+            if (missing.length) throw new Error(`${scenario.id} has missing routes: ${missing.join(', ')}`);
+            const starters = new Set(scenario.choices.map(id => routeById.get(id).starter));
+            if (starters.size !== 1) throw new Error(`${scenario.id} choices must share the same starter`);
+          }
+
+          console.log(`Decision drill validation passed: ${scenarios.length} scenarios, all with comparable 3-choice routes.`);
           NODE
 
       - name: Validate favicon wiring
