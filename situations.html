@@ -4,10 +4,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#f3efe7" />
-  <meta name="description" content="対空、暴れ、弾抜け、起き攻めなど、試合中の状況からモダンマリーザの候補技を探す。" />
+  <meta name="description" content="距離、画面位置、相手の行動から、モダンマリーザの次の一手と練習方法を探す。" />
   <title>状況から探す｜MODERN MARISA LAB</title>
-  <link rel="stylesheet" href="site-shell.css?v=0.12.0" />
-  <link rel="stylesheet" href="situations-page.css?v=0.12.0" />
+  <link rel="stylesheet" href="site-shell.css?v=0.15.0" />
+  <link rel="stylesheet" href="situations-page.css?v=0.15.0" />
 </head>
 <body>
   <header class="site-header">
@@ -30,31 +30,75 @@
     <section class="page-hero shell">
       <div class="page-hero-grid">
         <div>
-          <p class="page-kicker">SITUATION FINDER / 40 DECISIONS</p>
-          <h1>技名より先に、<em>困り方。</em></h1>
-          <p class="page-lead">「対空で何を押すか」「相手の弾をどう越えるか」「端で何を狙うか」。試合中の目的を選ぶと、技ページを該当候補だけに絞って開きます。</p>
+          <p class="page-kicker">SITUATION FINDER / DECISION MAP</p>
+          <h1>技名より先に、<em>いまの状況。</em></h1>
+          <p class="page-lead">攻めているか、守っているか。中央か、画面端か。相手は暴れるか、ガードするか。条件を絞ると、最初に試す行動と次に学ぶ内容を表示します。</p>
         </div>
         <dl class="page-meta">
-          <div><dt>分野</dt><dd>8カテゴリ</dd></div>
-          <div><dt>状況</dt><dd>40パターン</dd></div>
-          <div><dt>移動先</dt><dd>技ページの絞り込み結果</dd></div>
+          <div><dt>入口</dt><dd id="situation-category-count">5フェーズ</dd></div>
+          <div><dt>状況</dt><dd id="situation-total-count">読み込み中</dd></div>
+          <div><dt>詳細化</dt><dd id="situation-detailed-count">弱ディマ後から</dd></div>
         </dl>
       </div>
     </section>
 
-    <section class="situations-index shell">
-      <div id="situation-groups" class="situation-groups"></div>
+    <section class="situation-finder shell" aria-labelledby="finder-title">
+      <header class="finder-heading">
+        <div>
+          <p class="page-kicker">FIND THE MOMENT</p>
+          <h2 id="finder-title">いま、どの場面で迷った？</h2>
+        </div>
+        <p>まず試合の段階を選び、必要な時だけ位置・距離・相手行動を絞る。</p>
+      </header>
+
+      <nav id="situation-phases" class="situation-phases" aria-label="試合の段階"></nav>
+
+      <div class="situation-filter-panel">
+        <div class="filter-row">
+          <span class="filter-label">画面位置</span>
+          <div id="situation-position-filters" class="filter-chips"></div>
+        </div>
+        <div class="filter-row">
+          <span class="filter-label">距離</span>
+          <div id="situation-distance-filters" class="filter-chips"></div>
+        </div>
+        <div class="filter-row">
+          <span class="filter-label">相手の行動</span>
+          <div id="situation-opponent-filters" class="filter-chips"></div>
+        </div>
+
+        <details id="situation-search-panel" class="situation-search-panel">
+          <summary>キーワード検索・条件をまとめて解除</summary>
+          <div class="situation-search-body">
+            <label for="situation-search">状況・技・注意点を検索</label>
+            <input id="situation-search" type="search" placeholder="例：弱ディマ、無敵技、投げ抜け" autocomplete="off" />
+            <button id="situation-reset" type="button">条件をすべて解除</button>
+          </div>
+        </details>
+      </div>
+
+      <div id="situation-selftest" class="situation-selftest" hidden></div>
+
+      <div class="situation-result-bar">
+        <p id="situation-result-summary" aria-live="polite"></p>
+        <button id="situation-result-reset" type="button" hidden>絞り込みを解除</button>
+      </div>
+
+      <div id="situation-groups" class="situation-results"></div>
+
       <aside class="situations-note">
         <div><p class="page-kicker">READING NOTE</p><h2>第一候補は、唯一の正解ではない。</h2></div>
-        <p>相手キャラクター、距離、画面位置、ドライブゲージで答えは変わります。ここでは試合中に迷わないための「最初に検討する技」を置き、細かい成立条件は技ページ側へ分離しています。</p>
+        <p>相手キャラクター、距離、画面位置、ドライブゲージで答えは変わります。詳細化したカードでは「何に勝つか」「何に負けるか」「トレモでどう練習するか」まで確認できます。既存データは順次、新形式へ更新します。</p>
       </aside>
     </section>
   </main>
 
-  <footer class="site-footer"><div class="site-footer-inner shell"><b>MODERN MARISA LAB</b><span>v0.12.0 / 状況から探す</span></div></footer>
+  <footer class="site-footer"><div class="site-footer-inner shell"><b>MODERN MARISA LAB</b><span>v0.15.0 / 状況から探す</span></div></footer>
 
   <script src="data-core.js"></script>
   <script src="situations.js"></script>
-  <script src="situations-page.js?v=0.12.0"></script>
+  <script src="situations-data-v2.js?v=0.15.0"></script>
+  <script src="situations-adapter.js?v=0.15.0"></script>
+  <script src="situations-page.js?v=0.15.0"></script>
 </body>
 </html>
