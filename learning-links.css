@@ -1,0 +1,94 @@
+.learning-flow {
+  margin-top: 18px;
+  padding: 15px;
+  border: 1px solid rgba(24,215,208,.28);
+  background: linear-gradient(110deg, rgba(24,215,208,.08), rgba(8,11,14,.88));
+}
+.learning-flow > small {
+  display: block;
+  color: var(--hud-cyan, #18d7d0);
+  font-size: 9px;
+  font-weight: 950;
+  letter-spacing: .12em;
+}
+.learning-flow > h4 {
+  margin: 5px 0 0;
+  color: #fff;
+  font-size: 14px;
+}
+.learning-flow-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 8px;
+  margin-top: 11px;
+}
+.learning-flow-link {
+  position: relative;
+  display: grid;
+  min-height: 66px;
+  padding: 11px 34px 11px 12px;
+  border: 1px solid rgba(255,255,255,.17);
+  background: rgba(255,255,255,.035);
+  color: #fff;
+  text-decoration: none;
+}
+.learning-flow-link:hover {
+  border-color: var(--hud-cyan, #18d7d0);
+  background: rgba(24,215,208,.09);
+}
+.learning-flow-link small,
+.learning-flow-link b {
+  display: block;
+}
+.learning-flow-link small {
+  color: #b8b2aa;
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+.learning-flow-link b {
+  margin-top: 4px;
+  color: #fff;
+  font-size: 11px;
+  line-height: 1.45;
+}
+.learning-flow-link span {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  color: var(--hud-cyan, #18d7d0);
+  font-size: 16px;
+  transform: translateY(-50%);
+}
+.learning-flow-link[data-link-type="drill"] { border-left: 4px solid #ff7a1a; }
+.learning-flow-link[data-link-type="strategy"] { border-left: 4px solid #18d7d0; }
+.learning-flow-link[data-link-type="situation"] { border-left: 4px solid #d5202f; }
+.learning-flow-link[data-link-type="move"] { border-left: 4px solid #e5b75c; }
+
+.playbook-card-footer {
+  flex-wrap: wrap;
+}
+.playbook-card-footer .learning-flow {
+  flex: 0 0 100%;
+  width: 100%;
+  margin-top: 12px;
+}
+
+.decision-feedback .learning-flow {
+  margin-top: 14px;
+}
+
+.move-detail .learning-flow {
+  margin-top: 20px;
+}
+
+@media (max-width: 620px) {
+  .learning-flow { padding: 12px; }
+  .learning-flow-links { grid-template-columns: 1fr; }
+  .learning-flow-link { min-height: 58px; }
+}
+
+@media (prefers-contrast: more) {
+  .learning-flow,
+  .learning-flow-link { border-color: rgba(255,255,255,.55); }
+}

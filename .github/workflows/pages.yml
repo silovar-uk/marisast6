@@ -39,11 +39,14 @@ jobs:
             playbook-expanded.js \
             drill-data.js \
             drill-scenarios.js \
+            drill-focus.js \
             drill-decision-engine.js \
             situations.js \
             situations-data-v2.js \
             situations-adapter.js \
             situations-page.js \
+            learning-links.js \
+            learning-flow-enhancer.js \
             data-core.js \
             data-{1..6}.js; do
             node --check "$file"
@@ -131,6 +134,83 @@ jobs:
           }
 
           console.log(`Decision drill validation passed: ${scenarios.length} scenarios, all with comparable 3-choice routes.`);
+          NODE
+
+      - name: Validate learning flow links
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const context = { window: {}, URLSearchParams };
+          vm.createContext(context);
+          const run = file => vm.runInContext(fs.readFileSync(file, 'utf8'), context, { filename: file });
+
+          for (const file of [
+            'data-core.js',
+            'situations.js',
+            'data-1.js',
+            'data-2.js',
+            'data-3.js',
+            'data-4.js',
+            'data-5.js',
+            'data-6.js',
+            'playbook-data.js',
+            'playbook-expanded.js',
+            'situations-data-v2.js',
+            'situations-adapter.js',
+            'drill-data.js',
+            'drill-scenarios.js',
+            'learning-links.js'
+          ]) run(file);
+
+          const data = context.window.MARISA_DATA;
+          const playbook = context.window.MARISA_PLAYBOOK;
+          const finder = context.window.MARISA_SITUATIONS;
+          const drill = context.window.MARISA_DECISION_DRILL;
+          const links = context.window.MARISA_LEARNING_LINKS;
+
+          const ids = {
+            move: new Set(data.moves.map(item => item.id)),
+            strategy: new Set(playbook.cards.map(item => item.id)),
+            situation: new Set(finder.items.map(item => item.id)),
+            scenario: new Set(drill.scenarios.map(item => item.id))
+          };
+
+          const registries = [
+            ['scenario', links.scenarioLinks],
+            ['situation', links.situationLinks],
+            ['strategy', links.strategyLinks],
+            ['move', links.moveLinks]
+          ];
+
+          for (const [type, registry] of registries) {
+            for (const key of Object.keys(registry)) {
+              if (!ids[type].has(key)) throw new Error(`Unknown ${type} registry key: ${key}`);
+            }
+          }
+
+          const allLinks = registries.flatMap(([, registry]) => Object.values(registry).flat());
+          for (const link of allLinks) {
+            const url = new URL(link.href, 'https://example.test/');
+            if (link.type === 'move') {
+              const id = url.searchParams.get('move');
+              if (!ids.move.has(id)) throw new Error(`Unknown move link: ${link.href}`);
+            }
+            if (link.type === 'drill') {
+              const id = url.searchParams.get('scenario');
+              if (!ids.scenario.has(id)) throw new Error(`Unknown drill link: ${link.href}`);
+            }
+            if (link.type === 'situation') {
+              const id = url.searchParams.get('situation');
+              if (id && !ids.situation.has(id)) throw new Error(`Unknown situation link: ${link.href}`);
+            }
+            if (link.type === 'strategy') {
+              const match = url.hash.match(/^#playbook\/[^/]+\/([^/]+)/);
+              if (!match || !ids.strategy.has(decodeURIComponent(match[1]))) throw new Error(`Unknown strategy link: ${link.href}`);
+            }
+          }
+
+          console.log(`Learning flow validation passed: ${allLinks.length} cross-page links.`);
           NODE
 
       - name: Validate favicon wiring
