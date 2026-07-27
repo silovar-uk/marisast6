@@ -1,0 +1,484 @@
+body.page-strategy .combo-learning-panel {
+  margin: 18px 0 26px;
+  color: var(--readable-text-primary, #f7f4ee);
+}
+
+body.page-strategy .combo-learning-panel[hidden] { display: none; }
+
+body.page-strategy .combo-learning-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 150px;
+  gap: 22px;
+  align-items: end;
+  padding: 22px;
+  border: 1px solid var(--readable-line-strong, rgba(255,255,255,.28));
+  border-left: 6px solid var(--hud-cyan, #18d7d0);
+  background:
+    linear-gradient(110deg, rgba(24,215,208,.12), transparent 45%),
+    var(--readable-surface-base, #0d1014);
+}
+
+body.page-strategy .combo-learning-heading small,
+body.page-strategy .combo-learning-next small,
+body.page-strategy .combo-roadmap-family summary small,
+body.page-strategy .combo-roadmap-entry small,
+body.page-strategy .combo-card-learning-block header small {
+  color: var(--hud-cyan, #18d7d0);
+  font-size: 9px;
+  font-weight: 950;
+  letter-spacing: .14em;
+}
+
+body.page-strategy .combo-learning-heading h3 {
+  margin: 7px 0 0;
+  color: #fff;
+  font-family: var(--serif);
+  font-size: clamp(25px, 4vw, 38px);
+  line-height: 1.15;
+}
+
+body.page-strategy .combo-learning-heading p {
+  margin: 11px 0 0;
+  color: var(--readable-text-secondary, #d9d4cc);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+body.page-strategy .combo-learning-progress {
+  display: grid;
+  justify-items: end;
+  gap: 7px;
+}
+
+body.page-strategy .combo-learning-progress b {
+  color: #fff;
+  font-family: var(--serif);
+  font-size: 38px;
+  line-height: 1;
+}
+
+body.page-strategy .combo-learning-progress b span {
+  color: var(--readable-text-muted, #b8b2aa);
+  font-size: 17px;
+}
+
+body.page-strategy .combo-learning-progress > i {
+  display: block;
+  width: 100%;
+  height: 7px;
+  border: 1px solid var(--readable-line, rgba(255,255,255,.16));
+  background: #080a0d;
+}
+
+body.page-strategy .combo-learning-progress > i em {
+  display: block;
+  width: var(--combo-progress);
+  height: 100%;
+  background: linear-gradient(90deg, var(--hud-cyan, #18d7d0), var(--impact-orange, #ff7a1a));
+}
+
+body.page-strategy .combo-learning-progress small {
+  color: var(--readable-text-muted, #b8b2aa);
+  font-size: 10px;
+  font-weight: 850;
+}
+
+body.page-strategy .combo-learning-next,
+body.page-strategy .combo-learning-complete {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, .8fr);
+  gap: 14px 20px;
+  margin-top: 10px;
+  padding: 18px;
+  border: 1px solid var(--readable-line-strong, rgba(255,255,255,.28));
+  border-left: 6px solid var(--hud-cyan, #18d7d0);
+  background: var(--readable-surface-raised, #15191f);
+}
+
+body.page-strategy .combo-learning-next[data-tier="standard"] { border-left-color: #e5b75c; }
+body.page-strategy .combo-learning-next[data-tier="maximum"] { border-left-color: #ff6975; }
+
+body.page-strategy .combo-learning-next b,
+body.page-strategy .combo-learning-complete b {
+  display: block;
+  margin-top: 5px;
+  color: #fff;
+  font-size: 16px;
+}
+
+body.page-strategy .combo-learning-next p,
+body.page-strategy .combo-learning-complete span {
+  display: block;
+  margin: 7px 0 0;
+  color: var(--readable-text-secondary, #d9d4cc);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+body.page-strategy .combo-learning-next > strong {
+  align-self: center;
+  padding: 13px;
+  border: 1px solid rgba(24,215,208,.32);
+  background: #090c0f;
+  color: #fff;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+body.page-strategy .combo-learning-next .combo-route-actions {
+  grid-column: 1 / -1;
+}
+
+body.page-strategy .combo-learning-complete {
+  display: block;
+  border-left-color: #e5b75c;
+}
+
+body.page-strategy .combo-learning-tier-guide {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+
+body.page-strategy .combo-learning-tier-guide > div {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px 10px;
+  padding: 12px;
+  border: 1px solid var(--readable-line, rgba(255,255,255,.16));
+  background: var(--readable-surface-base, #0d1014);
+}
+
+body.page-strategy .combo-learning-tier-guide small {
+  color: var(--readable-text-secondary, #d9d4cc);
+  font-size: 10px;
+  font-weight: 950;
+}
+
+body.page-strategy .combo-learning-tier-guide b {
+  color: #fff;
+  font-size: 14px;
+}
+
+body.page-strategy .combo-learning-tier-guide span {
+  grid-column: 1 / -1;
+  color: var(--readable-text-muted, #b8b2aa);
+  font-size: 9px;
+}
+
+body.page-strategy .combo-learning-tier-guide [data-tier="stable"] { border-top: 3px solid var(--hud-cyan, #18d7d0); }
+body.page-strategy .combo-learning-tier-guide [data-tier="standard"] { border-top: 3px solid #e5b75c; }
+body.page-strategy .combo-learning-tier-guide [data-tier="maximum"] { border-top: 3px solid #ff6975; }
+
+body.page-strategy .combo-roadmap-families {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+body.page-strategy .combo-roadmap-family {
+  border: 1px solid var(--readable-line, rgba(255,255,255,.16));
+  background: var(--readable-surface-base, #0d1014);
+}
+
+body.page-strategy .combo-roadmap-family > summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: center;
+  padding: 15px 17px;
+  cursor: pointer;
+  list-style: none;
+}
+
+body.page-strategy .combo-roadmap-family > summary::-webkit-details-marker { display: none; }
+
+body.page-strategy .combo-roadmap-family > summary div > b,
+body.page-strategy .combo-roadmap-family > summary div > span { display: block; }
+
+body.page-strategy .combo-roadmap-family > summary div > b {
+  margin-top: 4px;
+  color: #fff;
+  font-size: 16px;
+}
+
+body.page-strategy .combo-roadmap-family > summary div > span {
+  margin-top: 4px;
+  color: var(--readable-text-secondary, #d9d4cc);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+body.page-strategy .combo-roadmap-family > summary > strong {
+  min-width: 54px;
+  padding: 8px;
+  border: 1px solid var(--readable-line-strong, rgba(255,255,255,.28));
+  background: #080a0d;
+  color: #fff;
+  font-size: 12px;
+  text-align: center;
+}
+
+body.page-strategy .combo-roadmap-family[open] > summary {
+  border-bottom: 1px solid var(--readable-line, rgba(255,255,255,.16));
+  background: rgba(24,215,208,.045);
+}
+
+body.page-strategy .combo-roadmap-family-body {
+  padding: 13px;
+}
+
+body.page-strategy .combo-roadmap-entry {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px 12px;
+  padding: 12px;
+  border: 1px dashed rgba(24,215,208,.4);
+  background: rgba(24,215,208,.06);
+  text-decoration: none;
+}
+
+body.page-strategy .combo-roadmap-entry b {
+  color: #fff;
+  font-size: 13px;
+}
+
+body.page-strategy .combo-roadmap-entry span {
+  grid-row: 1 / 3;
+  grid-column: 2;
+  align-self: center;
+  color: #aefbf7;
+  font-size: 10px;
+  font-weight: 850;
+}
+
+body.page-strategy .combo-roadmap-routes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+  margin-top: 9px;
+}
+
+body.page-strategy .combo-roadmap-route {
+  position: relative;
+  padding: 14px;
+  border: 1px solid var(--readable-line, rgba(255,255,255,.16));
+  border-left: 4px solid var(--hud-cyan, #18d7d0);
+  background: var(--readable-surface-raised, #15191f);
+}
+
+body.page-strategy .combo-roadmap-route[data-tier="standard"] { border-left-color: #e5b75c; }
+body.page-strategy .combo-roadmap-route[data-tier="maximum"] { border-left-color: #ff6975; }
+body.page-strategy .combo-roadmap-route.is-next { box-shadow: inset 0 0 0 1px rgba(24,215,208,.45); }
+body.page-strategy .combo-roadmap-route.is-learned { background: rgba(24,215,208,.075); }
+body.page-strategy .combo-roadmap-route.is-locked { opacity: .62; }
+
+body.page-strategy .combo-roadmap-route > header {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+}
+
+body.page-strategy .combo-route-tier {
+  color: #fff;
+  font-size: 10px;
+  font-weight: 950;
+}
+
+body.page-strategy .combo-roadmap-route > header i {
+  color: var(--readable-text-muted, #b8b2aa);
+  font-size: 9px;
+  font-style: normal;
+  font-weight: 850;
+}
+
+body.page-strategy .combo-roadmap-route.is-next > header i { color: #aefbf7; }
+body.page-strategy .combo-roadmap-route.is-learned > header i { color: #8ff3c8; }
+body.page-strategy .combo-roadmap-route.is-locked > header i { color: #ffabb2; }
+
+body.page-strategy .combo-roadmap-route h4 {
+  margin: 8px 0 0;
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+body.page-strategy .combo-route-input {
+  margin: 9px 0 0;
+  padding: 10px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: #080a0d;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.55;
+}
+
+body.page-strategy .combo-route-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 8px;
+}
+
+body.page-strategy .combo-route-meta span {
+  padding: 4px 6px;
+  border: 1px solid rgba(255,255,255,.15);
+  color: var(--readable-text-secondary, #d9d4cc);
+  font-size: 8px;
+}
+
+body.page-strategy .combo-route-use,
+body.page-strategy .combo-route-lock-reason {
+  margin: 9px 0 0;
+  color: var(--readable-text-secondary, #d9d4cc);
+  font-size: 10px;
+  line-height: 1.55;
+}
+
+body.page-strategy .combo-route-lock-reason {
+  color: #ffb4ba;
+  font-weight: 800;
+}
+
+body.page-strategy .combo-route-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 11px;
+}
+
+body.page-strategy .combo-route-actions button,
+body.page-strategy .combo-route-actions a {
+  min-height: 34px;
+  padding: 8px 10px;
+  border: 1px solid var(--readable-line-strong, rgba(255,255,255,.28));
+  background: #0c1014;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 850;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+body.page-strategy .combo-route-actions button:hover,
+body.page-strategy .combo-route-actions a:hover {
+  border-color: var(--hud-cyan, #18d7d0);
+  color: #b7fffb;
+}
+
+body.page-strategy .combo-route-actions button.is-learned {
+  border-color: rgba(24,215,208,.55);
+  background: rgba(24,215,208,.12);
+}
+
+body.page-strategy .combo-route-actions button:disabled {
+  color: #918b84;
+  cursor: not-allowed;
+}
+
+body.page-strategy .combo-card-learning-block {
+  margin-top: 15px;
+  padding: 12px;
+  border: 1px solid var(--readable-line, rgba(255,255,255,.16));
+  background: #0a0d10;
+}
+
+body.page-strategy .combo-card-learning-block header {
+  margin-bottom: 8px;
+}
+
+body.page-strategy .combo-card-learning-block header b {
+  display: block;
+  margin-top: 3px;
+  color: #fff;
+  font-size: 12px;
+}
+
+body.page-strategy .combo-card-route {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  gap: 7px;
+  align-items: center;
+  padding: 8px 0;
+  border-top: 1px solid rgba(255,255,255,.1);
+}
+
+body.page-strategy .combo-card-route > span {
+  min-width: 34px;
+  color: var(--hud-cyan, #18d7d0);
+  font-size: 9px;
+  font-weight: 950;
+}
+
+body.page-strategy .combo-card-route[data-tier="standard"] > span { color: #e5b75c; }
+body.page-strategy .combo-card-route[data-tier="maximum"] > span { color: #ff8993; }
+
+body.page-strategy .combo-card-route b {
+  color: #fff;
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+body.page-strategy .combo-card-route i {
+  color: var(--readable-text-muted, #b8b2aa);
+  font-size: 8px;
+  font-style: normal;
+}
+
+body.page-strategy .combo-card-route button {
+  display: grid;
+  place-items: center;
+  width: 29px;
+  height: 29px;
+  border: 1px solid var(--readable-line-strong, rgba(255,255,255,.28));
+  background: #11161b;
+  color: #fff;
+  cursor: pointer;
+}
+
+body.page-strategy .combo-card-route.is-learned button {
+  border-color: var(--hud-cyan, #18d7d0);
+  color: var(--hud-cyan, #18d7d0);
+}
+
+body.page-strategy .playbook-card-combo.is-route-complete {
+  box-shadow: inset 0 0 0 2px rgba(24,215,208,.3);
+}
+
+body.page-strategy :where(.combo-learning-panel button, .combo-learning-panel a, .combo-card-learning-block button):focus-visible {
+  outline: 3px solid var(--readable-focus, #18d7d0);
+  outline-offset: 3px;
+}
+
+@media (max-width: 760px) {
+  body.page-strategy .combo-learning-heading,
+  body.page-strategy .combo-learning-next { grid-template-columns: 1fr; }
+  body.page-strategy .combo-learning-progress { justify-items: start; }
+  body.page-strategy .combo-learning-next .combo-route-actions { grid-column: 1; }
+  body.page-strategy .combo-roadmap-routes { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 520px) {
+  body.page-strategy .combo-learning-tier-guide { grid-template-columns: 1fr; }
+  body.page-strategy .combo-roadmap-family > summary { grid-template-columns: 1fr auto; padding: 13px; }
+  body.page-strategy .combo-roadmap-entry { grid-template-columns: 1fr; }
+  body.page-strategy .combo-roadmap-entry span { grid-row: auto; grid-column: auto; }
+  body.page-strategy .combo-card-route { grid-template-columns: auto minmax(0, 1fr) auto; }
+  body.page-strategy .combo-card-route i { grid-column: 2; }
+  body.page-strategy .combo-card-route button { grid-row: 1 / 3; grid-column: 3; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.page-strategy .combo-learning-progress > i em { transition: none; }
+}
+
+@media (prefers-contrast: more) {
+  body.page-strategy .combo-learning-heading,
+  body.page-strategy .combo-learning-next,
+  body.page-strategy .combo-roadmap-family,
+  body.page-strategy .combo-roadmap-route,
+  body.page-strategy .combo-card-learning-block { border-color: rgba(255,255,255,.55); }
+}
