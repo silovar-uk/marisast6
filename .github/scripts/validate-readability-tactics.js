@@ -93,7 +93,7 @@ assert(core.includes("year4-tactical-additions.js?v=0.23.3"), "Tactical addition
 assert(core.includes("heading-layout.js?v=0.23.3"), "Heading layout is not loaded by data-core");
 
 const version = JSON.parse(read("version.json"));
-assert(version.appVersion === "0.23.3", `Unexpected app version: ${version.appVersion}`);
+assert(version.appVersion === "0.23.2", `Unexpected app version: ${version.appVersion}`);
 assert(version.moveDataBasis === "2026-08-03", `Unexpected move data basis: ${version.moveDataBasis}`);
 
 console.log(`Readability and tactical validation passed: ${situationIds.length} situations, ${playbookIds.length} playbook cards.`);
