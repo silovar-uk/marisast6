@@ -7,17 +7,28 @@ on:
       - "index.html"
       - "drill.html"
       - "data-core.js"
+      - "year4-phase*.js"
       - "home-*.js"
       - "home-*.css"
-      - "drill-focus.js"
-      - "drill-data.js"
-      - "drill-route-schema.js"
-      - "drill-scenarios.js"
-      - "drill-result-analysis.js"
+      - "drill-*.js"
       - "combo-learning-data.js"
+      - "page-guides.js"
+      - "page-guides.css"
+      - ".github/scripts/validate-site.js"
       - ".github/workflows/home-dashboard.yml"
   push:
     branches: [main]
+    paths:
+      - "index.html"
+      - "drill.html"
+      - "data-core.js"
+      - "year4-phase*.js"
+      - "home-*.js"
+      - "drill-*.js"
+      - "combo-learning-data.js"
+      - "page-guides.js"
+      - ".github/scripts/validate-site.js"
+      - ".github/workflows/home-dashboard.yml"
   workflow_dispatch:
 
 permissions:
@@ -28,157 +39,37 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
 
-      - name: Validate dashboard JavaScript syntax
+      - name: Validate home JavaScript syntax
         run: |
           set -euo pipefail
           for file in data-core.js home-practice-plan.js home-dashboard.js drill-focus.js; do
             node --check "$file"
           done
 
-      - name: Validate data core without browser globals
-        run: |
-          node <<'NODE'
-          const fs = require('fs');
-          const vm = require('vm');
-          const context = { window: {}, console };
-          vm.createContext(context);
-          vm.runInContext(fs.readFileSync('data-core.js', 'utf8'), context, { filename: 'data-core.js' });
-          if (!context.window.MARISA_DATA) throw new Error('MARISA_DATA was not created');
-          if (!context.window.MARISA_YEAR4) throw new Error('MARISA_YEAR4 was not created');
-          console.log('Data core passed without document or DOM globals.');
-          NODE
+      - name: Validate August 3 data and public wiring
+        run: node .github/scripts/validate-site.js
 
-      - name: Validate deterministic daily five
-        run: |
-          node <<'NODE'
-          const fs = require('fs');
-          const vm = require('vm');
-          const context = { window: {}, console };
-          vm.createContext(context);
-          const run = file => vm.runInContext(fs.readFileSync(file, 'utf8'), context, { filename: file });
-
-          for (const file of [
-            'data-core.js',
-            'data-1.js',
-            'data-2.js',
-            'data-3.js',
-            'data-4.js',
-            'data-5.js',
-            'data-6.js',
-            'drill-data.js',
-            'drill-route-schema.js',
-            'drill-scenarios.js',
-            'drill-result-analysis.js',
-            'home-practice-plan.js'
-          ]) run(file);
-
-          const scenarios = context.window.MARISA_DECISION_DRILL.scenarios;
-          const scenarioIds = new Set(scenarios.map(item => item.id));
-          const planner = context.window.MARISA_HOME_PRACTICE_PLAN;
-          if (!planner) throw new Error('MARISA_HOME_PRACTICE_PLAN was not created');
-
-          const recent = [scenarios[2].id, scenarios[5].id];
-          const analysisSummary = {
-            dominantDiagnostic: 'underconvert',
-            recentMisses: recent.map((scenarioId, index) => ({ scenarioId, at: 100 + index }))
-          };
-          const attempts = [{
-            version: 2,
-            at: 1000,
-            results: scenarios.slice(0, 4).map(item => ({ scenarioId: item.id }))
-          }];
-
-          const first = planner.generate({ count: 5, dateKey: '2026-07-28', analysisSummary, attempts });
-          const second = planner.generate({ count: 5, dateKey: '2026-07-28', analysisSummary, attempts });
-
-          if (first.scenarioIds.length !== 5) throw new Error(`Expected 5 scenarios, got ${first.scenarioIds.length}`);
-          if (new Set(first.scenarioIds).size !== 5) throw new Error('Daily set contains duplicate scenarios');
-          if (!first.scenarioIds.every(id => scenarioIds.has(id))) throw new Error('Daily set contains an unknown scenario');
-          if (!recent.every(id => first.scenarioIds.includes(id))) throw new Error('Recent misses were not prioritized');
-          if (JSON.stringify(first.scenarioIds) !== JSON.stringify(second.scenarioIds)) throw new Error('Same-day plan must be deterministic');
-          if (!first.href.startsWith('drill.html?set=')) throw new Error(`Unexpected set href: ${first.href}`);
-          if (!first.items.some(item => item.source === 'diagnostic')) throw new Error('Dominant diagnostic did not contribute a question');
-          if (!first.items.some(item => item.source === 'unseen')) throw new Error('Long-unseen selection is missing');
-
-          console.log(`Daily five passed: ${first.scenarioIds.join(', ')}`);
-          NODE
-
-      - name: Validate focused drill URL parsing
-        run: |
-          node <<'NODE'
-          const fs = require('fs');
-          const vm = require('vm');
-          const source = fs.readFileSync('drill-focus.js', 'utf8');
-          const scenarioSource = (() => {
-            const context = { window: {} };
-            vm.createContext(context);
-            for (const file of [
-              'data-core.js', 'data-1.js', 'data-2.js', 'data-3.js', 'data-4.js', 'data-5.js', 'data-6.js',
-              'drill-data.js', 'drill-route-schema.js', 'drill-scenarios.js'
-            ]) vm.runInContext(fs.readFileSync(file, 'utf8'), context, { filename: file });
-            return context.window.MARISA_DECISION_DRILL.scenarios;
-          })();
-
-          function execute(search) {
-            const storage = {};
-            const context = {
-              window: { MARISA_DECISION_DRILL: { scenarios: scenarioSource.map(item => ({ ...item })) } },
-              URLSearchParams,
-              location: { search },
-              localStorage: {
-                getItem: key => storage[key] || null,
-                setItem: (key, value) => { storage[key] = value; }
-              },
-              document: {
-                addEventListener: () => {},
-                body: { classList: { add: () => {} }, dataset: {} },
-                querySelector: () => null
-              },
-              setTimeout: () => 0
-            };
-            vm.createContext(context);
-            vm.runInContext(source, context, { filename: 'drill-focus.js' });
-            return { focus: context.window.MARISA_DRILL_FOCUS, storage };
-          }
-
-          const [first, second] = scenarioSource;
-          const setResult = execute(`?set=${first.id},${second.id},${first.id},missing-id`);
-          if (setResult.focus?.mode !== 'set') throw new Error('set= did not create set focus mode');
-          if (setResult.focus.orderedScenarioIds.join(',') !== `${first.id},${second.id}`) throw new Error('set= did not preserve valid unique IDs');
-          const setStore = JSON.parse(setResult.storage['marisa-decision-drill-v2']);
-          if (setStore.settings.questionCount !== 2) throw new Error('set= did not set the temporary question count');
-
-          const singleResult = execute(`?scenario=${second.id}`);
-          if (singleResult.focus?.mode !== 'scenario') throw new Error('scenario= did not keep single focus mode');
-          if (singleResult.focus.orderedScenarioIds.length !== 1 || singleResult.focus.orderedScenarioIds[0] !== second.id) throw new Error('scenario= resolved the wrong question');
-
-          console.log('Focused drill URL parsing passed.');
-          NODE
-
-      - name: Validate home and drill wiring
+      - name: Check home-specific elements
         run: |
           node <<'NODE'
           const fs = require('fs');
           const home = fs.readFileSync('index.html', 'utf8');
           const drill = fs.readFileSync('drill.html', 'utf8');
-
-          const requiredHome = [
+          for (const token of [
             'id="home-dashboard"',
-            'home-dashboard.css?v=0.21.0',
-            'home-practice-plan.js?v=0.21.0',
-            'home-dashboard.js?v=0.21.0'
-          ];
-          requiredHome.forEach(value => {
-            if (!home.includes(value)) throw new Error(`Home wiring missing: ${value}`);
-          });
-
-          const homeOrder = ['drill-data.js', 'drill-route-schema.js', 'drill-scenarios.js', 'combo-learning-data.js', 'drill-result-analysis.js', 'home-practice-plan.js', 'home-dashboard.js'];
-          for (let index = 1; index < homeOrder.length; index += 1) {
-            if (home.indexOf(homeOrder[index - 1]) >= home.indexOf(homeOrder[index])) throw new Error(`Home script order is invalid: ${homeOrder[index - 1]} -> ${homeOrder[index]}`);
+            'home-dashboard.css?v=0.23.2',
+            'home-practice-plan.js?v=0.23.2',
+            'home-dashboard.js?v=0.23.2',
+            'href="advantage.html"',
+            '2026年8月3日調整',
+            'ワンボタン対空・牽制'
+          ]) {
+            if (!home.includes(token)) throw new Error(`Home wiring missing: ${token}`);
           }
-          if (drill.indexOf('drill-focus.js?v=0.21.0') >= drill.indexOf('drill-decision-engine.js?v=0.21.0')) throw new Error('drill-focus.js must load before the decision engine');
-
+          if (drill.indexOf('drill-focus.js?v=0.23.2') >= drill.indexOf('drill-decision-engine.js?v=0.23.2')) {
+            throw new Error('drill-focus.js must load before the decision engine');
+          }
           console.log('Home and drill wiring passed.');
           NODE
