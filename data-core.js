@@ -19,7 +19,7 @@ window.MARISA_DATA = {
 };
 
 window.MARISA_YEAR4 = window.MARISA_YEAR4 || {
-  version: "0.23.2-year4",
+  version: "0.23.3-year4",
   basisDate: "2026-08-03",
   phase: 4,
   changeLog: []
@@ -28,11 +28,13 @@ window.MARISA_YEAR4 = window.MARISA_YEAR4 || {
 const MARISA_HAS_DOCUMENT = typeof document !== "undefined";
 
 if (MARISA_HAS_DOCUMENT && document.readyState === "loading") {
-  document.write('<script src="year4-phase1.js?v=0.23.2"></' + 'script>');
-  document.write('<script src="year4-phase2.js?v=0.23.2"></' + 'script>');
-  document.write('<script src="year4-phase3.js?v=0.23.2"></' + 'script>');
-  document.write('<script src="year4-phase4.js?v=0.23.2"></' + 'script>');
-  document.write('<script src="year4-playbook-guard.js?v=0.23.2"></' + 'script>');
+  document.write('<script src="year4-phase1.js?v=0.23.3"></' + 'script>');
+  document.write('<script src="year4-phase2.js?v=0.23.3"></' + 'script>');
+  document.write('<script src="year4-phase3.js?v=0.23.3"></' + 'script>');
+  document.write('<script src="year4-phase4.js?v=0.23.3"></' + 'script>');
+  document.write('<script src="year4-playbook-guard.js?v=0.23.3"></' + 'script>');
+  document.write('<script src="year4-tactical-additions.js?v=0.23.3"></' + 'script>');
+  document.write('<script src="heading-layout.js?v=0.23.3"></' + 'script>');
 }
 
 if (MARISA_HAS_DOCUMENT) {
@@ -43,7 +45,7 @@ if (MARISA_HAS_DOCUMENT) {
         note.innerHTML = `基準：2026年8月3日調整<br>現行モダン技 ${moveCount}件・一部再計測中<br>進捗はブラウザ内だけに保存`;
       });
       document.querySelectorAll(".site-footer span").forEach(span => {
-        span.textContent = span.textContent.replace(/v0\.\d+\.\d+/, "v0.23.2");
+        span.textContent = span.textContent.replace(/v0\.\d+\.\d+/, "v0.23.3");
       });
     }, 0);
   });
