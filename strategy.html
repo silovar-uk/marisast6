@@ -4,18 +4,19 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#07080a" />
-  <meta name="description" content="モダンマリーザの距離、守り、起き攻め、コンボ、失敗修正と、安定・標準・最大のコンボ習得順を読む実戦攻略デッキ。" />
+  <meta name="description" content="2026年8月3日調整対応。モダンマリーザの距離、守り、対空、起き攻め、コンボと習得順を読む実戦攻略。" />
   <title>実戦攻略｜MODERN MARISA LAB</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="site-shell.css?v=0.19.0" />
-  <link rel="stylesheet" href="readability-tokens.css?v=0.19.0" />
-  <link rel="stylesheet" href="playbook-layout.css?v=0.19.0" />
-  <link rel="stylesheet" href="playbook-cards.css?v=0.19.0" />
-  <link rel="stylesheet" href="playbook-responsive.css?v=0.19.0" />
-  <link rel="stylesheet" href="strategy-page.css?v=0.19.0" />
-  <link rel="stylesheet" href="strategy-readability.css?v=0.19.0" />
-  <link rel="stylesheet" href="strategy-combo-learning.css?v=0.19.0" />
-  <link rel="stylesheet" href="learning-links.css?v=0.19.0" />
+  <link rel="stylesheet" href="site-shell.css?v=0.23.2" />
+  <link rel="stylesheet" href="readability-tokens.css?v=0.23.2" />
+  <link rel="stylesheet" href="playbook-layout.css?v=0.23.2" />
+  <link rel="stylesheet" href="playbook-cards.css?v=0.23.2" />
+  <link rel="stylesheet" href="playbook-responsive.css?v=0.23.2" />
+  <link rel="stylesheet" href="strategy-page.css?v=0.23.2" />
+  <link rel="stylesheet" href="strategy-readability.css?v=0.23.2" />
+  <link rel="stylesheet" href="strategy-combo-learning.css?v=0.23.2" />
+  <link rel="stylesheet" href="learning-links.css?v=0.23.2" />
+  <link rel="stylesheet" href="page-guides.css?v=0.23.2" />
 </head>
 <body class="page-strategy">
   <header class="site-header">
@@ -28,6 +29,7 @@
         <a href="index.html">ホーム</a>
         <a href="situations.html">状況から探す</a>
         <a href="moves.html">技と派生</a>
+        <a href="advantage.html">有利と連携</a>
         <a href="strategy.html" aria-current="page">実戦攻略</a>
         <a href="drill.html">コンボドリル</a>
       </nav>
@@ -40,39 +42,40 @@
         <div>
           <p class="page-kicker">PLAYBOOK / MATCH PLAN</p>
           <h1>技ではなく、<em>試合を読む。</em></h1>
-          <p class="page-lead">距離、守り、対空、起き攻め、コンボ、失敗修正を目的別に整理しました。コンボカテゴリでは、アシストを入口に安定・標準・最大の24ルートを順番に習得できます。</p>
+          <p class="page-lead">距離、守り、ワンボタングラディウス対空、起き攻め、コンボ、失敗修正を目的別に整理しました。コンボカテゴリでは、現役ルートだけをアシストから安定・標準・最大の順に習得します。</p>
         </div>
         <dl class="page-meta">
-          <div><dt>読み方</dt><dd>結論→条件→詳細</dd></div>
+          <div><dt>基準</dt><dd>2026年8月3日調整</dd></div>
           <div><dt>コンボ</dt><dd>入口→安定→標準→最大</dd></div>
-          <div><dt>次の行動</dt><dd>攻略カードと1問ドリル</dd></div>
+          <div><dt>検証</dt><dd>候補と確定を分離</dd></div>
         </dl>
       </div>
-      <div class="strategy-page-note"><b>EDITORIAL RULE</b><span>攻略カードを読んだことと、実戦ルートを習得したことは別に記録します。前段階を完走できてから、次のルートへ進みます。</span></div>
+      <div class="strategy-page-note"><b>EDITORIAL RULE</b><span>攻略カードを読んだことと、実戦ルートを習得したことは別に記録します。ODディマ依存ルートは現役進捗から除外し、クアドリガ候補は実測後に昇格します。</span></div>
     </section>
 
     <section id="strategy-gallery"></section>
   </main>
 
-  <footer class="site-footer"><div class="site-footer-inner shell"><b>MODERN MARISA LAB</b><span>v0.19.0 / 実戦攻略</span></div></footer>
+  <footer class="site-footer"><div class="site-footer-inner shell"><b>MODERN MARISA LAB</b><span>v0.23.2 / 実戦攻略</span></div></footer>
 
-  <script src="data-core.js?v=0.19.0"></script>
-  <script src="data-1.js?v=0.19.0"></script>
-  <script src="data-2.js?v=0.19.0"></script>
-  <script src="data-3.js?v=0.19.0"></script>
-  <script src="data-4.js?v=0.19.0"></script>
-  <script src="data-5.js?v=0.19.0"></script>
-  <script src="data-6.js?v=0.19.0"></script>
-  <script src="playbook-data.js?v=0.19.0"></script>
-  <script src="playbook-expanded.js?v=0.19.0"></script>
-  <script src="drill-data.js?v=0.19.0"></script>
-  <script src="drill-route-schema.js?v=0.19.0"></script>
-  <script src="combo-learning-data.js?v=0.19.0"></script>
-  <script src="learning-links.js?v=0.19.0"></script>
-  <script src="strategy-gallery.js?v=0.19.0"></script>
-  <script src="strategy-practical-cues.js?v=0.19.0"></script>
-  <script src="strategy-combo-learning.js?v=0.19.0"></script>
-  <script src="strategy-page.js?v=0.19.0"></script>
-  <script src="learning-flow-enhancer.js?v=0.19.0"></script>
+  <script src="data-core.js?v=0.23.2"></script>
+  <script src="data-1.js?v=0.23.2"></script>
+  <script src="data-2.js?v=0.23.2"></script>
+  <script src="data-3.js?v=0.23.2"></script>
+  <script src="data-4.js?v=0.23.2"></script>
+  <script src="data-5.js?v=0.23.2"></script>
+  <script src="data-6.js?v=0.23.2"></script>
+  <script src="playbook-data.js?v=0.23.2"></script>
+  <script src="playbook-expanded.js?v=0.23.2"></script>
+  <script src="drill-data.js?v=0.23.2"></script>
+  <script src="drill-route-schema.js?v=0.23.2"></script>
+  <script src="combo-learning-data.js?v=0.23.2"></script>
+  <script src="learning-links.js?v=0.23.2"></script>
+  <script src="strategy-gallery.js?v=0.23.2"></script>
+  <script src="strategy-practical-cues.js?v=0.23.2"></script>
+  <script src="strategy-combo-learning.js?v=0.23.2"></script>
+  <script src="strategy-page.js?v=0.23.2"></script>
+  <script src="learning-flow-enhancer.js?v=0.23.2"></script>
+  <script src="page-guides.js?v=0.23.2"></script>
 </body>
 </html>
