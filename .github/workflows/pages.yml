@@ -43,6 +43,9 @@ jobs:
       - name: Validate readability and tactical additions
         run: node .github/scripts/validate-readability-tactics.js
 
+      - name: Validate contrast across public pages
+        run: node .github/scripts/validate-contrast.js
+
   deploy:
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     needs: validate

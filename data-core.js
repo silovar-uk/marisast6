@@ -27,6 +27,14 @@ window.MARISA_YEAR4 = window.MARISA_YEAR4 || {
 
 const MARISA_HAS_DOCUMENT = typeof document !== "undefined";
 
+if (MARISA_HAS_DOCUMENT && !document.querySelector('link[data-contrast-guard]')) {
+  const contrastLink = document.createElement("link");
+  contrastLink.rel = "stylesheet";
+  contrastLink.href = "contrast-guard.css?v=20260805";
+  contrastLink.dataset.contrastGuard = "true";
+  document.head.appendChild(contrastLink);
+}
+
 if (MARISA_HAS_DOCUMENT && document.readyState === "loading") {
   document.write('<script src="year4-phase1.js?v=0.23.3"></' + 'script>');
   document.write('<script src="year4-phase2.js?v=0.23.3"></' + 'script>');
@@ -35,6 +43,7 @@ if (MARISA_HAS_DOCUMENT && document.readyState === "loading") {
   document.write('<script src="year4-playbook-guard.js?v=0.23.3"></' + 'script>');
   document.write('<script src="year4-tactical-additions.js?v=0.23.3"></' + 'script>');
   document.write('<script src="heading-layout.js?v=0.23.3"></' + 'script>');
+  document.write('<script src="contrast-guard.js?v=20260805"></' + 'script>');
 }
 
 if (MARISA_HAS_DOCUMENT) {
