@@ -1,0 +1,53 @@
+/* Runtime contrast safety net / 2026-08-05 */
+:root {
+  --contrast-light-text: #191512;
+  --contrast-light-text-soft: #4d453e;
+  --contrast-light-link: #7b141b;
+  --contrast-dark-text: #f7f4ee;
+}
+
+.contrast-text-dark {
+  color: var(--contrast-light-text) !important;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+}
+
+.contrast-text-dark:is(a, button, summary) {
+  text-decoration-color: currentColor;
+}
+
+.contrast-text-light {
+  color: var(--contrast-dark-text) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .55) !important;
+}
+
+/* Reading surfaces must never inherit the arena's white text tokens. */
+.editorial-guide,
+.page-advantage .advantage-hero-note,
+.page-advantage .advantage-section,
+.page-advantage .advantage-calculator,
+.page-advantage .tightness-card,
+.page-advantage .training-grid article,
+.page-advantage .advantage-definition-grid article,
+.page-advantage .plus-move-card,
+.page-advantage .advantage-caution {
+  color-scheme: light;
+  text-shadow: none;
+}
+
+.editorial-guide :where(h1, h2, h3, h4, p, li, dt, dd, label, code, kbd),
+.page-advantage .advantage-hero-note,
+.page-advantage .advantage-section :where(h1, h2, h3, h4, p, li, dt, dd, label, code, kbd),
+.page-advantage .advantage-calculator :where(h1, h2, h3, h4, p, li, dt, dd, label, code, kbd),
+.page-advantage .plus-move-card :where(h1, h2, h3, h4, p, li, dt, dd, label, code, kbd),
+.page-advantage .advantage-caution :where(h1, h2, h3, h4, p, li, dt, dd, label, code, kbd) {
+  text-shadow: none;
+}
+
+@media (forced-colors: active) {
+  .contrast-text-dark,
+  .contrast-text-light {
+    color: CanvasText !important;
+    text-shadow: none !important;
+  }
+}
