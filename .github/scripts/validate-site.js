@@ -109,6 +109,7 @@ for (const file of [
   "year4-phase2.js",
   "year4-phase3.js",
   "year4-phase4.js",
+  "year4-playbook-guard.js",
   "situations.js",
   "data-1.js",
   "data-2.js",
@@ -147,6 +148,9 @@ for (const retiredId of year4.retiredRouteIds) {
 assert((year4.comboCandidates || []).length === 9, "Expected nine Quadriga verification candidates");
 assert(context.window.MARISA_COMBO_LEARNING.pendingFamilies?.some(item => item.id === "quadriga-year4"), "Quadriga pending learning family is missing");
 
+const activeCards = context.window.MARISA_PLAYBOOK.cards;
+assert(!activeCards.some(card => year4.api.containsRetired(card)), "A retired move remains in an active playbook card");
+
 const advantageContext = {
   window: {},
   location: { search: "" },
@@ -165,6 +169,7 @@ console.log(JSON.stringify({
   basisDate: year4.basisDate,
   activeMoves: moves.length,
   activeRoutes: routes.length,
+  activePlaybookCards: activeCards.length,
   scenarios: context.window.MARISA_DECISION_DRILL.scenarios.length,
   quadrigaCandidates: year4.comboCandidates.length,
   pagesWorkflow: deployWorkflows[0],
