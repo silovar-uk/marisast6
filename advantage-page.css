@@ -1,0 +1,298 @@
+.advantage-hero-note {
+  margin-top: 24px;
+  padding: 16px 18px;
+  border-left: 3px solid var(--red);
+  background: rgba(255, 253, 248, .62);
+  color: var(--ink-soft);
+  font-size: 12px;
+}
+
+.advantage-section {
+  padding: 64px 0;
+  border-top: 1px solid var(--line);
+}
+
+.advantage-section:first-of-type { border-top: 0; }
+
+.advantage-heading {
+  display: grid;
+  grid-template-columns: minmax(0, .65fr) minmax(0, 1.35fr);
+  gap: 60px;
+  align-items: start;
+  margin-bottom: 30px;
+}
+
+.advantage-heading h2 {
+  margin: 8px 0 0;
+  font-family: var(--serif);
+  font-size: clamp(34px, 5vw, 62px);
+  letter-spacing: -.045em;
+  line-height: 1;
+}
+
+.advantage-heading-copy {
+  display: grid;
+  gap: 14px;
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.advantage-heading-copy p { margin: 0; }
+
+.advantage-definition-grid,
+.tightness-grid,
+.training-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--line-strong);
+  border-left: 1px solid var(--line);
+}
+
+.advantage-definition-grid article,
+.tightness-card,
+.training-grid article {
+  padding: 25px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: rgba(255, 253, 248, .52);
+}
+
+.advantage-definition-grid small,
+.tightness-card small,
+.training-grid small {
+  display: block;
+  color: var(--red);
+  font-size: 9px;
+  font-weight: 950;
+  letter-spacing: .14em;
+}
+
+.advantage-definition-grid h3,
+.tightness-card h3,
+.training-grid h3 {
+  margin: 9px 0 0;
+  font-family: var(--serif);
+  font-size: 24px;
+  line-height: 1.16;
+}
+
+.advantage-definition-grid p,
+.tightness-card p,
+.training-grid p {
+  margin: 13px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.frame-formula {
+  margin: 30px 0;
+  padding: 25px;
+  border: 1px solid var(--line-strong);
+  background: var(--ink);
+  color: #fff;
+}
+
+.frame-formula small {
+  color: #d6b273;
+  font-size: 9px;
+  font-weight: 950;
+  letter-spacing: .14em;
+}
+
+.frame-formula code {
+  display: block;
+  margin-top: 8px;
+  font-family: var(--serif);
+  font-size: clamp(24px, 4vw, 42px);
+  white-space: normal;
+}
+
+.frame-formula p {
+  margin: 12px 0 0;
+  color: #c9c0b7;
+  font-size: 12px;
+}
+
+.tightness-card strong {
+  display: block;
+  margin-top: 15px;
+  color: var(--red-dark);
+  font-size: 22px;
+}
+
+.tightness-card.is-true { background: #edf4ef; }
+.tightness-card.is-trap { background: #fff8e8; }
+.tightness-card.is-trade { background: #f7eee5; }
+.tightness-card.is-open { background: #f5e5e5; }
+
+.advantage-calculator {
+  display: grid;
+  grid-template-columns: minmax(0, .78fr) minmax(0, 1.22fr);
+  gap: 0;
+  margin-top: 32px;
+  border: 1px solid var(--line-strong);
+  background: rgba(255, 253, 248, .68);
+}
+
+.advantage-calculator-form {
+  display: grid;
+  gap: 17px;
+  padding: 28px;
+  border-right: 1px solid var(--line);
+}
+
+.advantage-calculator label {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 850;
+}
+
+.advantage-calculator input {
+  width: 100%;
+  min-height: 46px;
+  padding: 9px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 0;
+  background: var(--white);
+  color: var(--ink);
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.advantage-calculator-result {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 30px;
+}
+
+.advantage-calculator-result small {
+  color: var(--red);
+  font-size: 9px;
+  font-weight: 950;
+  letter-spacing: .14em;
+}
+
+.advantage-calculator-result b {
+  margin-top: 7px;
+  font-family: var(--serif);
+  font-size: clamp(30px, 5vw, 54px);
+  line-height: 1.05;
+}
+
+.advantage-calculator-result p {
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.plus-move-summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: end;
+  margin-bottom: 18px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.plus-move-summary p { margin: 0; color: var(--muted); font-size: 12px; }
+.plus-move-summary b { font-family: var(--serif); font-size: 32px; }
+
+.plus-move-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.plus-move-card {
+  display: grid;
+  grid-template-columns: minmax(108px, .35fr) minmax(0, 1fr);
+  gap: 20px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  background: rgba(255, 253, 248, .62);
+}
+
+.plus-move-command {
+  color: var(--red-dark);
+  font-size: 14px;
+  font-weight: 950;
+}
+
+.plus-move-card small {
+  display: block;
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 850;
+  letter-spacing: .08em;
+}
+
+.plus-move-card h3 {
+  margin: 3px 0 0;
+  font-family: var(--serif);
+  font-size: 24px;
+  line-height: 1.15;
+}
+
+.plus-move-block {
+  margin-top: 12px;
+  color: var(--green);
+  font-size: 16px;
+  font-weight: 950;
+}
+
+.plus-move-card p {
+  margin: 9px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.advantage-caution {
+  margin-top: 28px;
+  padding: 24px;
+  border: 1px solid var(--line-strong);
+  background: #f6efe0;
+}
+
+.advantage-caution h3 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 28px;
+}
+
+.advantage-caution p {
+  margin: 12px 0 0;
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+@media (max-width: 820px) {
+  .advantage-heading,
+  .advantage-calculator {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .advantage-definition-grid,
+  .tightness-grid,
+  .training-grid,
+  .plus-move-list {
+    grid-template-columns: 1fr;
+  }
+
+  .advantage-calculator-form { border-right: 0; border-bottom: 1px solid var(--line); }
+}
+
+@media (max-width: 560px) {
+  .advantage-section { padding: 44px 0; }
+  .advantage-definition-grid,
+  .tightness-grid,
+  .training-grid { border-left: 0; }
+  .advantage-definition-grid article,
+  .tightness-card,
+  .training-grid article { padding: 21px 2px; border-right: 0; }
+  .plus-move-card { grid-template-columns: 1fr; gap: 8px; padding: 19px; }
+}
