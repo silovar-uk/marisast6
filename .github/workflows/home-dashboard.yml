@@ -6,6 +6,7 @@ on:
     paths:
       - "index.html"
       - "drill.html"
+      - "data-core.js"
       - "home-*.js"
       - "home-*.css"
       - "drill-focus.js"
@@ -32,9 +33,22 @@ jobs:
       - name: Validate dashboard JavaScript syntax
         run: |
           set -euo pipefail
-          for file in home-practice-plan.js home-dashboard.js drill-focus.js; do
+          for file in data-core.js home-practice-plan.js home-dashboard.js drill-focus.js; do
             node --check "$file"
           done
+
+      - name: Validate data core without browser globals
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const context = { window: {}, console };
+          vm.createContext(context);
+          vm.runInContext(fs.readFileSync('data-core.js', 'utf8'), context, { filename: 'data-core.js' });
+          if (!context.window.MARISA_DATA) throw new Error('MARISA_DATA was not created');
+          if (!context.window.MARISA_YEAR4) throw new Error('MARISA_YEAR4 was not created');
+          console.log('Data core passed without document or DOM globals.');
+          NODE
 
       - name: Validate deterministic daily five
         run: |
