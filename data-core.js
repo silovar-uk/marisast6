@@ -19,26 +19,28 @@ window.MARISA_DATA = {
 };
 
 window.MARISA_YEAR4 = window.MARISA_YEAR4 || {
-  version: "0.23.0-year4",
+  version: "0.23.1-year4",
   basisDate: "2026-08-03",
   phase: 4,
   changeLog: []
 };
 
-(() => {
+const MARISA_HAS_DOCUMENT = typeof document !== "undefined";
+
+if (MARISA_HAS_DOCUMENT) {
   if (!document.querySelector('link[data-page-guides]')) {
     const link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "page-guides.css?v=0.23.0";
+    link.href = "page-guides.css?v=0.23.1";
     link.dataset.pageGuides = "true";
     document.head.appendChild(link);
   }
-})();
 
-if (document.readyState === "loading") {
-  document.write('<script src="year4-phase1.js?v=0.23.0"></' + 'script>');
-  document.write('<script src="year4-phase2.js?v=0.23.0"></' + 'script>');
-  document.write('<script src="year4-phase3.js?v=0.23.0"></' + 'script>');
-  document.write('<script src="year4-phase4.js?v=0.23.0"></' + 'script>');
-  document.write('<script src="page-guides.js?v=0.23.0"></' + 'script>');
+  if (document.readyState === "loading") {
+    document.write('<script src="year4-phase1.js?v=0.23.1"></' + 'script>');
+    document.write('<script src="year4-phase2.js?v=0.23.1"></' + 'script>');
+    document.write('<script src="year4-phase3.js?v=0.23.1"></' + 'script>');
+    document.write('<script src="year4-phase4.js?v=0.23.1"></' + 'script>');
+    document.write('<script src="page-guides.js?v=0.23.1"></' + 'script>');
+  }
 }
