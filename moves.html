@@ -4,15 +4,16 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#07080a" />
-  <meta name="description" content="モダンマリーザ全48技のフレーム、用途、通常・カウンター・パニカン・ラッシュ時のおすすめ派生。" />
+  <meta name="description" content="2026年8月3日調整対応。モダンマリーザの現行技、用途、フレーム、条件別のおすすめ派生を確認する。" />
   <title>技と派生｜MODERN MARISA LAB</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="site-shell.css?v=0.17.0" />
-  <link rel="stylesheet" href="readability-tokens.css?v=0.17.0" />
-  <link rel="stylesheet" href="moves-page.css?v=0.17.0" />
-  <link rel="stylesheet" href="followups.css?v=0.17.0" />
-  <link rel="stylesheet" href="moves-readability.css?v=0.17.0" />
-  <link rel="stylesheet" href="learning-links.css?v=0.17.0" />
+  <link rel="stylesheet" href="site-shell.css?v=0.23.2" />
+  <link rel="stylesheet" href="readability-tokens.css?v=0.23.2" />
+  <link rel="stylesheet" href="moves-page.css?v=0.23.2" />
+  <link rel="stylesheet" href="followups.css?v=0.23.2" />
+  <link rel="stylesheet" href="moves-readability.css?v=0.23.2" />
+  <link rel="stylesheet" href="learning-links.css?v=0.23.2" />
+  <link rel="stylesheet" href="page-guides.css?v=0.23.2" />
 </head>
 <body class="page-moves">
   <header class="site-header">
@@ -25,6 +26,7 @@
         <a href="index.html">ホーム</a>
         <a href="situations.html">状況から探す</a>
         <a href="moves.html" aria-current="page">技と派生</a>
+        <a href="advantage.html">有利と連携</a>
         <a href="strategy.html">実戦攻略</a>
         <a href="drill.html">コンボドリル</a>
       </nav>
@@ -35,14 +37,14 @@
     <section class="page-hero moves-intro shell">
       <div class="page-hero-grid">
         <div class="moves-intro-copy">
-          <p class="page-kicker">MOVE DATABASE / 48 MOVES</p>
+          <p class="page-kicker">MOVE DATABASE / YEAR 4</p>
           <h1>技と、<em>その次。</em></h1>
           <p class="page-lead">最初に使う場面を確認し、必要な時だけ発生・ダメージ・ヒット後の派生へ進みます。通常、カウンター、パニカン、ラッシュを切り替え、火力・継続・簡単さから最大3案を比較できます。</p>
         </div>
         <dl class="page-meta">
           <div><dt>読み方</dt><dd>用途→数値→派生</dd></div>
-          <div><dt>数値基準</dt><dd>2026年3月17日調整</dd></div>
-          <div><dt>表示方針</dt><dd>推定と確認済みを分離</dd></div>
+          <div><dt>数値基準</dt><dd>2026年8月3日調整</dd></div>
+          <div><dt>表示方針</dt><dd>確定・候補・旧参考を分離</dd></div>
         </dl>
       </div>
     </section>
@@ -50,7 +52,7 @@
     <section class="moves-workspace shell">
       <div class="moves-status-bar">
         <div class="moves-status-count"><b id="result-count">0</b><span>技</span></div>
-        <div id="active-filter-copy" class="moves-status-copy">全技をカテゴリ順に表示</div>
+        <div id="active-filter-copy" class="moves-status-copy">現行技をカテゴリ順に表示</div>
         <button id="status-clear" type="button">条件をすべて解除</button>
       </div>
 
@@ -91,24 +93,24 @@
           </div>
         </details>
         <details id="sources">
-          <summary><b>出典と検証方針</b><span>公式数値・攻略資料・推定を分ける</span></summary>
+          <summary><b>出典と検証方針</b><span>現行値・旧資料・実測候補を分ける</span></summary>
           <div class="reference-body">
             <div class="source-list">
               <a href="https://www.streetfighter.com/6/ja-jp/character/marisa/frame" target="_blank" rel="noreferrer"><b>CAPCOM公式</b><span>マリーザ フレームデータ</span></a>
               <a href="https://www.streetfighter.com/6/ja-jp/character/marisa/movelist" target="_blank" rel="noreferrer"><b>CAPCOM公式</b><span>マリーザ コマンドリスト</span></a>
-              <a href="https://www.streetfighter.com/6/buckler/ja-jp/battle_change/20260317/marisa" target="_blank" rel="noreferrer"><b>CAPCOM公式</b><span>2026年3月17日 調整内容</span></a>
+              <a href="https://www.streetfighter.com/6/buckler/ja-jp/battle_change/20260317/marisa" target="_blank" rel="noreferrer"><b>CAPCOM公式・旧基準</b><span>2026年3月17日 調整内容</span></a>
               <a href="https://kamigame.jp/streetfighter6/page/271002230109263938.html" target="_blank" rel="noreferrer"><b>神ゲー攻略</b><span>モダンマリーザ主要コンボ</span></a>
               <a href="https://www.sukoreru.com/sf6-modern-marisa" target="_blank" rel="noreferrer"><b>すこれるブログ</b><span>コンボ・起き攻め・実戦用途</span></a>
               <a href="https://ultimateframedata.com/sf6/marisa" target="_blank" rel="noreferrer"><b>Ultimate Frame Data</b><span>フレーム照合</span></a>
             </div>
-            <p class="source-note">「フレーム差分推定」「距離依存」「高度依存」は、成立条件をトレーニングモードで最終確認してください。出典があることと、現行環境で実機確認済みであることは分けて表示しています。</p>
+            <p class="source-note">現行基準は2026年8月3日です。クアドリガの現行モダン入力・数値・コンボなど未実測項目は候補として分離し、旧数値を現行の確定値にはしません。「距離依存」「高度依存」もトレーニングモードで最終確認してください。</p>
           </div>
         </details>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer"><div class="site-footer-inner shell"><b>MODERN MARISA LAB</b><span>v0.17.0 / 技と派生</span></div></footer>
+  <footer class="site-footer"><div class="site-footer-inner shell"><b>MODERN MARISA LAB</b><span>v0.23.2 / 技と派生</span></div></footer>
 
   <template id="move-template">
     <article class="move-card">
@@ -140,19 +142,20 @@
     </article>
   </template>
 
-  <script src="data-core.js"></script>
-  <script src="situations.js"></script>
-  <script src="data-1.js"></script>
-  <script src="data-2.js"></script>
-  <script src="data-3.js"></script>
-  <script src="data-4.js"></script>
-  <script src="data-5.js"></script>
-  <script src="data-6.js"></script>
-  <script src="learning-links.js?v=0.17.0"></script>
-  <script src="followups-data.js?v=0.17.0"></script>
-  <script src="moves-page.js?v=0.17.0"></script>
-  <script src="moves-practical-cues.js?v=0.17.0"></script>
-  <script src="followups-engine.js?v=0.17.0"></script>
-  <script src="learning-flow-enhancer.js?v=0.17.0"></script>
+  <script src="data-core.js?v=0.23.2"></script>
+  <script src="situations.js?v=0.23.2"></script>
+  <script src="data-1.js?v=0.23.2"></script>
+  <script src="data-2.js?v=0.23.2"></script>
+  <script src="data-3.js?v=0.23.2"></script>
+  <script src="data-4.js?v=0.23.2"></script>
+  <script src="data-5.js?v=0.23.2"></script>
+  <script src="data-6.js?v=0.23.2"></script>
+  <script src="learning-links.js?v=0.23.2"></script>
+  <script src="followups-data.js?v=0.23.2"></script>
+  <script src="moves-page.js?v=0.23.2"></script>
+  <script src="moves-practical-cues.js?v=0.23.2"></script>
+  <script src="followups-engine.js?v=0.23.2"></script>
+  <script src="learning-flow-enhancer.js?v=0.23.2"></script>
+  <script src="page-guides.js?v=0.23.2"></script>
 </body>
 </html>
