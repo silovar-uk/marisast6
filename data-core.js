@@ -33,3 +33,17 @@ if (MARISA_HAS_DOCUMENT && document.readyState === "loading") {
   document.write('<script src="year4-phase3.js?v=0.23.2"></' + 'script>');
   document.write('<script src="year4-phase4.js?v=0.23.2"></' + 'script>');
 }
+
+if (MARISA_HAS_DOCUMENT) {
+  document.addEventListener("DOMContentLoaded", () => {
+    setTimeout(() => {
+      const moveCount = window.MARISA_DATA?.moves?.length || 0;
+      document.querySelectorAll(".home-hero-note").forEach(note => {
+        note.innerHTML = `基準：2026年8月3日調整<br>現行モダン技 ${moveCount}件・一部再計測中<br>進捗はブラウザ内だけに保存`;
+      });
+      document.querySelectorAll(".site-footer span").forEach(span => {
+        span.textContent = span.textContent.replace(/v0\.\d+\.\d+/, "v0.23.2");
+      });
+    }, 0);
+  });
+}
