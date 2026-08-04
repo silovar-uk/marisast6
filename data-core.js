@@ -21,7 +21,7 @@ window.MARISA_DATA = {
 window.MARISA_YEAR4 = window.MARISA_YEAR4 || {
   version: "0.22.0-year4",
   basisDate: "2026-08-03",
-  phase: 3,
+  phase: 4,
   changeLog: []
 };
 
@@ -29,4 +29,5 @@ if (document.readyState === "loading") {
   document.write('<script src="year4-phase1.js?v=0.22.0"><\\/script>');
   document.write('<script src="year4-phase2.js?v=0.22.0"><\\/script>');
   document.write('<script src="year4-phase3.js?v=0.22.0"><\\/script>');
+  document.write('<script src="year4-phase4.js?v=0.22.0"><\\/script>');
 }
