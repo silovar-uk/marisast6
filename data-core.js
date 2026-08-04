@@ -12,14 +12,14 @@ window.MARISA_DATA = {
     { name: "弾抜け", copy: "飛び道具を見て接近する", hint: "ファランクス・SA3" },
     { name: "起き攻め", copy: "ダウン後の本命二択", hint: "長押し←＋強・エンフォルド" },
     { name: "切り返し", copy: "守勢を無敵・アーマーで拒否", hint: "SA2・ODスクトゥム" },
-    { name: "端攻め", copy: "壁を背負わせて試合を壊す", hint: "ODファランクス" }
+    { name: "端攻め", copy: "壁を背負わせて試合を壊す", hint: "ODファランクス・ODクアドリガ" }
   ],
   firstSix: ["crLP", "stMK", "aMP", "gladiusL", "phalanxM", "sa2"],
   moves: []
 };
 
 window.MARISA_YEAR4 = window.MARISA_YEAR4 || {
-  version: "0.23.1-year4",
+  version: "0.23.2-year4",
   basisDate: "2026-08-03",
   phase: 4,
   changeLog: []
@@ -27,20 +27,9 @@ window.MARISA_YEAR4 = window.MARISA_YEAR4 || {
 
 const MARISA_HAS_DOCUMENT = typeof document !== "undefined";
 
-if (MARISA_HAS_DOCUMENT) {
-  if (!document.querySelector('link[data-page-guides]')) {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "page-guides.css?v=0.23.1";
-    link.dataset.pageGuides = "true";
-    document.head.appendChild(link);
-  }
-
-  if (document.readyState === "loading") {
-    document.write('<script src="year4-phase1.js?v=0.23.1"></' + 'script>');
-    document.write('<script src="year4-phase2.js?v=0.23.1"></' + 'script>');
-    document.write('<script src="year4-phase3.js?v=0.23.1"></' + 'script>');
-    document.write('<script src="year4-phase4.js?v=0.23.1"></' + 'script>');
-    document.write('<script src="page-guides.js?v=0.23.1"></' + 'script>');
-  }
+if (MARISA_HAS_DOCUMENT && document.readyState === "loading") {
+  document.write('<script src="year4-phase1.js?v=0.23.2"></' + 'script>');
+  document.write('<script src="year4-phase2.js?v=0.23.2"></' + 'script>');
+  document.write('<script src="year4-phase3.js?v=0.23.2"></' + 'script>');
+  document.write('<script src="year4-phase4.js?v=0.23.2"></' + 'script>');
 }
