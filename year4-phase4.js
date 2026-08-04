@@ -81,13 +81,19 @@
 
   function replaceLeafText(root, matcher, replacement) {
     root.querySelectorAll("*").forEach(node => {
-      if (node.children.length || !node.textContent || !matcher.test(node.textContent)) return;
+      if (node.children.length || !node.textContent) return;
+      matcher.lastIndex = 0;
+      if (!matcher.test(node.textContent)) return;
       if (node.closest('a[href*="20260317"]')) return;
+      matcher.lastIndex = 0;
       node.textContent = node.textContent.replace(matcher, replacement);
     });
   }
 
   function updateVisibleMeta() {
+    const hasMoveDataset = Boolean(window.MARISA_DATA?.moves?.length);
+    const hasDrillDataset = Boolean(window.MARISA_DRILL);
+    const hasDecisionDataset = Boolean(window.MARISA_DECISION_DRILL);
     const moveCount = window.MARISA_DATA?.moves?.length || 0;
     const routeCount = window.MARISA_DRILL?.routes?.length || 0;
     const scenarioCount = window.MARISA_DECISION_DRILL?.scenarios?.length || 0;
@@ -111,7 +117,12 @@
 
     const notice = document.querySelector("#year4-status");
     if (notice) {
-      notice.innerHTML = `<b>YEAR 4 DATA STATUS / PHASE 4</b><br>現役技 ${moveCount}件・現役コンボ ${routeCount}件・判断問題 ${scenarioCount}件。クアドリガ候補は実測完了まで習得数と正解問題から除外しています。`;
+      const counts = [];
+      if (hasMoveDataset) counts.push(`現役技 ${moveCount}件`);
+      if (hasDrillDataset) counts.push(`現役コンボ ${routeCount}件`);
+      if (hasDecisionDataset) counts.push(`判断問題 ${scenarioCount}件`);
+      const countText = counts.length ? `${counts.join("・")}。` : "Year 4移行レイヤー適用済み。";
+      notice.innerHTML = `<b>YEAR 4 DATA STATUS / PHASE 4</b><br>${countText}クアドリガ候補は実測完了まで習得数と正解問題から除外しています。`;
     }
   }
 
@@ -124,12 +135,15 @@
     const errors = [];
     const warnings = [];
 
+    const hasMoveDataset = moves.length > 0;
     if (moves.some(move => retiredMoveIds.has(move.id))) errors.push("retired move remains active");
-    quadrigaMoveIds.forEach(id => {
-      const move = moves.find(item => item.id === id);
-      if (!move) errors.push(`missing move: ${id}`);
-      else if (move.verificationStatus !== "candidate" && move.verificationStatus !== "measured") warnings.push(`unexpected Quadriga status: ${id}`);
-    });
+    if (hasMoveDataset) {
+      quadrigaMoveIds.forEach(id => {
+        const move = moves.find(item => item.id === id);
+        if (!move) errors.push(`missing move: ${id}`);
+        else if (move.verificationStatus !== "candidate" && move.verificationStatus !== "measured") warnings.push(`unexpected Quadriga status: ${id}`);
+      });
+    }
 
     routes.forEach(route => {
       if (api.routeUsesRetired(route)) errors.push(`retired route remains active: ${route.id}`);
