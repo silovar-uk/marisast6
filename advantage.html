@@ -4,12 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#07080a" />
-  <meta name="description" content="モダンマリーザのガード有利、連続ガード、暴れ潰し、埋まる・埋まらないを、発生と距離から理解する攻略ページ。" />
+  <meta name="description" content="2026年8月3日調整対応。モダンマリーザのガード有利、連続ガード、暴れ潰し、相打ち、割り込みと距離の穴を理解する。" />
   <title>有利と連携｜MODERN MARISA LAB</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="site-shell.css?v=0.23.0" />
-  <link rel="stylesheet" href="readability-tokens.css?v=0.23.0" />
-  <link rel="stylesheet" href="advantage-page.css?v=0.23.0" />
+  <link rel="stylesheet" href="site-shell.css?v=0.23.2" />
+  <link rel="stylesheet" href="readability-tokens.css?v=0.23.2" />
+  <link rel="stylesheet" href="advantage-page.css?v=0.23.2" />
 </head>
 <body class="page-advantage">
   <header class="site-header">
@@ -35,11 +35,11 @@
         <div>
           <p class="page-kicker">FRAME ADVANTAGE / PRESSURE MAP</p>
           <h1>有利だから、<em>何が埋まる？</em></h1>
-          <p class="page-lead">ガード時のプラスフレームを、次の打撃が連続ガードになるのか、4F暴れを潰すのか、相打ちになるのか、割り込まれるのかまで分解します。さらに、数字上は成立しても技が届かない「距離の穴」も別に確認します。</p>
-          <p class="advantage-hero-note">このページでは「埋まる」を、原則として隙間0F以下の連続ガードに限定します。隙間はあるが4F暴れに勝つ連携は「暴れ潰し」と呼び分け、曖昧な表現を避けます。</p>
+          <p class="page-lead">ガード時のプラスフレームを、次の打撃が連続ガードになるのか、4F暴れを潰すのか、相打ちになるのか、割り込まれるのかまで分解します。数字上は成立しても技が届かない「距離の穴」も別に確認します。</p>
+          <p class="advantage-hero-note">「埋まる」は隙間0F以下の連続ガードに限定します。隙間はあるが4F暴れに勝つ連携は「暴れ潰し」と呼び分けます。</p>
         </div>
         <dl class="page-meta">
-          <div><dt>基準</dt><dd>ガード硬直差＋次技の発生</dd></div>
+          <div><dt>基準</dt><dd>2026年8月3日調整</dd></div>
           <div><dt>最速暴れ</dt><dd>原則4Fで比較</dd></div>
           <div><dt>別判定</dt><dd>距離・無敵・アーマー</dd></div>
         </dl>
@@ -50,15 +50,14 @@
       <div class="advantage-heading">
         <div><p class="page-kicker">01 / WHAT PLUS MEANS</p><h2 id="advantage-basics-title">有利は、先に動ける時間。</h2></div>
         <div class="advantage-heading-copy">
-          <p>ガード時＋4Fとは、技をガードさせた後、マリーザが相手より4フレーム早く動き始められるという意味です。＋4Fそのものがダメージを保証するわけではありません。早く動ける4Fを、打撃、投げ、前歩き、ガード、再度の溜めなどへどう使うかが攻めの本体です。</p>
-          <p>また、「反撃されない」と「有利」は別です。ガード時−2Fなら相手が2F先に動きますが、相手の最速技が4Fなら通常打撃による確定反撃は受けません。一方で、こちらからボタンを押すと相手の4Fに負けやすいため、攻めの順番は相手へ移っています。</p>
+          <p>ガード時＋4Fとは、マリーザが相手より4フレーム早く動き始められるという意味です。早く動ける時間を打撃、投げ、前歩き、ガード、再度の溜めへどう使うかが攻めの本体です。</p>
+          <p>「反撃されない」と「有利」は別です。−2Fは通常の4F技による確定反撃を受けませんが、こちらのターンでもありません。不利幅が4F以上、表記では−4F以下なら、距離が合う発生4F技で確定反撃を受けます。</p>
         </div>
       </div>
-
       <div class="advantage-definition-grid">
-        <article><small>PLUS</small><h3>＋1F以上</h3><p>マリーザが先に動けます。ただし、次の技が遅い、届かない、無敵技やアーマーに負ける場合があるため、プラスだけで自動的に攻め継続とは決めません。</p></article>
-        <article><small>SAFE</small><h3>不利だが反撃なし</h3><p>相手が先に動いても、最速技より不利幅が小さければ確定反撃はありません。安全ではありますが、こちらのターンではないため、ガードや後退を基準にします。</p></article>
-        <article><small>PUNISHABLE</small><h3>最速技が確定する不利</h3><p>不利幅が4F以上（表記では−4F以下）なら、距離と技の届き方が合えば発生4F技による確定反撃を受けます。先端ガードで届かない場合は、数値上の確反と実戦の確反を分けます。</p></article>
+        <article><small>PLUS</small><h3>＋1F以上</h3><p>マリーザが先に動けます。ただし次の技が遅い、届かない、無敵技やアーマーに負ける場合があります。</p></article>
+        <article><small>SAFE</small><h3>不利だが反撃なし</h3><p>相手が先に動いても、最速技より不利幅が小さければ通常打撃の確定反撃はありません。</p></article>
+        <article><small>PUNISHABLE</small><h3>確定反撃を受ける</h3><p>不利幅、相手の最速技、実際の距離が一致した時に確定反撃が成立します。</p></article>
       </div>
     </section>
 
@@ -66,22 +65,21 @@
       <div class="advantage-heading">
         <div><p class="page-kicker">02 / TIGHT OR OPEN</p><h2 id="tightness-title">埋まるかは、次の技まで計算する。</h2></div>
         <div class="advantage-heading-copy">
-          <p>有利フレームだけでは、連携の隙間は決まりません。次に出す技の発生を引いて、相手が動ける時間が何フレーム残るかを見ます。ここでは、最初の技を最速で出し切り、次の技も最速で入力した前提で計算します。</p>
-          <p>ディレイをかけた場合、その遅らせた分だけ隙間が増えます。意図的なディレイは投げ抜けや遅らせグラップを狩る読み合いになりますが、「埋まっている連携」とは別です。</p>
+          <p>有利フレームだけでは連携の隙間は決まりません。次に出す技の発生を合わせ、相手が動ける時間が残るかを見ます。次の技を遅らせた分だけ隙間は増えます。</p>
         </div>
       </div>
 
       <div class="frame-formula">
         <small>FRAME GAP</small>
         <code>隙間F ＝ 次の技の発生F − 有利F − 1</code>
-        <p>隙間0F以下なら連続ガード。最速4Fを基準にすると、1〜2F空きは暴れ潰し、3F空きは相打ち、4F以上空きは4F技で割り込まれます。</p>
+        <p>隙間0F以下は連続ガード。最速4Fを基準にすると、1〜2F空きは暴れ潰し、3F空きは相打ち、4F以上は割り込み可能です。</p>
       </div>
 
       <div class="tightness-grid">
-        <article class="tightness-card is-true"><small>TRUE BLOCK STRING</small><h3>＋4F → 発生5F</h3><strong>隙間0F</strong><p>完全に埋まる連続ガードです。相手は通常行動を挟めません。ただし、技が空振りする距離では連携そのものが成立しません。</p></article>
-        <article class="tightness-card is-trap"><small>FRAME TRAP</small><h3>＋4F → 発生6F</h3><strong>隙間1F</strong><p>連続ガードではありませんが、相手の4F打撃より先に当たります。無敵技、アーマー、パリィなどは別の回答として残ります。</p></article>
-        <article class="tightness-card is-trade"><small>TRADE</small><h3>＋4F → 発生8F</h3><strong>隙間3F</strong><p>相手の4F打撃と同じタイミングで攻撃判定が出ます。相打ち後の有利やダメージまで確認して初めて実戦的な連携になります。</p></article>
-        <article class="tightness-card is-open"><small>INTERRUPTIBLE</small><h3>＋4F → 発生9F</h3><strong>隙間4F</strong><p>相手の4F技が先に当たります。相手がガードを続ける読みで使うディレイ打撃としては成立しますが、暴れ潰しではありません。</p></article>
+        <article class="tightness-card is-true"><small>TRUE BLOCK STRING</small><h3>＋4F → 発生5F</h3><strong>隙間0F</strong><p>完全に埋まる連続ガード。相手は通常行動を挟めません。</p></article>
+        <article class="tightness-card is-trap"><small>FRAME TRAP</small><h3>＋4F → 発生6F</h3><strong>隙間1F</strong><p>連続ガードではありませんが、相手の4F打撃より先に当たります。</p></article>
+        <article class="tightness-card is-trade"><small>TRADE</small><h3>＋4F → 発生8F</h3><strong>隙間3F</strong><p>相手の4F打撃と同じタイミングで攻撃判定が出ます。</p></article>
+        <article class="tightness-card is-open"><small>INTERRUPTIBLE</small><h3>＋4F → 発生9F</h3><strong>隙間4F</strong><p>相手の4F技が先に当たり、暴れ潰しにはなりません。</p></article>
       </div>
 
       <div class="advantage-calculator" aria-label="連携の隙間計算">
@@ -103,20 +101,18 @@
       <div class="advantage-heading">
         <div><p class="page-kicker">03 / TIME AND DISTANCE</p><h2 id="distance-title">時間が埋まっても、距離が空く。</h2></div>
         <div class="advantage-heading-copy">
-          <p>連携計算が成立していても、最初の技のガードバックで相手が離れ、次の技が届かなければ攻撃判定は当たりません。この状態はフレーム上の隙間とは別の「距離の穴」です。マリーザは溜めグラディウスやファランクスで有利を取っても、投げや短い小技が届かない場面があります。</p>
-          <p>その場合は、無理に小技を振るのではなく、リーチの長いN中、もう一度のグラディウス、前歩き、相手の暴れを待つガードなどへ切り替えます。投げが届くかどうかも、＋何Fではなくガード後の実距離で決まります。</p>
+          <p>計算上は埋まっていても、ガードバックで相手が離れ、次の技が届かなければ連携は成立しません。溜めグラディウスやファランクスの後は、投げや短い小技が届くかを別に確認します。</p>
+          <p>届かない場合は、N中、再度のグラディウス、前歩き、相手の暴れを待つガードへ切り替えます。有利フレームは行動を保証せず、選択肢を増やす材料です。</p>
         </div>
       </div>
-
       <div class="training-grid">
-        <article><small>CHECK 1</small><h3>最速4Fを録画する</h3><p>相手へ最速4F技を設定し、有利技をガードさせた後の打撃が勝つ、相打ち、負けるのどれになるかを確認します。カウンター表示も記録します。</p></article>
-        <article><small>CHECK 2</small><h3>立ちガードを録画する</h3><p>相手が何も押さない場合、次の技が連続ガードになるか、隙間があるかをフレームメーターで確認します。連続ガードと暴れ潰しを混同しません。</p></article>
-        <article><small>CHECK 3</small><h3>後ろ歩きと無敵技を混ぜる</h3><p>打撃は届くが投げが届かない、無敵技には負けるといった別の穴を確認します。一つの連携で全防御行動に勝とうとせず、相手の選択を見て二手目を変えます。</p></article>
+        <article><small>CHECK 1</small><h3>最速4Fを録画する</h3><p>有利技後の打撃が勝つ、相打ち、負けるのどれになるかを確認します。</p></article>
+        <article><small>CHECK 2</small><h3>ガードを録画する</h3><p>次の技が連続ガードか、隙間がある暴れ潰しかをフレームメーターで確認します。</p></article>
+        <article><small>CHECK 3</small><h3>後ろ歩きと無敵技</h3><p>投げや短い技が届かない距離、無敵技やアーマーに負ける選択を確認します。</p></article>
       </div>
-
       <div class="advantage-caution">
-        <h3>「有利だから押す」ではなく、「何を押すと何に勝つか」。</h3>
-        <p>有利フレームは攻める権利を増やしますが、行動を保証しません。打撃は暴れに勝ち、投げはガードに勝ち、ガードは無敵技に勝つという関係を基準にします。モダンマリーザの対空はこの攻防とは別で、第一候補はワンボタングラディウス。SA2、しゃがみ強、空対空は距離や角度に応じた補助候補です。</p>
+        <h3>何を押すと、何に勝つか。</h3>
+        <p>打撃は暴れ、投げはガード、ガードは無敵技への回答になります。対空は別の判断で、第一候補はワンボタングラディウス。SA2、しゃがみ強、空対空は距離や角度に応じた補助候補です。</p>
       </div>
     </section>
 
@@ -124,25 +120,24 @@
       <div class="advantage-heading">
         <div><p class="page-kicker">04 / PLUS MOVES</p><h2 id="plus-moves-title">ガードされて有利な技。</h2></div>
         <div class="advantage-heading-copy">
-          <p>下の一覧は、サイトの現行技データからガード時にプラスとなる数値を持つ技だけを自動抽出します。最大溜め時だけ有利になる技は、通常版と条件を混ぜず、元データの表記をそのまま表示します。</p>
-          <p>Year 4で追加したクアドリガのように、現行数値が未計測の技や旧参考値しかない技は一覧へ含めません。技数よりも、確定値と候補値を分離することを優先します。</p>
+          <p>現行技データからガード時にプラス値を持つ技だけを自動抽出します。最大溜め時だけ有利になる技は条件を含めて表示します。</p>
+          <p>現行値が未計測のクアドリガや、旧参考値しかない項目は一覧へ混ぜません。</p>
         </div>
       </div>
-
-      <div class="plus-move-summary"><b><span id="plus-move-count">0</span> MOVES</b><p>技カードのガード硬直差から抽出／候補値・未計測値を除外</p></div>
+      <div class="plus-move-summary"><b><span id="plus-move-count">0</span> MOVES</b><p>確定したガード硬直差から抽出</p></div>
       <div id="plus-move-list" class="plus-move-list"><p>技データを読み込んでいます。</p></div>
     </section>
   </main>
 
-  <footer class="site-footer"><div class="site-footer-inner shell"><b>MODERN MARISA LAB</b><span>v0.23.0 / 有利と連携</span></div></footer>
+  <footer class="site-footer"><div class="site-footer-inner shell"><b>MODERN MARISA LAB</b><span>v0.23.2 / 有利と連携</span></div></footer>
 
-  <script src="data-core.js?v=0.23.0"></script>
-  <script src="data-1.js?v=0.23.0"></script>
-  <script src="data-2.js?v=0.23.0"></script>
-  <script src="data-3.js?v=0.23.0"></script>
-  <script src="data-4.js?v=0.23.0"></script>
-  <script src="data-5.js?v=0.23.0"></script>
-  <script src="data-6.js?v=0.23.0"></script>
-  <script src="advantage-page.js?v=0.23.0"></script>
+  <script src="data-core.js?v=0.23.2"></script>
+  <script src="data-1.js?v=0.23.2"></script>
+  <script src="data-2.js?v=0.23.2"></script>
+  <script src="data-3.js?v=0.23.2"></script>
+  <script src="data-4.js?v=0.23.2"></script>
+  <script src="data-5.js?v=0.23.2"></script>
+  <script src="data-6.js?v=0.23.2"></script>
+  <script src="advantage-page.js?v=0.23.2"></script>
 </body>
 </html>
