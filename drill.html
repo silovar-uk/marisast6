@@ -4,16 +4,17 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#07080a" />
-  <meta name="description" content="モダンマリーザの状況、ゲージ、目的を読み、安定・標準・最大の完成コンボから適切なルートを選び、判断の癖まで分析するドリル。" />
+  <meta name="description" content="2026年8月3日調整対応。現役ルートから状況、ゲージ、目的に合うモダンマリーザの完成コンボを選ぶ判断ドリル。" />
   <title>コンボ判断ドリル｜MODERN MARISA LAB</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="site-shell.css?v=0.21.0" />
-  <link rel="stylesheet" href="readability-tokens.css?v=0.21.0" />
-  <link rel="stylesheet" href="drill.css?v=0.21.0" />
-  <link rel="stylesheet" href="drill-decision.css?v=0.21.0" />
-  <link rel="stylesheet" href="drill-tier.css?v=0.21.0" />
-  <link rel="stylesheet" href="drill-analysis.css?v=0.21.0" />
-  <link rel="stylesheet" href="learning-links.css?v=0.21.0" />
+  <link rel="stylesheet" href="site-shell.css?v=0.23.2" />
+  <link rel="stylesheet" href="readability-tokens.css?v=0.23.2" />
+  <link rel="stylesheet" href="drill.css?v=0.23.2" />
+  <link rel="stylesheet" href="drill-decision.css?v=0.23.2" />
+  <link rel="stylesheet" href="drill-tier.css?v=0.23.2" />
+  <link rel="stylesheet" href="drill-analysis.css?v=0.23.2" />
+  <link rel="stylesheet" href="learning-links.css?v=0.23.2" />
+  <link rel="stylesheet" href="page-guides.css?v=0.23.2" />
 </head>
 <body class="page-drill">
   <header class="site-header">
@@ -26,6 +27,7 @@
         <a href="index.html">ホーム</a>
         <a href="situations.html">状況から探す</a>
         <a href="moves.html">技と派生</a>
+        <a href="advantage.html">有利と連携</a>
         <a href="strategy.html">実戦攻略</a>
         <a href="drill.html" aria-current="page">コンボドリル</a>
       </nav>
@@ -38,12 +40,12 @@
         <div>
           <p class="page-kicker">COMBO DRILL / DECISION MAKING</p>
           <h1>正解だけでなく、<em>迷い方を知る。</em></h1>
-          <p class="page-lead">ヒット状況、ゲージ、位置、目的を読み、同じ始動技の3ルートから選びます。結果では、安定・標準・最大の正答率に加え、基準未定着、伸ばしすぎ、リターン不足、条件違いを分けて確認できます。</p>
+          <p class="page-lead">ヒット状況、ゲージ、位置、目的を読み、同じ始動技の現役3ルートから選びます。ODディマ依存ルートは出題せず、未実測のクアドリガ候補も正解へ混ぜません。</p>
         </div>
         <dl class="page-meta">
-          <div><dt>形式</dt><dd>完成コンボ3択</dd></div>
+          <div><dt>基準</dt><dd>2026年8月3日調整</dd></div>
           <div><dt>段階</dt><dd>安定・標準・最大</dd></div>
-          <div><dt>集中練習</dt><dd>1問または指定セット</dd></div>
+          <div><dt>検証</dt><dd>確定ルートだけを出題</dd></div>
         </dl>
       </div>
     </section>
@@ -56,24 +58,25 @@
   </main>
 
   <footer class="site-footer">
-    <div class="site-footer-inner shell"><b>MODERN MARISA LAB</b><span>v0.21.0 / DAILY PRACTICE SET</span></div>
+    <div class="site-footer-inner shell"><b>MODERN MARISA LAB</b><span>v0.23.2 / DAILY PRACTICE SET</span></div>
   </footer>
 
-  <script src="data-core.js?v=0.21.0"></script>
-  <script src="data-1.js?v=0.21.0"></script>
-  <script src="data-2.js?v=0.21.0"></script>
-  <script src="data-3.js?v=0.21.0"></script>
-  <script src="data-4.js?v=0.21.0"></script>
-  <script src="data-5.js?v=0.21.0"></script>
-  <script src="data-6.js?v=0.21.0"></script>
-  <script src="drill-data.js?v=0.21.0"></script>
-  <script src="drill-route-schema.js?v=0.21.0"></script>
-  <script src="drill-scenarios.js?v=0.21.0"></script>
-  <script src="drill-result-analysis.js?v=0.21.0"></script>
-  <script src="learning-links.js?v=0.21.0"></script>
-  <script src="drill-focus.js?v=0.21.0"></script>
-  <script src="drill-decision-engine.js?v=0.21.0"></script>
-  <script src="drill-tier-explanation.js?v=0.21.0"></script>
-  <script src="learning-flow-enhancer.js?v=0.21.0"></script>
+  <script src="data-core.js?v=0.23.2"></script>
+  <script src="data-1.js?v=0.23.2"></script>
+  <script src="data-2.js?v=0.23.2"></script>
+  <script src="data-3.js?v=0.23.2"></script>
+  <script src="data-4.js?v=0.23.2"></script>
+  <script src="data-5.js?v=0.23.2"></script>
+  <script src="data-6.js?v=0.23.2"></script>
+  <script src="drill-data.js?v=0.23.2"></script>
+  <script src="drill-route-schema.js?v=0.23.2"></script>
+  <script src="drill-scenarios.js?v=0.23.2"></script>
+  <script src="drill-result-analysis.js?v=0.23.2"></script>
+  <script src="learning-links.js?v=0.23.2"></script>
+  <script src="drill-focus.js?v=0.23.2"></script>
+  <script src="drill-decision-engine.js?v=0.23.2"></script>
+  <script src="drill-tier-explanation.js?v=0.23.2"></script>
+  <script src="learning-flow-enhancer.js?v=0.23.2"></script>
+  <script src="page-guides.js?v=0.23.2"></script>
 </body>
 </html>
