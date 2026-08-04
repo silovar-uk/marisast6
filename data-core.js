@@ -19,7 +19,7 @@ window.MARISA_DATA = {
 };
 
 window.MARISA_YEAR4 = window.MARISA_YEAR4 || {
-  version: "0.23.3-year4",
+  version: "0.23.2-year4",
   basisDate: "2026-08-03",
   phase: 4,
   changeLog: []
@@ -45,8 +45,14 @@ if (MARISA_HAS_DOCUMENT) {
         note.innerHTML = `基準：2026年8月3日調整<br>現行モダン技 ${moveCount}件・一部再計測中<br>進捗はブラウザ内だけに保存`;
       });
       document.querySelectorAll(".site-footer span").forEach(span => {
-        span.textContent = span.textContent.replace(/v0\.\d+\.\d+/, "v0.23.3");
+        span.textContent = span.textContent.replace(/v0\.\d+\.\d+/, "v0.23.2");
       });
+      if (!document.querySelector("#year4-version-style")) {
+        const style = document.createElement("style");
+        style.id = "year4-version-style";
+        style.textContent = 'html body:has(.home-hero) .site-footer span::after,html body:has(.moves-workspace) .site-footer span::after{content:"v0.23.2 / YEAR 4"}';
+        document.head.appendChild(style);
+      }
     }, 0);
   });
 }
