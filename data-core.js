@@ -32,6 +32,7 @@ if (MARISA_HAS_DOCUMENT && document.readyState === "loading") {
   document.write('<script src="year4-phase2.js?v=0.23.2"></' + 'script>');
   document.write('<script src="year4-phase3.js?v=0.23.2"></' + 'script>');
   document.write('<script src="year4-phase4.js?v=0.23.2"></' + 'script>');
+  document.write('<script src="year4-playbook-guard.js?v=0.23.2"></' + 'script>');
 }
 
 if (MARISA_HAS_DOCUMENT) {
