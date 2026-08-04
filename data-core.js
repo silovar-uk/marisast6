@@ -28,11 +28,13 @@ window.MARISA_YEAR4 = window.MARISA_YEAR4 || {
 const MARISA_HAS_DOCUMENT = typeof document !== "undefined";
 
 if (MARISA_HAS_DOCUMENT && document.readyState === "loading") {
-  document.write('<script src="year4-phase1.js?v=0.23.2"></' + 'script>');
-  document.write('<script src="year4-phase2.js?v=0.23.2"></' + 'script>');
-  document.write('<script src="year4-phase3.js?v=0.23.2"></' + 'script>');
-  document.write('<script src="year4-phase4.js?v=0.23.2"></' + 'script>');
-  document.write('<script src="year4-playbook-guard.js?v=0.23.2"></' + 'script>');
+  document.write('<script src="year4-phase1.js?v=0.23.3"></' + 'script>');
+  document.write('<script src="year4-phase2.js?v=0.23.3"></' + 'script>');
+  document.write('<script src="year4-phase3.js?v=0.23.3"></' + 'script>');
+  document.write('<script src="year4-phase4.js?v=0.23.3"></' + 'script>');
+  document.write('<script src="year4-playbook-guard.js?v=0.23.3"></' + 'script>');
+  document.write('<script src="year4-tactical-additions.js?v=0.23.3"></' + 'script>');
+  document.write('<script src="heading-layout.js?v=0.23.3"></' + 'script>');
 }
 
 if (MARISA_HAS_DOCUMENT) {
@@ -45,6 +47,12 @@ if (MARISA_HAS_DOCUMENT) {
       document.querySelectorAll(".site-footer span").forEach(span => {
         span.textContent = span.textContent.replace(/v0\.\d+\.\d+/, "v0.23.2");
       });
+      if (!document.querySelector("#year4-version-style")) {
+        const style = document.createElement("style");
+        style.id = "year4-version-style";
+        style.textContent = 'html body:has(.home-hero) .site-footer span::after,html body:has(.moves-workspace) .site-footer span::after{content:"v0.23.2 / YEAR 4"}';
+        document.head.appendChild(style);
+      }
     }, 0);
   });
 }
