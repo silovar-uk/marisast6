@@ -99,14 +99,19 @@
 
   function sanitizeMove(move) {
     if (!move || RETIRED_MOVE_IDS.has(move.id)) return null;
-    const result = cleanValue(move);
+
+    const source = { ...move };
+    ["follow", "strong", "risks"].forEach(key => { delete source[key]; });
+    const result = cleanValue(source);
+
     ["follow", "strong", "risks"].forEach(key => {
-      if (!Array.isArray(result[key])) return;
-      result[key] = result[key]
+      if (!Array.isArray(move[key])) return;
+      result[key] = move[key]
         .filter(item => !containsRetired(item))
-        .map(sanitizeText)
+        .map(item => cleanValue(item))
         .filter(Boolean);
     });
+
     result.basisDate ||= year4.basisDate;
     result.verificationStatus ||= "legacy-reference";
     result.availability ||= "confirmed";
@@ -152,7 +157,9 @@
     value.updatedAt = year4.basisDate;
     value.note = "2026年8月3日Year 4調整対応。ODディマ依存は現役情報から隔離し、代替ルートは実測後に追加する。";
     value.cards = filterPushableArray(
-      value.cards.map(card => cleanValue(card)),
+      value.cards
+        .filter(card => card && !containsRetired(card))
+        .map(card => cleanValue(card)),
       card => card && !containsRetired(card)
     );
     return value;
