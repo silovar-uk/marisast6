@@ -1,0 +1,97 @@
+name: Advantage page check
+
+on:
+  pull_request:
+    paths:
+      - "advantage.html"
+      - "advantage-page.js"
+      - "advantage-page.css"
+      - "page-guides.js"
+      - "page-guides.css"
+      - "data-core.js"
+      - "version.json"
+      - ".github/workflows/advantage-page-check.yml"
+  push:
+    branches: [main]
+    paths:
+      - "advantage.html"
+      - "advantage-page.js"
+      - "advantage-page.css"
+      - "page-guides.js"
+      - "page-guides.css"
+      - "data-core.js"
+      - "version.json"
+      - ".github/workflows/advantage-page-check.yml"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check JavaScript syntax
+        run: |
+          node --check data-core.js
+          node --check page-guides.js
+          node --check advantage-page.js
+
+      - name: Test frame-gap classification
+        run: |
+          node <<'NODE'
+          global.window = global;
+          global.location = { search: "" };
+          global.document = {
+            addEventListener() {},
+            querySelector() { return null; }
+          };
+          require("./advantage-page.js");
+          const results = global.MARISA_ADVANTAGE.selfTest();
+          const failed = results.filter(result => !result.ok);
+          if (failed.length) {
+            console.error(failed);
+            process.exit(1);
+          }
+          console.log(results);
+          NODE
+
+      - name: Check six-page information architecture
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          public_pages = [
+              "index.html",
+              "situations.html",
+              "moves.html",
+              "advantage.html",
+              "strategy.html",
+              "drill.html",
+          ]
+          missing = [page for page in public_pages if not Path(page).exists()]
+          if missing:
+              raise SystemExit(f"missing public pages: {missing}")
+
+          advantage = Path("advantage.html").read_text(encoding="utf-8")
+          required = [
+              "有利だから、<em>何が埋まる？</em>",
+              "advantage-page.css",
+              "advantage-page.js",
+              "plus-move-list",
+              "calc-advantage",
+          ]
+          absent = [token for token in required if token not in advantage]
+          if absent:
+              raise SystemExit(f"advantage page missing: {absent}")
+
+          core = Path("data-core.js").read_text(encoding="utf-8")
+          for token in ["page-guides.css", "page-guides.js", "ワンボタングラディウス"]:
+              if token not in core:
+                  raise SystemExit(f"data-core missing: {token}")
+
+          guides = Path("page-guides.js").read_text(encoding="utf-8")
+          for page_class in ["page-home", "page-situations", "page-moves", "page-strategy", "page-drill"]:
+              if page_class not in guides:
+                  raise SystemExit(f"page guide missing: {page_class}")
+          if "advantage.html" not in guides:
+              raise SystemExit("advantage navigation is not injected")
+          PY
