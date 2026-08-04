@@ -4,12 +4,13 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#07080a" />
-  <meta name="description" content="モダンマリーザの次に覚えるコンボ、最近の判断傾向、今日の5問を表示する個人用攻略ホーム。" />
+  <meta name="description" content="2026年8月3日調整対応。モダンマリーザの次に覚えるコンボ、判断傾向、今日の練習をまとめる個人用攻略ホーム。" />
   <title>MODERN MARISA LAB｜モダンマリーザ攻略</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="site-shell.css?v=0.21.0" />
-  <link rel="stylesheet" href="theme-marisa.css?v=0.21.0" />
-  <link rel="stylesheet" href="home-dashboard.css?v=0.21.0" />
+  <link rel="stylesheet" href="site-shell.css?v=0.23.2" />
+  <link rel="stylesheet" href="theme-marisa.css?v=0.23.2" />
+  <link rel="stylesheet" href="home-dashboard.css?v=0.23.2" />
+  <link rel="stylesheet" href="page-guides.css?v=0.23.2" />
 </head>
 <body class="page-home">
   <header class="site-header">
@@ -22,6 +23,7 @@
         <a href="index.html" aria-current="page">ホーム</a>
         <a href="situations.html">状況から探す</a>
         <a href="moves.html">技と派生</a>
+        <a href="advantage.html">有利と連携</a>
         <a href="strategy.html">実戦攻略</a>
         <a href="drill.html">コンボドリル</a>
       </nav>
@@ -34,7 +36,7 @@
       <h1>知っている。<span>ではなく、適切に選べる。</span></h1>
       <div class="home-hero-copy">
         <p>状況を調べ、安定・標準・最大を理解し、判断ドリルで反復する。習得状況と最近のミスから、今日やる練習まで一つにつなげたモダンマリーザ専用ラボです。</p>
-        <aside class="home-hero-note">基準：2026年3月17日調整<br>モダンで使用できる48技を収録<br>進捗はブラウザ内だけに保存</aside>
+        <aside class="home-hero-note">基準：2026年8月3日調整<br>現行モダン技を収録・一部は再計測中<br>進捗はブラウザ内だけに保存</aside>
       </div>
     </section>
 
@@ -49,7 +51,7 @@
       </a>
       <a class="entry-link entry-link-primary" href="moves.html">
         <small>02 / MOVE DATABASE</small>
-        <div><b>技と、<br>その次。</b><p>全48技の使う場面、数値、通常・カウンター・パニカン後の派生を確認する。</p></div>
+        <div><b>技と、<br>その次。</b><p>現行技の使う場面、数値、通常・カウンター・パニカン後の派生を確認する。</p></div>
       </a>
       <a class="entry-link entry-link-playbook" href="strategy.html">
         <small>03 / PLAYBOOK</small>
@@ -69,7 +71,7 @@
         </div>
         <div class="method-steps">
           <article><span>1</span><b>状況を特定する</b><p>試合で困った場面を、距離・位置・相手行動から探す。</p></article>
-          <article><span>2</span><b>理由と段階を読む</b><p>実戦攻略と技ページで、安定・標準・最大の使い分けを確認する。</p></article>
+          <article><span>2</span><b>理由と段階を読む</b><p>実戦攻略、技、有利と連携のページで判断の理由を確認する。</p></article>
           <article><span>3</span><b>5問だけ選ぶ</b><p>最近のミスを含む今日の5問で、適切な選択を反復する。</p></article>
         </div>
       </div>
@@ -78,39 +80,40 @@
     <section class="first-six-band shell">
       <div class="first-six-head">
         <div><p class="page-kicker">FIRST SIX</p><h2>迷ったら、この6技。</h2></div>
-        <p>均等に覚える必要はありません。地上、暴れ、確認、牽制、弾抜け、対空の基準になる6技から始めます。</p>
+        <p>均等に覚える必要はありません。地上、暴れ、確認、対空、弾抜け、切り返しの基準になる6技から始めます。</p>
       </div>
       <div class="first-six-list">
         <a href="moves.html?move=crLP"><kbd>↓＋弱</kbd><span><b>アンダーライト</b><small>4F暴れ・小技確認</small></span></a>
         <a href="moves.html?move=stMK"><kbd>N＋中</kbd><span><b>スターナムブレイク</b><small>中距離の基準</small></span></a>
         <a href="moves.html?move=aMP"><kbd>A中</kbd><span><b>ミドルパンチ</b><small>近距離の確認</small></span></a>
-        <a href="moves.html?move=gladiusL"><kbd>弱グラ</kbd><span><b>弱グラディウス</b><small>牽制・アーマー</small></span></a>
+        <a href="moves.html?move=gladiusL"><kbd>N＋SP</kbd><span><b>弱グラディウス</b><small>ワンボタン対空・牽制</small></span></a>
         <a href="moves.html?move=phalanxM"><kbd>↓＋SP</kbd><span><b>中ファランクス</b><small>弾・下段への回答</small></span></a>
-        <a href="moves.html?move=sa2"><kbd>SA2</kbd><span><b>メテオリティス</b><small>正面対空・切り返し</small></span></a>
+        <a href="moves.html?move=sa2"><kbd>SA2</kbd><span><b>メテオリティス</b><small>補助対空・切り返し</small></span></a>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div class="site-footer-inner shell"><b>MODERN MARISA LAB</b><span>v0.21.0 / PERSONAL TRAINING HOME</span></div>
+    <div class="site-footer-inner shell"><b>MODERN MARISA LAB</b><span>v0.23.2 / PERSONAL TRAINING HOME</span></div>
   </footer>
 
-  <script src="data-core.js?v=0.21.0"></script>
-  <script src="data-1.js?v=0.21.0"></script>
-  <script src="data-2.js?v=0.21.0"></script>
-  <script src="data-3.js?v=0.21.0"></script>
-  <script src="data-4.js?v=0.21.0"></script>
-  <script src="data-5.js?v=0.21.0"></script>
-  <script src="data-6.js?v=0.21.0"></script>
-  <script src="playbook-data.js?v=0.21.0"></script>
-  <script src="playbook-expanded.js?v=0.21.0"></script>
-  <script src="drill-data.js?v=0.21.0"></script>
-  <script src="drill-route-schema.js?v=0.21.0"></script>
-  <script src="drill-scenarios.js?v=0.21.0"></script>
-  <script src="combo-learning-data.js?v=0.21.0"></script>
-  <script src="drill-result-analysis.js?v=0.21.0"></script>
-  <script src="home-practice-plan.js?v=0.21.0"></script>
-  <script src="home-dashboard.js?v=0.21.0"></script>
-  <script src="marisa-arena.js?v=0.21.0"></script>
+  <script src="data-core.js?v=0.23.2"></script>
+  <script src="data-1.js?v=0.23.2"></script>
+  <script src="data-2.js?v=0.23.2"></script>
+  <script src="data-3.js?v=0.23.2"></script>
+  <script src="data-4.js?v=0.23.2"></script>
+  <script src="data-5.js?v=0.23.2"></script>
+  <script src="data-6.js?v=0.23.2"></script>
+  <script src="playbook-data.js?v=0.23.2"></script>
+  <script src="playbook-expanded.js?v=0.23.2"></script>
+  <script src="drill-data.js?v=0.23.2"></script>
+  <script src="drill-route-schema.js?v=0.23.2"></script>
+  <script src="drill-scenarios.js?v=0.23.2"></script>
+  <script src="combo-learning-data.js?v=0.23.2"></script>
+  <script src="drill-result-analysis.js?v=0.23.2"></script>
+  <script src="home-practice-plan.js?v=0.23.2"></script>
+  <script src="home-dashboard.js?v=0.23.2"></script>
+  <script src="marisa-arena.js?v=0.23.2"></script>
+  <script src="page-guides.js?v=0.23.2"></script>
 </body>
 </html>
