@@ -1,14 +1,19 @@
-# GitHub Pages deployment notes
+# GitHub Pages publishing notes
 
-Production Pages runs use a shared `pages-production` concurrency group and do not cancel an active deployment. New pushes or manual runs wait for the current deployment to finish.
+This repository is a static HTML/CSS/JavaScript site and is published directly from the `main` branch root.
 
-Pull-request validation uses a PR-specific concurrency group and may cancel stale validation runs from the same pull request.
+## Repository setting
 
-The workflow uses Node 24-compatible official actions:
+In **Settings → Pages → Build and deployment**, use:
 
-- `actions/checkout@v7`
-- `actions/configure-pages@v6`
-- `actions/upload-pages-artifact@v5`
-- `actions/deploy-pages@v5`
+- Source: `Deploy from a branch`
+- Branch: `main`
+- Folder: `/(root)`
 
-When a production run is in `deployment_queued`, do not start another manual deployment. The queue can take several minutes.
+The root `.nojekyll` file prevents Jekyll processing and allows the files to be served as committed.
+
+## GitHub Actions
+
+`.github/workflows/pages.yml` is validation-only. It checks JavaScript syntax, Year 4 data, readability, contrast, icons, the immersive lab layer, and branch-publishing readiness. It does not create or cancel GitHub Pages deployments.
+
+This separation avoids the repository-specific `deployment_queued` state that affected artifact-based `actions/deploy-pages` deployments on 2026-08-06.
