@@ -17,3 +17,7 @@ The root `.nojekyll` file prevents Jekyll processing and allows the files to be 
 `.github/workflows/pages.yml` is validation-only. It checks JavaScript syntax, Year 4 data, readability, contrast, icons, the immersive lab layer, and branch-publishing readiness. It does not create or cancel GitHub Pages deployments.
 
 This separation avoids the repository-specific `deployment_queued` state that affected artifact-based `actions/deploy-pages` deployments on 2026-08-06.
+
+## Retry log
+
+- 2026-08-07 08:38 JST: harmless main-branch push to trigger a fresh GitHub Pages branch build after repeated backend timeouts.
