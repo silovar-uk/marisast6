@@ -1,3 +1,0 @@
-The GitHub Pages deployment queue became stuck after overlapping cancelled deployments on 2026-08-06.
-This marker enables a one-time Pages site reset before the next production deployment.
-Remove this file immediately after a successful deployment.

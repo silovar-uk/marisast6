@@ -1,4 +1,4 @@
-name: Deploy static site to Pages
+name: Validate static site
 
 on:
   pull_request:
@@ -7,25 +7,20 @@ on:
       - "*.html"
       - "*.js"
       - "*.css"
+      - ".nojekyll"
       - "README.md"
       - "version.json"
       - ".github/scripts/**"
       - ".github/workflows/**"
-      - ".github/PAGES_RESET_ONCE"
   push:
     branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
-# Production deployments must finish in order. A new manual run or push waits
-# instead of cancelling the Pages deployment that is already in progress.
-# Pull-request validation can still replace stale runs from the same PR.
 concurrency:
-  group: ${{ github.event_name == 'pull_request' && format('pages-pr-{0}', github.event.pull_request.number) || 'pages-production' }}
+  group: validate-static-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
@@ -56,57 +51,5 @@ jobs:
       - name: Validate immersive fight lab experience
         run: node .github/scripts/validate-immersive-lab.js
 
-      - name: Validate Pages deployment queue safety
+      - name: Validate branch-based Pages readiness
         run: node .github/scripts/validate-pages-workflow.js
-
-  deploy:
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-    needs: validate
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-
-      - name: Reset stuck Pages site once
-        if: ${{ hashFiles('.github/PAGES_RESET_ONCE') != '' }}
-        env:
-          GH_TOKEN: ${{ github.token }}
-          GH_REPOSITORY: ${{ github.repository }}
-        run: |
-          set -euo pipefail
-          api="https://api.github.com/repos/${GH_REPOSITORY}/pages"
-          code=$(curl --silent --show-error --location \
-            --output /tmp/pages-delete-response.json \
-            --write-out '%{http_code}' \
-            --request DELETE \
-            --header 'Accept: application/vnd.github+json' \
-            --header "Authorization: Bearer ${GH_TOKEN}" \
-            --header 'X-GitHub-Api-Version: 2022-11-28' \
-            "$api")
-          if [ "$code" != "204" ] && [ "$code" != "404" ]; then
-            cat /tmp/pages-delete-response.json || true
-            echo "Unexpected Pages delete response: HTTP $code" >&2
-            exit 1
-          fi
-          echo "Pages site reset accepted with HTTP $code. Waiting for the old queue to clear."
-          sleep 20
-
-      - name: Configure Pages
-        uses: actions/configure-pages@v6
-        with:
-          enablement: ${{ hashFiles('.github/PAGES_RESET_ONCE') != '' }}
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v5
-        with:
-          path: .
-
-      - name: Deploy
-        id: deployment
-        uses: actions/deploy-pages@v5
-        with:
-          timeout: 600000
