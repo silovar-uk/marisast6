@@ -1,0 +1,51 @@
+/* Progressive disclosure for dense explanation blocks / 2026-08-06 */
+.mi-section-brief {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0;
+  font-size: clamp(14px, 1.3vw, 16px);
+  font-weight: 850;
+  line-height: 1.65;
+}
+
+.mi-section-brief > .mi-icon {
+  width: 19px;
+  height: 19px;
+  margin-top: .2em;
+  flex: 0 0 auto;
+}
+
+.mi-section-details {
+  margin-top: 13px;
+  border-top: 1px solid currentColor;
+  border-color: color-mix(in srgb, currentColor 20%, transparent);
+}
+
+.mi-section-details > summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 12px 0 3px;
+  color: inherit;
+  font-size: 11px;
+  font-weight: 900;
+  cursor: pointer;
+  list-style: none;
+  opacity: .82;
+}
+
+.mi-section-details > summary::-webkit-details-marker { display: none; }
+.mi-section-details > summary::after { content: "+"; font-size: 15px; }
+.mi-section-details[open] > summary::after { content: "−"; }
+.mi-section-details > summary .mi-icon { width: 14px; height: 14px; }
+.mi-section-details-body { display: grid; gap: 12px; padding-top: 8px; }
+.mi-section-details-body > p { margin: 0 !important; }
+
+.page-advantage .mi-section-brief { color: var(--adv-text, #191512); }
+.page-advantage .mi-section-details { color: var(--adv-text-soft, #4d453e); }
+.page-advantage .mi-section-details > summary { color: var(--adv-link, #741119); }
+
+@media (max-width: 720px) {
+  .mi-section-brief { font-size: 14px; }
+}
