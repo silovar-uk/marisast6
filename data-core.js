@@ -39,6 +39,7 @@ function appendMarisaStylesheet(href, dataKey) {
 appendMarisaStylesheet("contrast-guard.css?v=20260805", "contrast-guard");
 appendMarisaStylesheet("icon-system.css?v=20260806", "icon-system");
 appendMarisaStylesheet("icon-density.css?v=20260806", "icon-density");
+appendMarisaStylesheet("immersive-lab.css?v=20260806-2", "immersive-lab");
 
 if (MARISA_HAS_DOCUMENT && document.readyState === "loading") {
   document.write('<script src="year4-phase1.js?v=0.23.3"></' + 'script>');
@@ -49,6 +50,7 @@ if (MARISA_HAS_DOCUMENT && document.readyState === "loading") {
   document.write('<script src="year4-tactical-additions.js?v=0.23.3"></' + 'script>');
   document.write('<script src="heading-layout.js?v=0.23.3"></' + 'script>');
   document.write('<script src="icon-system.js?v=20260806"></' + 'script>');
+  document.write('<script src="immersive-lab.js?v=20260806-2"></' + 'script>');
   document.write('<script src="contrast-guard.js?v=20260805"></' + 'script>');
 }
 
