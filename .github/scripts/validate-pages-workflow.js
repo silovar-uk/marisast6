@@ -2,6 +2,7 @@ const fs = require("fs");
 
 const workflowPath = ".github/workflows/pages.yml";
 const workflow = fs.readFileSync(workflowPath, "utf8");
+const resetMarker = ".github/PAGES_RESET_ONCE";
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -30,7 +31,14 @@ for (const action of [
 }
 
 assert(workflow.includes("timeout-minutes: 20"), "Deploy job needs enough time for the Pages queue");
-assert(workflow.includes("timeout: 900000"), "deploy-pages needs a 15-minute Pages status timeout");
+assert(workflow.includes("timeout: 600000"), "deploy-pages must use its supported ten-minute maximum timeout");
 assert(workflow.includes("if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'"), "Pull requests must validate without deploying");
 
-console.log("Pages workflow validation passed: production deploys queue safely and use Node 24 actions.");
+if (fs.existsSync(resetMarker)) {
+  assert(workflow.includes("Reset stuck Pages site once"), "Reset marker exists but the one-time recovery step is missing");
+  assert(workflow.includes("--request DELETE"), "One-time recovery must delete the stuck Pages site configuration");
+  assert(workflow.includes("enablement: ${{ hashFiles('.github/PAGES_RESET_ONCE') != '' }}"), "configure-pages must recreate the workflow site after reset");
+  assert(workflow.includes("sleep 20"), "Recovery must allow the old Pages queue time to clear");
+}
+
+console.log(`Pages workflow validation passed: production deploys queue safely${fs.existsSync(resetMarker) ? " with one-time recovery enabled" : ""}.`);
