@@ -11,6 +11,7 @@
   "pageGuideVersion": "1.1.0",
   "tacticalAdditionVersion": "1.0.0",
   "iconSystemVersion": "1.0.0",
+  "immersiveLabVersion": "1.0.0",
   "updatedAt": "2026-08-06",
   "moveDataBasis": "2026-08-03",
   "features": [
@@ -52,6 +53,15 @@
     "semantic-card-icon-chips",
     "collapsible-editorial-explanations",
     "compact-advantage-section-summaries",
-    "dynamic-content-icon-observer"
+    "dynamic-content-icon-observer",
+    "personal-fight-lab-atmosphere",
+    "daily-six-page-lab-map",
+    "page-specific-mission-briefings",
+    "real-local-progress-command-stats",
+    "route-and-accuracy-progress-meters",
+    "scroll-reveal-station-rhythm",
+    "dynamic-card-depth-effects",
+    "drill-tension-and-result-feedback",
+    "reduced-motion-immersive-fallback"
   ]
 }
