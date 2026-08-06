@@ -1,0 +1,236 @@
+/* Semantic icon system / 2026-08-06 */
+:root {
+  --mi-red: #d5202f;
+  --mi-gold: #e5b75c;
+  --mi-cyan: #18d7d0;
+  --mi-orange: #f28b36;
+  --mi-green: #5da776;
+  --mi-blue: #4ea3e3;
+  --mi-purple: #a984dc;
+  --mi-ink: #191512;
+  --mi-paper: #fffdf8;
+}
+
+.mi-icon {
+  display: block;
+  width: 1em;
+  height: 1em;
+  flex: 0 0 auto;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mi-icon-badge {
+  display: inline-grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  flex: 0 0 auto;
+  border: 1px solid color-mix(in srgb, currentColor 32%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, currentColor 10%, transparent);
+  color: var(--mi-gold);
+}
+
+.mi-icon-badge .mi-icon { width: 18px; height: 18px; }
+
+.mi-nav-icon {
+  display: inline-grid;
+  width: 20px;
+  height: 20px;
+  place-items: center;
+  flex: 0 0 auto;
+  color: currentColor;
+  opacity: .82;
+}
+
+.mi-nav-icon .mi-icon { width: 15px; height: 15px; }
+.site-tabs a { display: inline-flex; align-items: center; gap: 7px; }
+.site-tabs a[aria-current="page"] .mi-nav-icon { opacity: 1; }
+
+.mi-page-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.mi-legend-chip,
+.mi-concept-chip {
+  display: inline-flex;
+  min-height: 30px;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 10px;
+  border: 1px solid rgba(255,255,255,.17);
+  border-radius: 999px;
+  background: rgba(255,255,255,.055);
+  color: inherit;
+  font-size: 10px;
+  font-weight: 900;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.mi-legend-chip .mi-icon,
+.mi-concept-chip .mi-icon { width: 14px; height: 14px; }
+
+.mi-concept-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.mi-heading-with-icon {
+  display: flex !important;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.mi-heading-with-icon > .mi-icon-badge {
+  width: 32px;
+  height: 32px;
+  margin-top: -.1em;
+  border-radius: 9px;
+}
+
+.mi-heading-with-icon > .mi-icon-badge .mi-icon { width: 17px; height: 17px; }
+
+.mi-entry-icon {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border: 1px solid rgba(255,255,255,.17);
+  border-radius: 14px;
+  background: rgba(255,255,255,.065);
+  color: var(--mi-gold);
+  pointer-events: none;
+}
+
+.mi-entry-icon .mi-icon { width: 25px; height: 25px; }
+.entry-link { position: relative; padding-right: 82px !important; }
+.entry-link:hover .mi-entry-icon { transform: translateY(-2px); }
+
+.mi-step-icon,
+.mi-first-six-icon {
+  display: inline-grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  flex: 0 0 auto;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 9px;
+  background: rgba(255,255,255,.055);
+  color: var(--mi-gold);
+}
+
+.mi-step-icon .mi-icon,
+.mi-first-six-icon .mi-icon { width: 16px; height: 16px; }
+.method-steps article { position: relative; }
+.method-steps article > .mi-step-icon { margin-bottom: 12px; }
+.first-six-list a { position: relative; }
+.first-six-list a > .mi-first-six-icon { margin-right: 2px; }
+
+/* Reading guide: keep the core prose, but make it optional after a concise visual summary. */
+.editorial-guide article { position: relative; }
+.editorial-guide article > .mi-guide-icon {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  color: var(--guide-accent, #8f1d24);
+}
+
+.editorial-guide article > small,
+.editorial-guide article > h3 { padding-right: 46px; }
+
+.mi-card-summary {
+  margin: 13px 0 0;
+  color: var(--guide-text-soft, #4d453e);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.6;
+}
+
+.mi-explanation {
+  margin-top: 14px;
+  border-top: 1px solid var(--guide-line, rgba(25,21,18,.18));
+}
+
+.mi-explanation > summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 12px 0 4px;
+  color: var(--guide-accent, #8f1d24);
+  font-size: 11px;
+  font-weight: 900;
+  cursor: pointer;
+  list-style: none;
+}
+
+.mi-explanation > summary::-webkit-details-marker { display: none; }
+.mi-explanation > summary::after { content: "+"; font-size: 15px; }
+.mi-explanation[open] > summary::after { content: "−"; }
+.mi-explanation > summary .mi-icon { width: 14px; height: 14px; }
+.mi-explanation-body > p { margin-top: 10px !important; }
+
+.editorial-guide .mi-concept-chip,
+.page-advantage .mi-concept-chip {
+  border-color: rgba(25,21,18,.18);
+  background: rgba(25,21,18,.055);
+  color: #4d453e;
+}
+
+/* Card-level scanning cues across the data-heavy pages. */
+.situation-card-heading .mi-concept-row,
+.plus-move-card .mi-concept-row,
+.playbook-card .mi-concept-row,
+.strategy-card .mi-concept-row,
+.move-card .mi-concept-row,
+.drill-card .mi-concept-row,
+.decision-card .mi-concept-row { margin-top: 10px; }
+
+.mi-inline-label {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 5px;
+}
+.mi-inline-label > .mi-icon { width: 12px; height: 12px; }
+
+/* Semantic accents are stable across every page. */
+[data-mi-icon="warning"], [data-mi-icon="split"] { color: #ff6975; }
+[data-mi-icon="wall"], [data-mi-icon="impact"], [data-mi-icon="max"] { color: var(--mi-orange); }
+[data-mi-icon="fire"], [data-mi-icon="star"] { color: #f3a24c; }
+[data-mi-icon="shield"], [data-mi-icon="stable"], [data-mi-icon="guard"] { color: #77c5c0; }
+[data-mi-icon="chain"], [data-mi-icon="link"], [data-mi-icon="distance"] { color: var(--mi-gold); }
+[data-mi-icon="bolt"], [data-mi-icon="jump"], [data-mi-icon="up"] { color: var(--mi-cyan); }
+[data-mi-icon="low"] { color: #8eb8ef; }
+[data-mi-icon="battery"], [data-mi-icon="super"] { color: var(--mi-blue); }
+[data-mi-icon="flask"], [data-mi-icon="repeat"] { color: var(--mi-purple); }
+[data-mi-icon="scale"], [data-mi-icon="swap"] { color: var(--mi-gold); }
+
+@media (max-width: 720px) {
+  .site-tabs a { gap: 5px; }
+  .mi-nav-icon { width: 17px; height: 17px; }
+  .mi-nav-icon .mi-icon { width: 13px; height: 13px; }
+  .mi-page-legend { margin-top: 18px; gap: 6px; }
+  .mi-legend-chip { min-height: 28px; padding: 5px 9px; }
+  .mi-entry-icon { width: 40px; height: 40px; top: 14px; right: 14px; }
+  .mi-entry-icon .mi-icon { width: 21px; height: 21px; }
+  .entry-link { padding-right: 66px !important; }
+  .editorial-guide article > .mi-guide-icon { top: 17px; right: 10px; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .mi-entry-icon,
+  .mi-icon-badge { transition: transform .16s ease, background-color .16s ease; }
+}
