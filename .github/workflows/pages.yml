@@ -49,6 +49,9 @@ jobs:
       - name: Validate semantic icons and reduced text density
         run: node .github/scripts/validate-icon-system.js
 
+      - name: Validate immersive fight lab experience
+        run: node .github/scripts/validate-immersive-lab.js
+
   deploy:
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     needs: validate

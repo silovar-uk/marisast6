@@ -1,0 +1,585 @@
+/* PERSONAL FIGHT LAB / immersive experience layer / 2026-08-06 */
+:root {
+  --lab-void: #050608;
+  --lab-void-soft: #090b0f;
+  --lab-steel: #11151b;
+  --lab-steel-raised: #181d24;
+  --lab-red: #e12635;
+  --lab-red-deep: #6f0711;
+  --lab-orange: #ff8426;
+  --lab-cyan: #22e2d9;
+  --lab-gold: #edc26c;
+  --lab-text: #f9f5ee;
+  --lab-muted: #b7b1a8;
+  --lab-line: rgba(255,255,255,.14);
+  --lab-line-strong: rgba(255,255,255,.28);
+  --lab-glow-red: 0 0 44px rgba(225,38,53,.23);
+  --lab-glow-cyan: 0 0 38px rgba(34,226,217,.17);
+  --lab-depth: 0 34px 90px rgba(0,0,0,.48);
+}
+
+html { scroll-behavior: smooth; }
+body.lab-immersive-ready {
+  --lab-pointer-x: 50vw;
+  --lab-pointer-y: 24vh;
+  background:
+    radial-gradient(circle at var(--lab-pointer-x) var(--lab-pointer-y), rgba(34,226,217,.07), transparent 28rem),
+    radial-gradient(circle at 8% 16%, rgba(225,38,53,.2), transparent 34rem),
+    radial-gradient(circle at 94% 30%, rgba(255,132,38,.09), transparent 30rem),
+    linear-gradient(145deg, #050608 0%, #0c0f14 46%, #060709 100%);
+}
+
+.lab-atmosphere {
+  position: fixed;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.lab-atmosphere::before {
+  content: "";
+  position: absolute;
+  inset: -18%;
+  opacity: .42;
+  background:
+    repeating-radial-gradient(circle at 50% 52%, transparent 0 88px, rgba(255,255,255,.025) 89px 90px, transparent 91px 178px),
+    repeating-linear-gradient(90deg, transparent 0 88px, rgba(255,255,255,.018) 89px 90px);
+  transform: perspective(720px) rotateX(62deg) translateY(42%);
+  transform-origin: center bottom;
+  mask-image: linear-gradient(to bottom, transparent 2%, #000 36%, #000 100%);
+}
+.lab-atmosphere::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: .2;
+  background-image:
+    radial-gradient(rgba(255,255,255,.3) .45px, transparent .7px),
+    linear-gradient(106deg, transparent 0 48%, rgba(225,38,53,.08) 48.2% 48.5%, transparent 48.8% 100%);
+  background-size: 5px 5px, 100% 100%;
+  mix-blend-mode: screen;
+}
+.lab-orbit {
+  position: absolute;
+  top: 8vh;
+  right: -13vw;
+  width: min(60vw, 880px);
+  aspect-ratio: 1;
+  border: 1px solid rgba(34,226,217,.13);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 72px rgba(255,255,255,.012),
+    0 0 0 146px rgba(225,38,53,.018),
+    inset 0 0 80px rgba(34,226,217,.035);
+  transform: rotate(-12deg);
+}
+.lab-orbit::before,
+.lab-orbit::after {
+  content: "";
+  position: absolute;
+  inset: 14%;
+  border: 1px dashed rgba(255,132,38,.15);
+  border-radius: inherit;
+}
+.lab-orbit::after {
+  inset: 31%;
+  border-style: solid;
+  border-color: rgba(225,38,53,.18);
+}
+.lab-beam {
+  position: absolute;
+  top: -12vh;
+  left: 11vw;
+  width: 2px;
+  height: 78vh;
+  background: linear-gradient(transparent, rgba(225,38,53,.44), transparent);
+  box-shadow: 0 0 28px rgba(225,38,53,.28);
+  transform: rotate(18deg);
+}
+
+body.lab-immersive-ready > :not(.lab-atmosphere) { position: relative; z-index: 1; }
+
+/* Header becomes the lab's persistent control rail. */
+body.lab-immersive-ready .site-header {
+  position: sticky;
+  z-index: 90;
+  top: 0;
+  backdrop-filter: blur(18px) saturate(1.15);
+  background: rgba(5,6,8,.84);
+  box-shadow: 0 14px 38px rgba(0,0,0,.33);
+}
+body.lab-immersive-ready .site-brand-mark {
+  box-shadow: 5px 5px 0 rgba(34,226,217,.28), var(--lab-glow-red);
+}
+body.lab-immersive-ready .site-tabs a {
+  position: relative;
+  overflow: hidden;
+}
+body.lab-immersive-ready .site-tabs a::after {
+  content: "";
+  position: absolute;
+  right: 10px;
+  bottom: 3px;
+  left: 10px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0;
+  transform: scaleX(.25);
+  transition: opacity .18s ease, transform .18s ease;
+}
+body.lab-immersive-ready .site-tabs a:hover::after,
+body.lab-immersive-ready .site-tabs a[aria-current="page"]::after {
+  opacity: .7;
+  transform: scaleX(1);
+}
+
+.lab-session-ribbon {
+  border-bottom: 1px solid rgba(255,255,255,.1);
+  background:
+    linear-gradient(90deg, rgba(225,38,53,.12), transparent 28%, rgba(34,226,217,.075) 72%, transparent),
+    rgba(7,9,12,.9);
+}
+.lab-session-ribbon-inner {
+  display: grid;
+  grid-template-columns: auto minmax(180px, 1fr) auto;
+  gap: 22px;
+  align-items: center;
+  min-height: 48px;
+}
+.lab-live-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: #e9fffd;
+  font-family: var(--display, sans-serif);
+  font-size: 10px;
+  font-style: italic;
+  font-weight: 900;
+  letter-spacing: .14em;
+  white-space: nowrap;
+}
+.lab-live-state i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--lab-cyan);
+  box-shadow: 0 0 0 5px rgba(34,226,217,.1), 0 0 18px rgba(34,226,217,.72);
+}
+.lab-map-track {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 5px;
+}
+.lab-map-node {
+  position: relative;
+  display: block;
+  height: 7px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.13);
+  background: rgba(255,255,255,.035);
+  text-indent: -9999px;
+}
+.lab-map-node::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--lab-red), var(--lab-orange));
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .25s ease, opacity .25s ease;
+}
+.lab-map-node.is-visited::before { opacity: .5; transform: scaleX(1); }
+.lab-map-node.is-current::before {
+  opacity: 1;
+  background: linear-gradient(90deg, var(--lab-cyan), #efffff);
+  box-shadow: 0 0 14px rgba(34,226,217,.7);
+  transform: scaleX(1);
+}
+.lab-map-copy {
+  color: var(--lab-muted);
+  font-size: 10px;
+  font-weight: 850;
+  white-space: nowrap;
+}
+.lab-map-copy b { color: var(--lab-gold); font-family: var(--display, sans-serif); font-size: 15px; font-style: italic; }
+
+/* Hero becomes the opening shot of each training room. */
+body.lab-immersive-ready :is(.home-hero, .page-hero) {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255,255,255,.1);
+}
+body.lab-immersive-ready :is(.home-hero, .page-hero)::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 12% -7% auto 48%;
+  height: 58%;
+  border: 1px solid rgba(255,255,255,.07);
+  background:
+    linear-gradient(115deg, transparent 0 47%, rgba(255,255,255,.045) 47.3% 47.6%, transparent 48%),
+    linear-gradient(140deg, rgba(225,38,53,.14), transparent 56%);
+  clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%);
+  transform: skewX(-8deg);
+}
+body.lab-immersive-ready :is(.home-hero, .page-hero) h1 {
+  max-width: 12em;
+  filter: drop-shadow(0 20px 35px rgba(0,0,0,.45));
+}
+.lab-hero-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 22px;
+  padding: 7px 10px;
+  border: 1px solid rgba(237,194,108,.3);
+  background: rgba(237,194,108,.07);
+  color: #f2d89d;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+.lab-hero-status .mi-icon { width: 14px; height: 14px; }
+
+/* Mission briefing: the page always opens with an actionable objective. */
+.lab-mission-brief {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.22fr) minmax(300px, .78fr);
+  gap: clamp(30px, 5vw, 72px);
+  align-items: center;
+  margin-block: 28px 48px;
+  padding: clamp(25px, 4vw, 46px);
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.2);
+  border-left: 7px solid var(--lab-red);
+  background:
+    linear-gradient(115deg, rgba(225,38,53,.16), transparent 42%),
+    linear-gradient(145deg, rgba(24,29,36,.98), rgba(8,10,14,.98));
+  box-shadow: var(--lab-depth), inset 0 1px 0 rgba(255,255,255,.055);
+  color: var(--lab-text);
+  clip-path: polygon(0 0, calc(100% - 34px) 0, 100% 34px, 100% 100%, 0 100%);
+}
+.lab-mission-brief::before {
+  content: attr(data-code);
+  position: absolute;
+  right: 28px;
+  bottom: -12px;
+  color: transparent;
+  font-family: var(--display, sans-serif);
+  font-size: clamp(62px, 11vw, 126px);
+  font-style: italic;
+  letter-spacing: -.05em;
+  line-height: .8;
+  -webkit-text-stroke: 1px rgba(255,255,255,.055);
+  pointer-events: none;
+}
+.lab-mission-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--lab-cyan);
+  font-family: var(--display, sans-serif);
+  font-size: 10px;
+  font-style: italic;
+  font-weight: 900;
+  letter-spacing: .15em;
+}
+.lab-mission-label::before { content: ""; width: 38px; height: 3px; background: var(--lab-red); transform: skewX(-24deg); }
+.lab-mission-copy h2 {
+  max-width: 14em;
+  margin: 11px 0 0;
+  color: #fff;
+  font-family: var(--sans, sans-serif);
+  font-size: clamp(30px, 4.5vw, 58px);
+  font-weight: 900;
+  letter-spacing: -.055em;
+  line-height: 1.06;
+  text-wrap: balance;
+}
+.lab-mission-copy > p {
+  max-width: 720px;
+  margin: 17px 0 0;
+  color: #d3cec6;
+  font-size: 14px;
+  line-height: 1.8;
+}
+.lab-mission-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 23px;
+}
+.lab-mission-action {
+  display: inline-flex;
+  min-height: 46px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 1px solid rgba(34,226,217,.43);
+  background: rgba(34,226,217,.085);
+  color: #edffff;
+  font-size: 12px;
+  font-weight: 900;
+  text-decoration: none;
+}
+.lab-mission-action.is-primary {
+  border-color: rgba(255,132,38,.65);
+  background: linear-gradient(135deg, var(--lab-red), var(--lab-red-deep));
+  box-shadow: 6px 6px 0 rgba(255,132,38,.19), var(--lab-glow-red);
+}
+.lab-mission-action:hover { filter: brightness(1.12); transform: translateY(-2px); }
+.lab-mission-action .mi-icon { width: 15px; height: 15px; }
+.lab-mission-stats {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.lab-mission-stat {
+  min-width: 0;
+  min-height: 96px;
+  padding: 14px;
+  border: 1px solid rgba(255,255,255,.13);
+  background: rgba(4,6,9,.65);
+}
+.lab-mission-stat small,
+.lab-mission-stat b,
+.lab-mission-stat span { display: block; }
+.lab-mission-stat small { color: #969da6; font-size: 8px; font-weight: 900; letter-spacing: .1em; }
+.lab-mission-stat b {
+  margin-top: 8px;
+  overflow: hidden;
+  color: var(--lab-gold);
+  font-family: var(--display, sans-serif);
+  font-size: clamp(20px, 3vw, 31px);
+  font-style: italic;
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lab-mission-stat span { margin-top: 7px; color: #b7b1a9; font-size: 9px; line-height: 1.45; }
+
+/* Home command metrics and real progress feedback. */
+.lab-command-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0 auto 18px;
+}
+.lab-command-stat {
+  position: relative;
+  min-height: 112px;
+  padding: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.14);
+  background: linear-gradient(145deg, rgba(20,25,31,.96), rgba(7,9,12,.94));
+}
+.lab-command-stat::after {
+  content: "";
+  position: absolute;
+  right: -22px;
+  bottom: -42px;
+  width: 86px;
+  height: 86px;
+  border: 1px solid rgba(34,226,217,.14);
+  border-radius: 50%;
+}
+.lab-command-stat small { color: #8e959e; font-size: 9px; font-weight: 900; letter-spacing: .09em; }
+.lab-command-stat b { display: block; margin-top: 9px; color: #fff; font-family: var(--display, sans-serif); font-size: clamp(25px, 4vw, 38px); font-style: italic; line-height: 1; }
+.lab-command-stat span { display: block; margin-top: 8px; color: #bcb6ae; font-size: 10px; }
+.lab-command-stat.is-accent b { color: var(--lab-cyan); }
+.lab-command-stat.is-reward b { color: var(--lab-gold); }
+.lab-command-stat.is-alert b { color: #ff7b87; }
+
+.lab-card-meter {
+  position: relative;
+  height: 7px;
+  margin-top: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.13);
+  background: #07090c;
+}
+.lab-card-meter i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc(var(--lab-meter, 0) * 1%);
+  background: linear-gradient(90deg, var(--lab-red), var(--lab-orange), var(--lab-gold));
+  box-shadow: 0 0 18px rgba(255,132,38,.34);
+}
+.lab-card-meter span {
+  position: absolute;
+  top: -22px;
+  right: 0;
+  color: #9ba1a9;
+  font-size: 8px;
+  font-weight: 900;
+}
+
+/* Every data card gains tactile depth without sacrificing readability. */
+body.lab-immersive-ready :is(
+  .entry-link,
+  .home-dashboard-card,
+  .home-today-set,
+  .situation-card,
+  .move-card,
+  .playbook-card,
+  .strategy-card,
+  .decision-choice,
+  .plus-move-card,
+  .editorial-guide article
+) {
+  transform-origin: center;
+  transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease, filter .2s ease;
+}
+body.lab-immersive-ready :is(
+  .entry-link,
+  .home-dashboard-card,
+  .situation-card,
+  .move-card,
+  .playbook-card,
+  .strategy-card,
+  .decision-choice,
+  .plus-move-card
+):hover {
+  z-index: 2;
+  transform: translateY(-4px);
+  border-color: rgba(255,132,38,.48);
+  box-shadow: 0 24px 58px rgba(0,0,0,.35), 0 0 0 1px rgba(255,132,38,.08);
+}
+body.lab-immersive-ready :is(.move-card.is-open, .situation-card[open], .decision-choice.is-correct) {
+  box-shadow: 0 30px 72px rgba(0,0,0,.45), 0 0 34px rgba(34,226,217,.09);
+}
+
+.lab-section-index {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 10px;
+  color: var(--lab-cyan);
+  font-family: var(--display, sans-serif);
+  font-size: 9px;
+  font-style: italic;
+  font-weight: 900;
+  letter-spacing: .14em;
+}
+.lab-section-index::before { content: ""; width: 24px; height: 2px; background: var(--lab-red); }
+
+/* Drill: more tension, clearer choices and stronger result feedback. */
+body.page-drill.lab-immersive-ready .decision-countdown {
+  box-shadow: inset 0 0 90px rgba(225,38,53,.1), 0 30px 80px rgba(0,0,0,.42);
+}
+body.page-drill.lab-immersive-ready .decision-countdown b {
+  text-shadow: 9px 9px 0 rgba(225,38,53,.48), 0 0 70px rgba(34,226,217,.15);
+}
+body.page-drill.lab-immersive-ready .decision-choice::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: linear-gradient(var(--lab-cyan), transparent);
+  opacity: .25;
+}
+body.page-drill.lab-immersive-ready .decision-choice:hover::before,
+body.page-drill.lab-immersive-ready .decision-choice.is-correct::before { opacity: 1; }
+body.page-drill.lab-immersive-ready .decision-feedback[data-tone="correct"] {
+  box-shadow: 0 0 0 1px rgba(34,226,217,.13), 0 28px 68px rgba(0,0,0,.4), var(--lab-glow-cyan);
+}
+body.page-drill.lab-immersive-ready .decision-feedback[data-tone="wrong"],
+body.page-drill.lab-immersive-ready .decision-feedback[data-tone="timeout"] {
+  box-shadow: 0 0 0 1px rgba(225,38,53,.13), 0 28px 68px rgba(0,0,0,.4), var(--lab-glow-red);
+}
+
+/* Advantage keeps its readable paper, framed as a tactical document inside the arena. */
+body.page-advantage.lab-immersive-ready .advantage-section {
+  position: relative;
+  box-shadow: 0 28px 80px rgba(0,0,0,.4), inset 0 0 0 1px rgba(255,255,255,.45);
+}
+body.page-advantage.lab-immersive-ready .advantage-section::after {
+  content: "TACTICAL FILE";
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  color: rgba(25,21,18,.28);
+  font-size: 8px;
+  font-weight: 950;
+  letter-spacing: .15em;
+}
+
+/* Reveal rhythm: content arrives like stations in the lab. */
+.lab-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .5s ease, transform .5s cubic-bezier(.2,.75,.25,1);
+}
+.lab-reveal.is-lab-visible { opacity: 1; transform: translateY(0); }
+
+.lab-reward-toast {
+  position: fixed;
+  z-index: 120;
+  right: 20px;
+  bottom: 20px;
+  width: min(360px, calc(100% - 40px));
+  padding: 16px 18px;
+  border: 1px solid rgba(237,194,108,.55);
+  border-left: 5px solid var(--lab-gold);
+  background: rgba(8,10,13,.96);
+  box-shadow: 0 24px 70px rgba(0,0,0,.48), 0 0 30px rgba(237,194,108,.1);
+  color: #fff;
+  transform: translateY(22px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .24s ease, transform .24s ease;
+}
+.lab-reward-toast.is-visible { opacity: 1; transform: translateY(0); }
+.lab-reward-toast small { display: block; color: var(--lab-gold); font-size: 8px; font-weight: 950; letter-spacing: .14em; }
+.lab-reward-toast b { display: block; margin-top: 6px; font-size: 14px; }
+.lab-reward-toast span { display: block; margin-top: 6px; color: #aaa49c; font-size: 10px; }
+
+@media (max-width: 980px) {
+  .lab-mission-brief { grid-template-columns: 1fr; }
+  .lab-command-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lab-session-ribbon-inner { grid-template-columns: auto 1fr; }
+  .lab-map-copy { grid-column: 1 / -1; }
+}
+
+@media (max-width: 720px) {
+  .lab-session-ribbon-inner { gap: 10px; min-height: 54px; }
+  .lab-live-state { font-size: 8px; }
+  .lab-map-copy { font-size: 9px; }
+  .lab-mission-brief { margin-block: 18px 36px; padding: 22px 18px; clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%); }
+  .lab-mission-stats { grid-template-columns: 1fr 1fr; }
+  .lab-mission-stat { min-height: 84px; }
+  .lab-command-summary { grid-template-columns: 1fr 1fr; }
+  .lab-command-stat { min-height: 96px; }
+  .lab-atmosphere .lab-orbit { opacity: .55; }
+}
+
+@media (max-width: 460px) {
+  .lab-session-ribbon-inner { grid-template-columns: 1fr; padding-block: 8px; }
+  .lab-map-track { order: 3; }
+  .lab-map-copy { grid-column: auto; }
+  .lab-mission-stats,
+  .lab-command-summary { grid-template-columns: 1fr; }
+  .lab-mission-actions { display: grid; }
+  .lab-mission-action { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .lab-reveal { opacity: 1; transform: none; transition: none; }
+  .lab-live-state i { box-shadow: none; }
+  body.lab-immersive-ready :is(.entry-link,.home-dashboard-card,.situation-card,.move-card,.playbook-card,.strategy-card,.decision-choice,.plus-move-card):hover { transform: none; }
+  .lab-mission-action:hover { transform: none; }
+}
+
+@media (prefers-contrast: more) {
+  .lab-session-ribbon,
+  .lab-mission-brief,
+  .lab-mission-stat,
+  .lab-command-stat { border-color: rgba(255,255,255,.55); }
+  .lab-map-node { border-color: rgba(255,255,255,.45); }
+}
