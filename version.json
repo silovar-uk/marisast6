@@ -10,7 +10,8 @@
   "advantageGuideVersion": "1.1.0",
   "pageGuideVersion": "1.1.0",
   "tacticalAdditionVersion": "1.0.0",
-  "updatedAt": "2026-08-05",
+  "iconSystemVersion": "1.0.0",
+  "updatedAt": "2026-08-06",
   "moveDataBasis": "2026-08-03",
   "features": [
     "year4-august-3-source-basis",
@@ -45,6 +46,12 @@
     "cross-page-learning-flow",
     "single-pages-deployment-workflow",
     "public-source-staleness-audit",
-    "domless-data-core-validation"
+    "domless-data-core-validation",
+    "shared-inline-svg-icon-dictionary",
+    "six-page-concept-legends",
+    "semantic-card-icon-chips",
+    "collapsible-editorial-explanations",
+    "compact-advantage-section-summaries",
+    "dynamic-content-icon-observer"
   ]
 }
