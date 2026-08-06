@@ -59,11 +59,12 @@ assert(version.appVersion === "0.23.2", `Unexpected appVersion: ${version.appVer
 assert(version.moveDataBasis === "2026-08-03", `Unexpected moveDataBasis: ${version.moveDataBasis}`);
 
 const workflowDir = path.join(root, ".github/workflows");
-const deployWorkflows = fs.readdirSync(workflowDir)
+const validationWorkflows = fs.readdirSync(workflowDir)
   .filter(file => /\.ya?ml$/.test(file))
-  .filter(file => /^name:\s*Deploy static site to Pages\s*$/m.test(fs.readFileSync(path.join(workflowDir, file), "utf8")));
-assert(deployWorkflows.length === 1, `Expected one Pages workflow, found: ${deployWorkflows.join(", ")}`);
-assert(deployWorkflows[0] === "pages.yml", `Canonical Pages workflow must be pages.yml, got ${deployWorkflows[0]}`);
+  .filter(file => /^name:\s*Validate static site\s*$/m.test(fs.readFileSync(path.join(workflowDir, file), "utf8")));
+assert(validationWorkflows.length === 1, `Expected one static-site validation workflow, found: ${validationWorkflows.join(", ")}`);
+assert(validationWorkflows[0] === "pages.yml", `Canonical validation workflow must be pages.yml, got ${validationWorkflows[0]}`);
+assert(exists(".nojekyll"), "Branch-based Pages publishing requires a root .nojekyll file");
 
 function createContext() {
   const storage = new Map();
@@ -172,6 +173,7 @@ console.log(JSON.stringify({
   activePlaybookCards: activeCards.length,
   scenarios: context.window.MARISA_DECISION_DRILL.scenarios.length,
   quadrigaCandidates: year4.comboCandidates.length,
-  pagesWorkflow: deployWorkflows[0],
+  validationWorkflow: validationWorkflows[0],
+  publishingMode: "main-root-branch",
   frameGapTests: frameTests.length
 }, null, 2));
