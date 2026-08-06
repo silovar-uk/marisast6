@@ -55,6 +55,9 @@ jobs:
       - name: Validate immersive fight lab experience
         run: node .github/scripts/validate-immersive-lab.js
 
+      - name: Validate Pages deployment queue safety
+        run: node .github/scripts/validate-pages-workflow.js
+
   deploy:
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     needs: validate
