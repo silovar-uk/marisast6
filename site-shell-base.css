@@ -122,6 +122,9 @@ img { max-width: 100%; }
 .entry-link-primary b { font-size: clamp(42px, 6.5vw, 76px); }
 .entry-link-situations { background: #fff8f2; }
 .entry-link-playbook { background: #e9e0d4; }
+.entry-link-matchups { grid-column: 1 / -1; min-height: 190px; background: linear-gradient(110deg, #17191d, #261116); color: #fff; }
+.entry-link-matchups small { color: #18d7d0; }
+.entry-link-matchups p { color: #bfc3c8; }
 .entry-link-drill { grid-column: 1 / -1; min-height: 160px; background: #f6efe0; }
 
 .home-method { padding: 76px 0; border-block: 1px solid var(--line); background: rgba(255,253,248,.47); }

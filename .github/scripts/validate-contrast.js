@@ -26,7 +26,7 @@ assert(guardCss.includes("!important"), "Runtime corrections cannot override pag
 assert(core.includes("contrast-guard.css?v=20260805"), "Global contrast CSS is not loaded by data-core");
 assert(core.includes("contrast-guard.js?v=20260805"), "Global contrast audit is not loaded by data-core");
 
-for (const page of ["index.html", "situations.html", "moves.html", "advantage.html", "strategy.html", "drill.html"]) {
+for (const page of ["index.html", "situations.html", "moves.html", "advantage.html", "matchups.html", "strategy.html", "drill.html"]) {
   assert(read(page).includes("data-core.js"), `${page} does not load data-core and would miss the contrast guard`);
 }
 

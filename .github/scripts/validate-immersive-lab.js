@@ -10,7 +10,7 @@ const css = read("immersive-lab.css");
 const js = read("immersive-lab.js");
 const core = read("data-core.js");
 const version = JSON.parse(read("version.json"));
-const pages = ["index.html", "situations.html", "moves.html", "advantage.html", "strategy.html", "drill.html"];
+const pages = ["index.html", "situations.html", "moves.html", "advantage.html", "matchups.html", "strategy.html", "drill.html"];
 
 for (const token of [
   ".lab-atmosphere",
@@ -45,10 +45,10 @@ for (const token of [
 }
 
 const missionCodes = [...js.matchAll(/code:\s*"([A-Z]{3}-\d{2})"/g)].map(match => match[1]);
-assert(missionCodes.length === 6, `Expected six page missions, found ${missionCodes.length}`);
-assert(new Set(missionCodes).size === 6, "Page mission codes are not unique");
+assert(missionCodes.length === 7, `Expected seven page missions, found ${missionCodes.length}`);
+assert(new Set(missionCodes).size === 7, "Page mission codes are not unique");
 
-for (const bodyClass of ["page-home", "page-situations", "page-moves", "page-advantage", "page-strategy", "page-drill"]) {
+for (const bodyClass of ["page-home", "page-situations", "page-moves", "page-advantage", "page-matchups", "page-strategy", "page-drill"]) {
   assert(js.includes(`"${bodyClass}"`), `Mission configuration missing ${bodyClass}`);
 }
 
@@ -71,7 +71,7 @@ for (const page of pages) {
 assert(version.immersiveLabVersion === "1.0.0", "immersiveLabVersion is not recorded");
 for (const feature of [
   "personal-fight-lab-atmosphere",
-  "daily-six-page-lab-map",
+  "daily-seven-page-lab-map",
   "page-specific-mission-briefings",
   "real-local-progress-command-stats",
   "reduced-motion-immersive-fallback"

@@ -8,6 +8,7 @@
     { file: "situations.html", body: "page-situations", label: "状況", icon: "search" },
     { file: "moves.html", body: "page-moves", label: "技", icon: "moves" },
     { file: "advantage.html", body: "page-advantage", label: "有利", icon: "chain" },
+    { file: "matchups.html", body: "page-matchups", label: "対策", icon: "swap" },
     { file: "strategy.html", body: "page-strategy", label: "攻略", icon: "map" },
     { file: "drill.html", body: "page-drill", label: "ドリル", icon: "drill" }
   ];
@@ -53,8 +54,18 @@
       primary: "連携を判定する",
       secondary: { href: "situations.html", label: "実戦状況へ戻る", icon: "search" }
     },
+    "page-matchups": {
+      code: "MAT-04",
+      label: "MATCHUP MISSION",
+      title: "相手を一人選び、置く条件を一つ決める。",
+      description: "全項目を覚えず、やること・やらないことを確認します。差し、差し返し、置きのうち、今日の一戦で使う判断を一つだけ持ち帰ります。",
+      icon: "swap",
+      target: "#matchup-app",
+      primary: "相手を選ぶ",
+      secondary: { href: "matchups.html#matchup-drill", label: "三択を試す", icon: "drill" }
+    },
     "page-strategy": {
-      code: "PLN-04",
+      code: "PLN-05",
       label: "MATCH PLAN MISSION",
       title: "ラウンドの勝ち筋を、一つ組む。",
       description: "地上、対空、接近後、画面端を別々の知識にせず、一つの試合の流れとして読みます。安定・標準・最大から今使う段階を決めます。",
@@ -64,7 +75,7 @@
       secondary: { href: "drill.html", label: "判断を試す", icon: "drill" }
     },
     "page-drill": {
-      code: "TST-05",
+      code: "TST-06",
       label: "DECISION TEST",
       title: "知識ではなく、選択の癖を鍛える。",
       description: "カウントダウン後に、状況・ゲージ・目的から完成ルートを選びます。最大を選ぶことではなく、その場面に合う答えへ戻れることを狙います。",
@@ -172,7 +183,7 @@
         <nav class="lab-map-track" aria-label="ラボマップ">
           ${PAGE_MAP.map(item => `<a class="lab-map-node${session.visited.includes(item.file) ? " is-visited" : ""}${item.file === page.file ? " is-current" : ""}" href="${item.file}" title="${escapeHtml(item.label)}">${escapeHtml(item.label)}</a>`).join("")}
         </nav>
-        <span class="lab-map-copy"><b>${session.visited.length}/6</b> 今日の探索</span>
+        <span class="lab-map-copy"><b>${session.visited.length}/${PAGE_MAP.length}</b> 今日の探索</span>
       </div>`;
     header.insertAdjacentElement("afterend", ribbon);
   }
@@ -184,7 +195,7 @@
     const plusCount = Number(document.querySelector("#plus-move-count")?.textContent) || 0;
     const situationCount = String(document.querySelector("#situation-total-count")?.textContent || "").replace(/[^0-9]/g, "") || "—";
     const routeCount = rootWindow.MARISA_DRILL?.routes?.length || progress.totalRoutes || 0;
-    const commonMap = { label: "LAB MAP", value: `${session.visited.length}/6`, note: "今日確認したページ" };
+    const commonMap = { label: "LAB MAP", value: `${session.visited.length}/${PAGE_MAP.length}`, note: "今日確認したページ" };
 
     const byPage = {
       "index.html": [
@@ -209,6 +220,12 @@
         { label: "PLUS MOVES", value: String(plusCount || "—"), note: "確定値から抽出" },
         { label: "FASTEST", value: "4F", note: "暴れ判定の基準" },
         { label: "CHECK", value: "時間+距離", note: "二つの穴を分離" },
+        commonMap
+      ],
+      "matchups.html": [
+        { label: "MATCHUPS", value: String(rootWindow.MARISA_MATCHUPS?.profileCount || 31), note: "ライブキャラ対策" },
+        { label: "FRAMEWORK", value: "3", note: "差し・差し返し・置き" },
+        { label: "PERSONAL", value: "D5", note: "置きすぎを矯正" },
         commonMap
       ],
       "strategy.html": [
@@ -279,7 +296,7 @@
       { tone: "reward", label: "ROUTE MASTERY", value: progress.totalRoutes ? `${routePercent}%` : "—", note: progress.totalRoutes ? `${progress.learned}/${progress.totalRoutes}ルート` : "記録待ち" },
       { tone: "accent", label: "DECISION LOG", value: String(progress.attempts), note: "蓄積した判断" },
       { tone: progress.accuracy !== null && progress.accuracy < 60 ? "alert" : "accent", label: "RECENT ACCURACY", value: progress.accuracy === null ? "—" : `${progress.accuracy}%`, note: "直近の正答率" },
-      { tone: "reward", label: "LAB MAP", value: `${session.visited.length}/6`, note: "今日の探索範囲" }
+      { tone: "reward", label: "LAB MAP", value: `${session.visited.length}/${PAGE_MAP.length}`, note: "今日の探索範囲" }
     ];
     const summary = document.createElement("div");
     summary.className = "lab-command-summary";
@@ -319,6 +336,8 @@
       ".move-card",
       ".playbook-card",
       ".strategy-card",
+      ".matchup-card",
+      ".neutral-lab-card",
       ".plus-move-card"
     ].join(","));
     targets.forEach(target => {
@@ -351,7 +370,7 @@
     const toast = document.createElement("aside");
     toast.className = "lab-reward-toast";
     toast.setAttribute("aria-live", "polite");
-    toast.innerHTML = `<small>LAB MAP UPDATED</small><b>${escapeHtml(page.label)}を確認</b><span>今日の探索 ${session.visited.length}/6。必要な場所だけ回れば十分です。</span>`;
+    toast.innerHTML = `<small>LAB MAP UPDATED</small><b>${escapeHtml(page.label)}を確認</b><span>今日の探索 ${session.visited.length}/${PAGE_MAP.length}。必要な場所だけ回れば十分です。</span>`;
     document.body.appendChild(toast);
     rootWindow.setTimeout(() => toast.classList.add("is-visible"), 700);
     rootWindow.setTimeout(() => toast.classList.remove("is-visible"), 4000);

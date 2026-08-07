@@ -340,6 +340,28 @@ body.page-home .home-today-set li p {
   line-height: 1.5;
 }
 
+body.page-home .home-matchup-brief {
+  display: grid;
+  grid-template-columns: 1.15fr .85fr;
+  gap: 1px;
+  margin-top: -34px;
+  margin-bottom: 56px;
+  border: 1px solid rgba(24,215,208,.34);
+  background: rgba(24,215,208,.18);
+}
+
+body.page-home .home-matchup-copy,
+body.page-home .home-matchup-brief dl { margin: 0; padding: 28px; background: #0c0e11; }
+body.page-home .home-matchup-copy small { color: var(--hud-cyan); font-size: 9px; font-weight: 950; letter-spacing: .14em; }
+body.page-home .home-matchup-copy h2 { margin: 6px 0 8px; color: white; font-family: var(--display); font-size: clamp(34px, 5vw, 58px); font-style: italic; line-height: .95; }
+body.page-home .home-matchup-copy p { max-width: 680px; margin: 0; color: #b9b4ad; font-size: 12px; }
+body.page-home .home-matchup-copy > div { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+body.page-home .home-matchup-copy a { padding: 10px 14px; border: 1px solid rgba(24,215,208,.45); color: white; font-size: 10px; font-weight: 850; text-decoration: none; }
+body.page-home .home-matchup-brief dl { display: grid; gap: 0; }
+body.page-home .home-matchup-brief dl div { display: grid; grid-template-columns: 88px 1fr; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,.1); }
+body.page-home .home-matchup-brief dt { color: #7f858d; font-size: 9px; font-weight: 900; }
+body.page-home .home-matchup-brief dd { margin: 0; color: #ddd8cf; font-size: 11px; }
+
 body.page-home :where(.home-dashboard a):focus-visible {
   outline: 3px solid var(--hud-cyan);
   outline-offset: 3px;
@@ -362,6 +384,9 @@ body.page-home :where(.home-dashboard a):focus-visible {
   body.page-home .home-today-set ol { grid-template-columns: 1fr; }
   body.page-home .home-today-set li:last-child { grid-column: auto; }
   body.page-home .home-today-set li p { font-size: 10px; }
+  body.page-home .home-matchup-brief { grid-template-columns: 1fr; margin-top: -24px; }
+  body.page-home .home-matchup-copy,
+  body.page-home .home-matchup-brief dl { padding: 20px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
