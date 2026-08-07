@@ -1,3 +1,29 @@
 @import url("site-shell-base.css?v=0.24.0");
 @import url("theme-marisa.css?v=0.24.0");
 @import url("theme-marisa-runtime.css?v=0.24.0");
+
+/* Mobile navigation: keep every menu label visible without horizontal scrolling. */
+@media (max-width: 820px) {
+  .site-tabs {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    row-gap: 2px;
+    column-gap: 4px;
+    padding-bottom: 0;
+  }
+
+  .site-tabs a {
+    flex: 0 0 auto;
+  }
+}
+
+@media (max-width: 560px) {
+  .site-tabs {
+    margin-top: 8px;
+  }
+
+  .site-tabs a {
+    min-height: 36px;
+    padding: 7px 10px;
+  }
+}
