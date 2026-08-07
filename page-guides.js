@@ -76,6 +76,30 @@
         }
       ]
     },
+    "page-matchups": {
+      kicker: "READING GUIDE / MATCHUP FIRST",
+      title: "キャラ名ではなく、相手の合図から答えを選ぶ。",
+      intro: "対策は技名の暗記ではありません。相手が止まる、空振る、前へ入るという三つの合図を見て、差し・差し返し・置きを切り替えます。対戦中は一つだけ持ち帰ります。",
+      articles: [
+        {
+          label: "01 / CUE",
+          title: "見る合図を先に決める",
+          body: "置き技は相手の前進を止めるために使います。相手がまだ動いていないのに振る、空振り後にもう一度振る、という二つを避けるだけで、差し返される回数を減らせます。"
+        },
+        {
+          label: "02 / COMPARE",
+          title: "三つを同時に比べる",
+          body: "相手が止まったら直接差す。相手技が空振ったら差し返す。相手が前へ入った時だけ置く。同じN中を使う場合でも、押す理由を分けて記録します。"
+        },
+        {
+          label: "03 / RETURN",
+          title: "対戦後は一件だけ残す",
+          body: "負けた理由をすべて書かず、合図なしの置き、置きの空振り、待ちすぎのいずれか一件だけ残します。次回はその一件がページ上部のミッションになります。",
+          href: "matchups.html#matchup-drill",
+          link: "三択ドリルで確認"
+        }
+      ]
+    },
     "page-strategy": {
       kicker: "READING GUIDE / BUILD A MATCH PLAN",
       title: "試合全体を、距離と目的の連続として読む。",
@@ -137,6 +161,17 @@
     });
   }
 
+  function addMatchupNavigation() {
+    document.querySelectorAll(".site-tabs").forEach(nav => {
+      if (nav.querySelector('a[href="matchups.html"]')) return;
+      const link = document.createElement("a");
+      link.href = "matchups.html";
+      link.textContent = "キャラ対策";
+      const strategy = nav.querySelector('a[href="strategy.html"]');
+      nav.insertBefore(link, strategy || null);
+    });
+  }
+
   function setCurrentNavigation() {
     const page = location.pathname.split("/").pop() || "index.html";
     document.querySelectorAll(".site-tabs a").forEach(link => {
@@ -186,12 +221,13 @@
 
   function updateFooterVersion() {
     document.querySelectorAll(".site-footer span").forEach(span => {
-      span.textContent = span.textContent.replace(/v0\.\d+\.\d+/, "v0.23.0");
+      span.textContent = span.textContent.replace(/v0\.\d+\.\d+/, "v0.24.0");
     });
   }
 
   document.addEventListener("DOMContentLoaded", () => {
     addAdvantageNavigation();
+    addMatchupNavigation();
     setCurrentNavigation();
     injectGuide();
     correctModernAntiAirCopy();

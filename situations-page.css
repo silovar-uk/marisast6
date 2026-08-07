@@ -311,6 +311,11 @@
 .situation-empty b { font-family: var(--serif); font-size: 27px; }
 .situation-empty span { color: var(--situation-text-soft); font-size: 11px; }
 
+.matchup-situation-link { display: grid; grid-template-columns: 180px 1fr auto; gap: 20px; align-items: center; margin-top: 22px; padding: 20px; border: 1px solid rgba(24,215,208,.35); background: rgba(24,215,208,.07); color: white; text-decoration: none; }
+.matchup-situation-link small { color: var(--hud-cyan); font-size: 9px; font-weight: 950; letter-spacing: .12em; }
+.matchup-situation-link b { font-size: 12px; }
+.matchup-situation-link span { font-size: 10px; font-weight: 900; }
+
 .situations-note {
   display: grid;
   grid-template-columns: .7fr 1.3fr;
@@ -331,6 +336,7 @@
 }
 
 @media (max-width: 720px) {
+  .matchup-situation-link { grid-template-columns: 1fr; gap: 8px; }
   .situation-finder { padding-top: 6px; }
   .finder-heading { grid-template-columns: 1fr; gap: 12px; }
   .situation-phases { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; }

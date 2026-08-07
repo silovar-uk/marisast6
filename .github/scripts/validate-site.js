@@ -14,6 +14,7 @@ const publicPages = [
   "situations.html",
   "moves.html",
   "advantage.html",
+  "matchups.html",
   "strategy.html",
   "drill.html"
 ];
@@ -30,7 +31,7 @@ for (const page of publicPages) {
   assert(exists(page), `Missing public page: ${page}`);
   const html = read(page);
   assert(html.includes("2026年8月3日調整"), `${page} does not state the August 3 basis`);
-  assert(html.includes("v0.23.2"), `${page} does not use v0.23.2 assets or footer`);
+  assert(html.includes("v0.24.0"), `${page} does not use v0.24.0 assets or footer`);
 
   for (const target of navTargets) {
     assert(html.includes(`href="${target}"`), `${page} navigation is missing ${target}`);
@@ -40,8 +41,8 @@ for (const page of publicPages) {
   }
 
   if (page !== "advantage.html") {
-    assert(html.includes("page-guides.css?v=0.23.2"), `${page} does not load page guide CSS explicitly`);
-    assert(html.includes("page-guides.js?v=0.23.2"), `${page} does not load page guide JS explicitly`);
+    assert(html.includes("page-guides.css?v=0.24.0"), `${page} does not load page guide CSS explicitly`);
+    assert(html.includes("page-guides.js?v=0.24.0"), `${page} does not load page guide JS explicitly`);
   }
 
   const refs = [...html.matchAll(/(?:href|src)="([^"?#]+\.(?:css|js))(?:\?[^\"]*)?"/g)]
@@ -55,7 +56,8 @@ assert(movePage.includes("2026年3月17日 調整内容"), "Historical March sou
 assert(movePage.includes("旧基準"), "Historical March source is not labeled as an old basis");
 
 const version = JSON.parse(read("version.json"));
-assert(version.appVersion === "0.23.2", `Unexpected appVersion: ${version.appVersion}`);
+assert(version.appVersion === "0.24.0", `Unexpected appVersion: ${version.appVersion}`);
+assert(version.matchupDataVersion === "1.0.0", `Unexpected matchupDataVersion: ${version.matchupDataVersion}`);
 assert(version.moveDataBasis === "2026-08-03", `Unexpected moveDataBasis: ${version.moveDataBasis}`);
 
 const workflowDir = path.join(root, ".github/workflows");
@@ -128,6 +130,12 @@ for (const file of [
   "situations-data-v2.js"
 ]) run(context, file);
 
+run(context, "matchup-data.js");
+const matchupValidation = context.window.MARISA_MATCHUPS.validate();
+assert(matchupValidation.ok, `Matchup validation failed: ${matchupValidation.errors.join(", ")}`);
+assert(context.window.MARISA_MATCHUPS.profiles.length === 31, "Expected 31 live matchup profiles");
+assert(context.window.MARISA_MATCHUPS.upcoming.length === 3, "Expected three Year 4 upcoming placeholders");
+
 const year4 = context.window.MARISA_YEAR4;
 assert(year4?.basisDate === "2026-08-03", `Unexpected Year 4 basis: ${year4?.basisDate}`);
 year4.api.finalizeDrillRoutes();
@@ -167,6 +175,7 @@ assert(frameTests.every(test => test.ok), `Frame-gap self-test failed: ${JSON.st
 
 console.log(JSON.stringify({
   publicPages: publicPages.length,
+  matchupProfiles: context.window.MARISA_MATCHUPS.profiles.length,
   basisDate: year4.basisDate,
   activeMoves: moves.length,
   activeRoutes: routes.length,

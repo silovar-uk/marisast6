@@ -75,8 +75,8 @@ assert(iconNames("安定・標準・最大").includes("max"), "Maximum tier was 
 assert(api.svgMarkup("shield").includes("<svg"), "SVG markup was not generated");
 assert(api.svgMarkup("shield").includes("aria-hidden=\"true\""), "Decorative SVG lacks aria-hidden");
 
-for (const page of ["index.html", "situations.html", "moves.html", "advantage.html", "strategy.html", "drill.html"]) {
+for (const page of ["index.html", "situations.html", "moves.html", "advantage.html", "matchups.html", "strategy.html", "drill.html"]) {
   assert(read(page).includes("data-core.js"), `${page} would not load the shared icon system`);
 }
 
-console.log(`Icon validation passed: ${api.icons.length} SVG icons, six page legends, semantic concepts and collapsible prose.`);
+console.log(`Icon validation passed: ${api.icons.length} SVG icons, seven page legends, semantic concepts and collapsible prose.`);

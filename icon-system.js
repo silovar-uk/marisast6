@@ -70,6 +70,7 @@
     "situations.html": "search",
     "moves.html": "moves",
     "advantage.html": "chain",
+    "matchups.html": "swap",
     "strategy.html": "map",
     "drill.html": "drill"
   };
@@ -95,6 +96,11 @@
       { icon: "chain", label: "連続ガード" },
       { icon: "ruler", label: "距離" }
     ],
+    "page-matchups": [
+      { icon: "target", label: "差し" },
+      { icon: "swap", label: "差し返し" },
+      { icon: "shield", label: "置き" }
+    ],
     "page-strategy": [
       { icon: "map", label: "試合設計" },
       { icon: "jump", label: "対空" },
@@ -117,6 +123,9 @@
     "発生は、間に合うかを見る": { icon: "clock", summary: "発生とリーチをセットで見る。" },
     "有利、安全、不利を分ける": { icon: "shield", summary: "攻守の順番を明確にする。" },
     "確定値と候補を混ぜない": { icon: "flask", summary: "未計測の情報は正解にしない。" },
+    "見る合図を先に決める": { icon: "target", summary: "技より前に、反応条件を固定する。" },
+    "三つを同時に比べる": { icon: "swap", summary: "差し・差し返し・置きを混同しない。" },
+    "対戦後は一件だけ残す": { icon: "repeat", summary: "次の練習へ失敗を接続する。" },
     "まず再現率の高い基準を持つ": { icon: "target", summary: "迷った時に戻れる軸を作る。" },
     "安定・標準・最大を場面で選ぶ": { icon: "scale", summary: "目的に合わせて三段階を選ぶ。" },
     "触った後は有利と距離を見る": { icon: "chain", summary: "時間と距離の両方で攻める。" },
@@ -135,6 +144,7 @@
   const ENTRY_ICON_MAP = {
     "situations.html": "search",
     "moves.html": "moves",
+    "matchups.html": "swap",
     "strategy.html": "map",
     "drill.html": "drill",
     "advantage.html": "chain"
