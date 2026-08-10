@@ -40,6 +40,9 @@ appendMarisaStylesheet("contrast-guard.css?v=20260805", "contrast-guard");
 appendMarisaStylesheet("icon-system.css?v=20260806", "icon-system");
 appendMarisaStylesheet("icon-density.css?v=20260806", "icon-density");
 appendMarisaStylesheet("immersive-lab.css?v=20260806-2", "immersive-lab");
+if (MARISA_HAS_DOCUMENT && document.body?.classList.contains("page-moves")) {
+  appendMarisaStylesheet("moves-advanced-tools.css?v=20260810", "moves-advanced-tools");
+}
 
 if (MARISA_HAS_DOCUMENT && document.readyState === "loading") {
   document.write('<script src="year4-phase1.js?v=0.23.3"></' + 'script>');
@@ -52,6 +55,9 @@ if (MARISA_HAS_DOCUMENT && document.readyState === "loading") {
   document.write('<script src="icon-system.js?v=20260806"></' + 'script>');
   document.write('<script src="immersive-lab.js?v=20260806-2"></' + 'script>');
   document.write('<script src="contrast-guard.js?v=20260805"></' + 'script>');
+  if (document.body?.classList.contains("page-moves")) {
+    document.write('<script src="moves-advanced-tools.js?v=20260810"></' + 'script>');
+  }
 }
 
 if (MARISA_HAS_DOCUMENT) {
