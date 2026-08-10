@@ -42,6 +42,7 @@ appendMarisaStylesheet("icon-density.css?v=20260806", "icon-density");
 appendMarisaStylesheet("immersive-lab.css?v=20260806-2", "immersive-lab");
 if (MARISA_HAS_DOCUMENT && document.body?.classList.contains("page-moves")) {
   appendMarisaStylesheet("moves-advanced-tools.css?v=20260810", "moves-advanced-tools");
+  appendMarisaStylesheet("moves-advanced-theme.css?v=20260810-2", "moves-advanced-theme");
 }
 
 if (MARISA_HAS_DOCUMENT && document.readyState === "loading") {
