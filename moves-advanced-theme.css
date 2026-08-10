@@ -1,0 +1,107 @@
+/* Dark-theme adapter for advanced move tools. Keep text readable against immersive page colors. */
+html body:has(.moves-workspace) .move-advanced-tools .move-sort-control,
+html body:has(.moves-workspace) .move-advanced-tools .advanced-tool-button {
+  border-color: rgba(255,255,255,.14);
+  background: rgba(19,21,25,.88);
+  color: #f5f2ec;
+}
+
+html body:has(.moves-workspace) .move-sort-control > span,
+html body:has(.moves-workspace) .advanced-tool-button b {
+  color: #9ca1a8;
+}
+
+html body:has(.moves-workspace) .move-sort-control select {
+  border-left-color: rgba(255,255,255,.14);
+  color: #f5f2ec;
+  background: #111318;
+}
+
+html body:has(.moves-workspace) .advanced-tool-button.is-active {
+  border-color: var(--marisa-red);
+  background: rgba(213,32,47,.16);
+  color: #fff;
+}
+
+html body:has(.moves-workspace) .advanced-tool-button.is-active b {
+  color: #ff9b74;
+}
+
+html body:has(.moves-workspace) .punish-panel {
+  border-color: rgba(255,255,255,.14);
+  border-left-color: var(--marisa-red);
+  background: linear-gradient(105deg, rgba(213,32,47,.14), rgba(15,17,20,.96));
+  color: #f5f2ec;
+}
+
+html body:has(.moves-workspace) .punish-panel-copy small {
+  color: var(--impact-orange);
+}
+
+html body:has(.moves-workspace) .punish-panel-copy b {
+  color: #fff;
+}
+
+html body:has(.moves-workspace) .punish-panel-copy span {
+  color: #b8b3ac;
+}
+
+html body:has(.moves-workspace) .punish-buttons button {
+  border-color: rgba(255,255,255,.16);
+  background: #171a1f;
+  color: #e9e5df;
+}
+
+html body:has(.moves-workspace) .punish-buttons button:hover {
+  border-color: var(--impact-orange);
+  background: #20242a;
+  color: #fff;
+}
+
+html body:has(.moves-workspace) .punish-buttons button.is-active {
+  border-color: var(--marisa-red);
+  background: var(--marisa-red);
+  color: #fff;
+}
+
+html body:has(.moves-workspace) .punish-buttons [data-punish-clear] {
+  color: #a8adb4;
+}
+
+html body:has(.moves-workspace) .move-compare-panel {
+  border-color: rgba(255,255,255,.16);
+  background: #111318;
+  color: #f5f2ec;
+}
+
+html body:has(.moves-workspace) .compare-empty b,
+html body:has(.moves-workspace) .compare-panel-head b,
+html body:has(.moves-workspace) .compare-table thead b {
+  color: #fff;
+}
+
+html body:has(.moves-workspace) .compare-empty span,
+html body:has(.moves-workspace) .compare-panel-head span,
+html body:has(.moves-workspace) .compare-table thead span,
+html body:has(.moves-workspace) .compare-table tbody th {
+  color: #a8adb4;
+}
+
+html body:has(.moves-workspace) .compare-table th,
+html body:has(.moves-workspace) .compare-table td,
+html body:has(.moves-workspace) .compare-panel-head {
+  border-color: rgba(255,255,255,.10);
+}
+
+html body:has(.moves-workspace) .compare-table thead th {
+  background: #181b20;
+}
+
+html body:has(.moves-workspace) .compare-table td {
+  color: #e7e3dd;
+}
+
+html body:has(.moves-workspace) .compare-table td.is-best {
+  background: rgba(34,226,217,.10);
+  color: #8ff7f1;
+}
