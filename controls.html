@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#07080a" />
+  <meta name="description" content="クラシックのマリーザ攻略をモダンで読むための差分ガイド。使える情報、読み替える情報、そのまま使えない情報を整理。" />
+  <title>モダンとクラシック｜MODERN MARISA LAB</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="site-shell.css?v=0.24.0" />
+  <link rel="stylesheet" href="theme-marisa.css?v=0.24.0" />
+  <style>
+    .control-hero{padding:70px 0 38px}.control-hero h1{max-width:900px;font-size:clamp(2.35rem,7vw,5.6rem);line-height:.96;letter-spacing:-.06em;margin:10px 0 22px}.control-hero h1 span{display:block;color:var(--accent,#ef3340)}.control-lead{max-width:780px;font-size:1.08rem;line-height:1.85;color:var(--text-sub,#b8bcc5)}
+    .control-note{margin-top:24px;padding:18px 20px;border:1px solid rgba(255,255,255,.12);border-left:3px solid var(--accent,#ef3340);background:rgba(255,255,255,.035);line-height:1.75}.control-note b{color:#fff}
+    .control-section{padding:24px 0 54px}.control-section h2{font-size:clamp(1.65rem,4vw,2.5rem);letter-spacing:-.035em;margin:0 0 12px}.section-copy{max-width:760px;color:var(--text-sub,#b8bcc5);line-height:1.8;margin:0 0 24px}
+    .judge-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.judge-card{border:1px solid rgba(255,255,255,.11);background:rgba(255,255,255,.035);padding:22px;min-height:250px}.judge-card small{display:inline-flex;padding:5px 9px;border-radius:999px;font-size:.72rem;font-weight:800;letter-spacing:.08em;margin-bottom:14px}.judge-card h3{font-size:1.25rem;margin:0 0 12px}.judge-card p,.judge-card li{color:var(--text-sub,#b8bcc5);line-height:1.7}.judge-card ul{padding-left:1.15em;margin:12px 0 0}.judge-ok small{background:#153c2b;color:#88e0ad}.judge-warn small{background:#493917;color:#ffd779}.judge-no small{background:#481f25;color:#ff9aa4}
+    .missing-box{border-top:1px solid rgba(255,255,255,.12);border-bottom:1px solid rgba(255,255,255,.12);padding:26px 0}.missing-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px}.missing-card{padding:20px;border:1px solid rgba(255,255,255,.11);background:#111318}.missing-card kbd{font:800 1.15rem/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:#ff9aa4}.missing-card b{display:block;margin:10px 0 6px;font-size:1.1rem}.missing-card p{margin:0;color:var(--text-sub,#b8bcc5);line-height:1.65}
+    .translate-list{display:grid;gap:10px}.translate-row{display:grid;grid-template-columns:160px 1fr auto;gap:16px;align-items:center;padding:16px 18px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.025)}.translate-row kbd{font:800 .92rem/1.2 ui-monospace,SFMono-Regular,Menlo,monospace}.translate-row p{margin:0;color:var(--text-sub,#b8bcc5);line-height:1.55}.badge{font-size:.72rem;font-weight:800;border-radius:999px;padding:6px 9px;white-space:nowrap}.badge-ok{background:#153c2b;color:#88e0ad}.badge-warn{background:#493917;color:#ffd779}.badge-no{background:#481f25;color:#ff9aa4}
+    .special-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.special-card{padding:20px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.025)}.special-card h3{margin:0 0 8px;font-size:1.1rem}.special-card p{margin:0;color:var(--text-sub,#b8bcc5);line-height:1.7}.special-card strong{color:#fff}.special-card code{font-size:.86em}
+    .sources-list{display:grid;gap:10px}.sources-list a{display:flex;justify-content:space-between;gap:14px;padding:14px 16px;border:1px solid rgba(255,255,255,.1);text-decoration:none;color:inherit;background:rgba(255,255,255,.025)}.sources-list a:hover{border-color:rgba(255,255,255,.25)}.sources-list span{color:var(--text-sub,#b8bcc5);font-size:.9rem}
+    @media(max-width:800px){.control-hero{padding-top:44px}.judge-grid,.missing-grid,.special-grid{grid-template-columns:1fr}.translate-row{grid-template-columns:1fr auto}.translate-row p{grid-column:1/-1}.sources-list a{display:block}.sources-list span{display:block;margin-top:4px}}
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner shell">
+      <a class="site-brand" href="index.html">
+        <span class="site-brand-mark">M</span>
+        <span><b>MODERN MARISA LAB</b><small>技・判断・実戦の攻略資料</small></span>
+      </a>
+      <nav class="site-tabs" aria-label="ページ">
+        <a href="index.html">ホーム</a>
+        <a href="situations.html">状況から探す</a>
+        <a href="moves.html">技と派生</a>
+        <a href="advantage.html">有利と連携</a>
+        <a href="matchups.html">キャラ対策</a>
+        <a href="strategy.html">実戦攻略</a>
+        <a href="drill.html">コンボドリル</a>
+        <a href="controls.html" aria-current="page">操作差</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="control-hero shell">
+      <p class="page-kicker">MODERN / CLASSIC TRANSLATOR</p>
+      <h1>クラシック攻略を、<span>どこまで信じていい？</span></h1>
+      <p class="control-lead">クラシックへ移行するためのページではありません。クラシックのマリーザ解説を読んだ時に、「そのまま参考にできる」「モダン用に読み替える」「その部分は使えない」を判断するための差分表です。</p>
+      <div class="control-note"><b>先に結論：</b>立ち回りの思想・間合い・フレーム・キャラ対策はかなり共有できます。ただし、<b>特定の通常技を前提にした始動・連携と、必殺技の強度や簡易入力を前提にしたダメージ計算</b>は必ず読み替えます。</div>
+    </section>
+
+    <section class="control-section shell">
+      <p class="page-kicker">01 / THREE JUDGMENTS</p>
+      <h2>まず、3種類に分ける。</h2>
+      <p class="section-copy">クラシック解説を一文ずつ全部翻訳する必要はありません。何について話しているかで、ほぼ判定できます。</p>
+      <div class="judge-grid">
+        <article class="judge-card judge-ok">
+          <small>そのまま参考</small>
+          <h3>考え方・状況・共有技</h3>
+          <p>操作タイプが変わっても、ゲーム内の状況そのものは変わりません。</p>
+          <ul>
+            <li>間合い管理、差し返し、置き</li>
+            <li>有利不利、確定反撃の考え方</li>
+            <li>共有している通常技・特殊技の用途</li>
+            <li>キャラ対策、相手技への回答</li>
+            <li>起き攻めの目的や守り方</li>
+          </ul>
+        </article>
+        <article class="judge-card judge-warn">
+          <small>読み替える</small>
+          <h3>入力・強度・コンボ</h3>
+          <p>同じ技でも、モダンでは出し方と火力条件が違うことがあります。</p>
+          <ul>
+            <li>「5MP」などのクラシック表記</li>
+            <li>弱・中・強の必殺技指定</li>
+            <li>SP簡易入力を使う場合の80％補正</li>
+            <li>アシストコンボと手動コンボの違い</li>
+            <li>特定始動からのコンボレシピ</li>
+          </ul>
+        </article>
+        <article class="judge-card judge-no">
+          <small>そのまま不可</small>
+          <h3>モダンにない通常技</h3>
+          <p>クラシック限定の通常技を前提にした話は、始動から別物です。</p>
+          <ul>
+            <li>5LK（立ち弱K）</li>
+            <li>5HK（立ち強K）</li>
+            <li>2MK（しゃがみ中K）</li>
+            <li>上記を始動・経由するコンボ</li>
+            <li>上記のリーチやキャンセル性能を前提にした連携</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="control-section shell">
+      <p class="page-kicker">02 / CLASSIC-ONLY NORMALS</p>
+      <h2>この3つが出たら、一回止まる。</h2>
+      <p class="section-copy">現行のMODERN MARISA LAB収録技とクラシックの通常技一覧を照合すると、クラシックの通常技でモダンから直接使えないのは次の3つです。</p>
+      <div class="missing-box">
+        <div class="missing-grid">
+          <article class="missing-card"><kbd>5LK</kbd><b>立ち弱K</b><p>小技の刻み、届く距離の確反、コンボ経由で指定されていたらそのレシピはそのまま使えません。</p></article>
+          <article class="missing-card"><kbd>5HK</kbd><b>立ち強K</b><p>長い強攻撃としての牽制・パニカン始動など、5HK固有の使い方は別のモダン技へ置換が必要です。</p></article>
+          <article class="missing-card"><kbd>2MK</kbd><b>しゃがみ中K</b><p>中足を軸にした下段牽制は最重要注意点。クラシック側の「中足を振る」はモダンでは同じ行動になりません。</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="control-section shell">
+      <p class="page-kicker">03 / QUICK TRANSLATOR</p>
+      <h2>クラシック表記を見た時の読み方。</h2>
+      <p class="section-copy">完全なボタン対応表というより、「攻略記事を読み進めていいか」を最速で判断するための表です。</p>
+      <div class="translate-list">
+        <div class="translate-row"><kbd>5MP</kbd><p>モダンでは <b>A＋中</b>。近距離主力のミドルパンチ。技自体の解説は参考にできます。</p><span class="badge badge-ok">使える</span></div>
+        <div class="translate-row"><kbd>5MK</kbd><p>モダンでは <b>N＋中</b>。中距離牽制としてそのまま参考にしやすい技。</p><span class="badge badge-ok">使える</span></div>
+        <div class="translate-row"><kbd>2LP</kbd><p>モダンでは <b>↓＋弱</b>。4F暴れ・確反の考え方は共有できます。</p><span class="badge badge-ok">使える</span></div>
+        <div class="translate-row"><kbd>2LK</kbd><p>モダンでは <b>A＋弱</b>。下段小技。ただしアシストコンボ運用まで含むとクラシックとは挙動が変わります。</p><span class="badge badge-warn">読み替え</span></div>
+        <div class="translate-row"><kbd>5HP / 2HP / 2HK</kbd><p>モダンにも対応技あり。差し返し・対空・下段差し返しなど、技そのものの用途は参考にできます。</p><span class="badge badge-ok">使える</span></div>
+        <div class="translate-row"><kbd>5LK / 5HK / 2MK</kbd><p>モダンに直接対応する通常技なし。これらを前提にしたコンボ・連携は別ルートを探します。</p><span class="badge badge-no">そのまま不可</span></div>
+        <div class="translate-row"><kbd>jLP〜jHK</kbd><p>ジャンプ通常技は現行データ上すべてモダンでも使用可能。アシスト併用の入力へ読み替えるものがあります。</p><span class="badge badge-warn">入力注意</span></div>
+      </div>
+    </section>
+
+    <section class="control-section shell">
+      <p class="page-kicker">04 / SPECIAL MOVES</p>
+      <h2>必殺技は「技名」より「何版か」を見る。</h2>
+      <p class="section-copy">クラシック攻略の必殺技解説はかなり使えます。ただし、SP簡易入力とコマンド入力ではダメージが違い、SPで出る強度も固定です。</p>
+      <div class="special-grid">
+        <article class="special-card"><h3>グラディウス</h3><p><strong>N＋SPは弱版・80％。</strong> 弱／中／強を使い分けるクラシック解説は、モダンでもコマンド入力すれば応用できます。距離・発生・火力の比較を読む時は「何版か」を確認。</p></article>
+        <article class="special-card"><h3>ディマカイルス</h3><p><strong>←＋SPは中版・80％。</strong> 弱・中・強は用途が違うため、クラシックのコンボ表に「弱ディマ」「強ディマ」と書いてあれば、SPへ雑に置換しない。</p></article>
+        <article class="special-card"><h3>ファランクス</h3><p><strong>↓＋SPは中版・80％。</strong> 弱・中・強で発生と届く距離が変わるので、「ファランクスで弾抜け」だけでなく指定強度まで読む。</p></article>
+      </div>
+    </section>
+
+    <section class="control-section shell">
+      <p class="page-kicker">05 / READING RULE</p>
+      <h2>クラシック攻略を見たら、この順で判定。</h2>
+      <div class="translate-list">
+        <div class="translate-row"><kbd>1</kbd><p><b>技名を見る。</b> 5LK・5HK・2MKなら、その段落はモダンへ直接移植しない。</p><span class="badge badge-no">停止</span></div>
+        <div class="translate-row"><kbd>2</kbd><p><b>共有技なら用途を読む。</b> 「なぜその技を振るか」「どの距離か」はそのまま吸収する。</p><span class="badge badge-ok">吸収</span></div>
+        <div class="translate-row"><kbd>3</kbd><p><b>コンボは入力と強度を再確認。</b> 通常技始動、必殺技の弱中強、SP簡易入力かコマンド入力かを見る。</p><span class="badge badge-warn">照合</span></div>
+        <div class="translate-row"><kbd>4</kbd><p><b>最後にこのサイトの「技と派生」でモダン側ルートを探す。</b> クラシックの結論ではなく、目的を持ち帰ってモダンの手段に置き換える。</p><span class="badge badge-ok">変換</span></div>
+      </div>
+    </section>
+
+    <section class="control-section shell" id="sources">
+      <p class="page-kicker">SOURCES</p>
+      <h2>確認元。</h2>
+      <p class="section-copy">現行サイトは2026年8月3日調整を基準にしています。技の追加・入力変更があった場合は、公式コマンドリストを優先してください。</p>
+      <div class="sources-list">
+        <a href="https://www.streetfighter.com/6/ja-jp/character/marisa/movelist" target="_blank" rel="noreferrer"><b>CAPCOM公式｜マリーザ コマンドリスト</b><span>操作タイプごとの技・入力確認</span></a>
+        <a href="https://www.streetfighter.com/6/ja-jp/character/marisa/frame" target="_blank" rel="noreferrer"><b>CAPCOM公式｜マリーザ フレームデータ</b><span>発生・硬直・有利不利確認</span></a>
+        <a href="https://ultimateframedata.com/sf6/marisa" target="_blank" rel="noreferrer"><b>Ultimate Frame Data｜Marisa</b><span>クラシック通常技一覧と現行調整の照合</span></a>
+        <a href="moves.html"><b>MODERN MARISA LAB｜技と派生</b><span>モダン側の入力・用途・派生を再確認</span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="site-footer-inner shell"><b>MODERN MARISA LAB</b><span>v0.24.0 / モダンとクラシック</span></div></footer>
+</body>
+</html>
