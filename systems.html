@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#07080a" />
+  <meta name="description" content="モダンマリーザ視点で、SA・ジャストパリィ・ドライブラッシュ・ドライブインパクトの共通システム仕様と実戦判断を整理するページ。" />
+  <title>共通システム｜MODERN MARISA LAB</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="site-shell.css?v=0.24.0" />
+  <link rel="stylesheet" href="systems.css?v=20260813" />
+</head>
+<body class="page-systems">
+  <header class="site-header">
+    <div class="site-header-inner shell">
+      <a class="site-brand" href="index.html"><span class="site-brand-mark">M</span><span><b>MODERN MARISA LAB</b><small>技・判断・実戦の攻略資料</small></span></a>
+      <nav class="site-tabs" aria-label="ページ">
+        <a href="index.html">ホーム</a><a href="situations.html">状況から探す</a><a href="moves.html">技と派生</a><a href="advantage.html">有利と連携</a><a href="matchups.html">キャラ対策</a><a href="strategy.html" aria-current="page">実戦攻略</a><a href="drill.html">コンボドリル</a><a href="controls.html">操作差</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="system-page">
+    <section class="system-hero shell">
+      <p class="page-kicker">SYSTEM LAB / COMMON RULES</p>
+      <h1>キャラの技より前に、<em>ゲームのルールを知る。</em></h1>
+      <p class="system-lead">SA、ジャストパリィ、ドライブラッシュ、ドライブインパクトは、マリーザ固有技ではない。でも実戦では、この4つの仕様をどこまで正確に理解しているかで「その技を振っていいか」「まだ攻めていいか」「何で返すか」が変わる。ここでは共通システムを、技ページと同じ粒度で読む。</p>
+      <div class="system-thesis"><span>SEPARATE THE GAUGES</span><b>SAゲージとドライブゲージは別物。バーンアウトしてもSAは残る。まずこの2本を頭の中で分ける。</b></div>
+      <nav class="system-index" aria-label="共通システム目次">
+        <a href="#sa"><small>01 / SUPER ART</small><b>SA</b><span>ゲージ、レベル、モダン簡易入力とコマンド入力、キャンセルの基本。</span></a>
+        <a href="#parry"><small>02 / PERFECT PARRY</small><b>ジャストパリィ</b><span>方向入力、暗転、補正、取った後に何を優先するか。</span></a>
+        <a href="#rush"><small>03 / DRIVE RUSH</small><b>ドライブラッシュ</b><span>生ラッシュとキャンセルラッシュ、消費量、有利の増え方。</span></a>
+        <a href="#impact"><small>04 / DRIVE IMPACT</small><b>インパクト</b><span>アーマー、返し方、壁やられ、バーンアウト時のスタン。</span></a>
+      </nav>
+    </section>
+
+    <section id="sa" class="system-section shell">
+      <p class="page-kicker">01 / SUPER ART</p>
+      <h2>SAは「最後の大技」ではなく、別ゲージで持つ防御・火力・位置の資源。</h2>
+      <p class="system-copy">SAゲージは最大3ストック。ラウンドをまたいで残る。Level 1は1本、Level 2は2本、Level 3は3本を使う。ドライブゲージとは独立しているので、バーンアウト中でもSAは使用できる。マリーザではSA1・SA2が切り返し、SA2が対空と位置調整、SA3/CAが倒し切りの中心になる。</p>
+      <div class="spec-grid">
+        <article class="spec-card"><small>LEVEL 1</small><b>1ストック</b><p>比較的軽い切り札。基本的にはスーパーキャンセル対応の通常技からつなぐ。マリーザSA1はアーマー／当身的な用途も持つ。</p></article>
+        <article class="spec-card"><small>LEVEL 2</small><b>2ストック</b><p>より強い性能。基本則では通常技に加え、対応するOD必殺技からのキャンセルルートもある。マリーザSA2は完全無敵・対空・位置調整。</p></article>
+        <article class="spec-card"><small>LEVEL 3 / CA</small><b>3ストック</b><p>通常技・必殺技・OD必殺技からつなげるルートが広い。マリーザは体力25％以下でSA3がCAになり、ダメージが上がる。</p></article>
+      </div>
+
+      <div class="input-grid">
+        <article class="input-card"><kbd>簡易SA</kbd><h3>方向＋SP＋強</h3><p>モダンの即時入力。マリーザはSA1＝N/→、SA2＝←、SA3＝↓を組み合わせる。反応速度が最大の利点。簡易入力には原則80％のダメージ補正がある。</p></article>
+        <article class="input-card"><kbd>コマンドSA</kbd><h3>モダンでも使用できる</h3><p>対応するSAはモダンでもコマンド入力可能。簡易入力の20％減を受けず、本来のダメージを取れる。コンボ締めなど、入力猶予がある場面では価値が高い。</p></article>
+      </div>
+
+      <div class="rule-list">
+        <article class="rule"><span>01</span><h3>簡易＝弱い、ではない</h3><p>20％補正はあるが、<strong>9F対空SA2を一瞬で出せる</strong>ような反応性能そのものがリターン。倒し切り計算ではコマンド、反応では簡易、と用途を分ける。</p></article>
+        <article class="rule"><span>02</span><h3>SAレベルでキャンセル先が違う</h3><p>「ゲージがあるから何からでもSAへ行ける」わけではない。基本則はLevel 1＜Level 2＜Level 3の順でキャンセル元が広がる。最終的には各技のキャンセル可否を優先する。</p></article>
+        <article class="rule"><span>03</span><h3>バーンアウト中の最後の防御になる</h3><p>ドライブ技が封じられてもSAゲージは別。相手もそれを知っているため、<strong>SAが残っているバーンアウトと、SAまで空のバーンアウトは別状況</strong>として考える。</p></article>
+      </div>
+
+      <div class="marisa-box">
+        <small>MARISA / SA2 METEORITIS</small>
+        <h3>SA2は、発動後の←／→で水平移動量を変えられる。</h3>
+        <p>2025年6月以降、メテオリティスは動作中の左右入力で横方向の移動距離を調整できる。通常軌道を固定で覚えるのではなく、「相手が少し遠い」「真上寄り」「着地点を前後へずらしたい」に対して、発動後のレバーで接触位置を合わせる技として扱う。ただし追尾ではないため、めくりや真上を必ず拾えるわけではない。</p>
+        <ul><li>簡易SA2：←＋SP＋強。反応対空として最速。</li><li>発動したら相手の横位置を見て、必要な時だけ←／→を追加する。</li><li>位置調整を考えすぎて発動が遅れるなら、まずニュートラル軌道で出す。</li><li>自分用操作メモ：ワンボタンSAを出す瞬間はアシストを離す。アシスト押しっぱなしは誤爆要因。</li></ul>
+      </div>
+    </section>
+
+    <section id="parry" class="system-section shell">
+      <p class="page-kicker">02 / PERFECT PARRY</p>
+      <h2>ジャストパリィは「パリィを押す」だけではなく、今はガード方向まで読む。</h2>
+      <p class="system-copy">2025年6月の共通調整以降、暗転・時間停止が発生するジャストパリィには正しいガード方向が必要。上段・中段には立ちガード方向＋パリィ、下段にはしゃがみガード方向＋パリィを合わせる。タイミングが合っても方向を外した場合、暗転するジャストパリィにはならない。</p>
+      <div class="flow">
+        <article><span>1</span><b>攻撃の高さを読む</b><small>上・中段か、下段か。</small></article>
+        <article><span>2</span><b>正しいガード方向</b><small>後ろ / 斜め後ろ下。</small></article>
+        <article><span>3</span><b>直前にパリィ</b><small>成功なら暗転・時間停止。</small></article>
+        <article><span>4</span><b>反撃を選ぶ</b><small>火力より位置・ダウンも見る。</small></article>
+      </div>
+      <div class="rule-list">
+        <article class="rule"><span>01</span><h3>暗転ジャスパ後は反撃時間が生まれる</h3><p>相手の技硬直を見て確定反撃を選べる。ただし、何でも最大コンボが入るわけではない。パリィした技の硬直と自分の技の発生を合わせる。</p></article>
+        <article class="rule"><span>02</span><h3>追撃には強い補正がかかる</h3><p>暗転ジャストパリィ後の反撃は<strong>基本50％始動の大きなダメージ補正</strong>がかかる。だから「一番長いコンボ」より、ダウン・端運び・位置入れ替え・ドライブゲージへの圧を優先する場面が多い。</p></article>
+        <article class="rule"><span>03</span><h3>めくりは方向まで含めて難しい</h3><p>攻撃が反対側へ回ればガード方向も変わる。2025年以降は「とりあえずパリィ」がめくりへの万能回答になりにくくなった。</p></article>
+        <article class="rule"><span>04</span><h3>飛び道具は別扱いがある</h3><p>暗転演出を伴わない飛び道具のジャストパリィは、方向入力を要求する近接攻撃の暗転ジャスパとは挙動が異なる。画面停止から反撃する用途と混同しない。</p></article>
+      </div>
+      <div class="marisa-box"><small>MARISA DECISION</small><h3>マリーザは、ジャスパ後も「最大火力」だけを見ない。</h3><p>50％補正があるので、火力キャラだから長いコンボへ行く、とは限らない。後ろ投げで端を入れ替える、短い確反から有利な距離へ戻す、ダウンを取って支配圏を作る、という位置のリターンが大きい。</p></div>
+    </section>
+
+    <section id="rush" class="system-section shell">
+      <p class="page-kicker">03 / DRIVE RUSH</p>
+      <h2>ラッシュは2種類。1本で走るのと、3本で通常技を変換するのは別物。</h2>
+      <p class="system-copy">ドライブラッシュは「緑に光って前へ行く技」ではなく、ニュートラルから使うパリィドライブラッシュと、キャンセル可能な通常技から使うキャンセルドライブラッシュでコストと目的が違う。</p>
+      <div class="input-grid">
+        <article class="input-card"><kbd>1 DRIVE</kbd><h3>パリィドライブラッシュ / 生ラッシュ</h3><p>パリィ状態から前前、または前→前＋パリィ系の入力で前進。1本消費。間合いを一気に詰める、起き攻めへ行く、相手の後退を追う、差し返し距離を変える用途。</p></article>
+        <article class="input-card"><kbd>3 DRIVE</kbd><h3>キャンセルドライブラッシュ</h3><p>キャンセル対応通常技のヒット／ガードからラッシュへ。3本消費。牽制をコンボへ変える、ガードさせて攻めを継続する、確認から高火力へ伸ばす用途。強いぶんゲージ負担が大きい。</p></article>
+      </div>
+      <div class="rule-list">
+        <article class="rule"><span>01</span><h3>ラッシュ通常技は有利が増える</h3><p>ドライブラッシュから出した対応通常技は、通常時より<strong>ヒット／ガード時の有利が4F増える</strong>。普段は連続しない技がつながったり、ガード後に強い攻めが成立する理由。</p></article>
+        <article class="rule"><span>02</span><h3>キャンセルラッシュ3本は「前借り」</h3><p>コンボが伸びても、その後にバーンアウトへ入れば守りが一気に弱くなる。<strong>倒し切る3本と、倒し切れない3本は価値が違う。</strong></p></article>
+        <article class="rule"><span>03</span><h3>生ラッシュは距離を買う</h3><p>1本で「自分のターン」を買うというより、まず位置を買う技。マリーザなら間合い管理で取った画面を、相手の後退に合わせて再圧縮する用途と相性がいい。</p></article>
+        <article class="rule"><span>04</span><h3>バーンアウト中は使えない</h3><p>ドライブゲージを使う共通システムなので、バーンアウト中は生ラッシュもキャンセルラッシュも不可。SAとはここが大きく違う。</p></article>
+      </div>
+      <div class="marisa-box"><small>MARISA DECISION</small><h3>「届かないからラッシュ」ではなく、歩きで足りない時にラッシュ。</h3><p>間合い管理を主軸にするなら、生ラッシュを通常移動の代わりにしない。まず歩いて支配圏を維持し、相手が大きく下がった時、ダウン後に一気に距離を詰めたい時など、1本を払う理由がある場面だけ使う。</p></div>
+    </section>
+
+    <section id="impact" class="system-section shell">
+      <p class="page-kicker">04 / DRIVE IMPACT</p>
+      <h2>インパクトは「強いボタン」ではなく、相手の長い行動へ差し込む26Fのアーマー技。</h2>
+      <p class="system-copy">ドライブインパクトは1本消費、発生26F。2回分のアーマーで攻撃を受けながら前へ出る。3ヒット以上の素早い連係、投げ、アーマーブレイク、SA、相手のインパクト返しなど、明確な回答も多い。</p>
+      <div class="choice-table">
+        <div class="choice-row"><b>相手が長い通常技</b><strong>インパクトが刺さりやすい</strong><span>キャンセル不能で硬直が長い攻撃なら、見てから／読んでからアーマーで受けて返しやすい。</span></div>
+        <div class="choice-row"><b>相手が弱連打</b><strong>危険</strong><span>複数ヒットでアーマーを割られたり、途中で相手がインパクト返しへ切り替えられる。</span></div>
+        <div class="choice-row"><b>相手が投げ</b><strong>負ける</strong><span>アーマーは投げを受け止めない。近距離でインパクトを守りの万能札にしない。</span></div>
+        <div class="choice-row"><b>相手もインパクト</b><strong>後出し返しが基本</strong><span>自分のキャンセル可能な攻撃中なら、相手のインパクトを見てインパクト返しへ切り替える。</span></div>
+      </div>
+      <div class="rule-list">
+        <article class="rule"><span>01</span><h3>2回アーマー＝2発まで我慢</h3><p>2ヒット分までは受け止められるが、3発目で割られる。多段技や弱攻撃連係を相手に「アーマーだから勝つ」と決めつけない。</p></article>
+        <article class="rule"><span>02</span><h3>壁があると価値が変わる</h3><p>画面端付近では、ガードされても壁やられを発生させられる距離がある。中央のインパクトと端のインパクトは、同じ26Fでもリターンが違う。</p></article>
+        <article class="rule"><span>03</span><h3>バーンアウト＋端はスタン条件</h3><p>相手がバーンアウト中に端でインパクトを壁へ当てると、ガードされてもスタンへ持ち込める。バーンアウトした側はSAなど別ゲージの回答を意識する。</p></article>
+        <article class="rule"><span>04</span><h3>自分の技選びが「返せるか」を決める</h3><p>キャンセル不能の長い技を振った瞬間は、相手のインパクトを見ても返せないことがある。だからインパクト対策は反応練習だけでなく、<strong>どの距離でどの技を振るか</strong>の問題でもある。</p></article>
+      </div>
+      <div class="marisa-box"><small>MARISA DECISION</small><h3>マリーザ自身がアーマーを持つからこそ、インパクトと混同しない。</h3><p>グラディウス等のアーマー技とドライブインパクトは、受けられる攻撃・コスト・反撃の受け方が違う。相手のインパクトへ「こっちもアーマー」で雑に答えるより、キャンセル可能技からのインパクト返し、SA、投げなど状況に合った共通回答を持つ。</p></div>
+    </section>
+
+    <section class="system-section shell">
+      <p class="page-kicker">05 / TRAINING MENU</p>
+      <h2>仕様は、トレモで「一つの条件だけ変える」と覚えやすい。</h2>
+      <div class="training">
+        <div><kbd>SA</kbd><b>簡易版とコマンド版のダメージ比較</b><p>同じ始動から簡易SA／コマンドSAで締め、ダメージ差を見る。次にバーンアウト状態でもSAが出せることを確認する。</p></div>
+        <div><kbd>JP</kbd><b>立ち／しゃがみ方向をランダム化</b><p>ダミーに上・中段と下段を記録。正しいガード方向＋パリィで暗転するか、方向を外した時に何が違うかを見る。</p></div>
+        <div><kbd>DR</kbd><b>通常時とラッシュ後の有利差</b><p>同じ通常技を通常状態／ラッシュからガードさせ、フレームメーターで+4F差を確認。1本と3本の消費も目で覚える。</p></div>
+        <div><kbd>DI</kbd><b>1発・2発・3発を順に当てる</b><p>インパクトへ単発、2連、3連を当ててアーマーの限界を見る。その後、投げ／インパクト返し／SAを一つずつ試す。</p></div>
+      </div>
+      <div class="system-note is-cyan"><b>共通システムページの役割</b><p>ここでは「ゲームとして何が起きるか」を固定する。そこから先の「マリーザなら何を押すか」は技ページ、「どの距離なら使うか」は間合い管理、「相手キャラ別の例外」はキャラ対策へ分ける。</p></div>
+    </section>
+
+    <section class="system-section shell">
+      <p class="page-kicker">SOURCES / BASELINE</p>
+      <h2>基準は2026年8月3日調整。</h2>
+      <p class="system-copy">共通仕様はアップデートで変わり得る。SAゲージの基本は公式Webマニュアル、共通システム変更はBuckler's Boot Campの現行Battle Change Listを最終確認先とする。2025年6月のジャストパリィ方向入力変更もこの変更履歴に基づく。</p>
+      <div class="source-list">
+        <a href="https://game.capcom.com/manual/SF6/ja/switch2/page/3/3" target="_blank" rel="noreferrer"><b>CAPCOM公式Webマニュアル｜ファイティンググラウンド画面</b><span>ドライブゲージ／SAゲージ、最大3ストック、ラウンド持ち越しの確認。</span></a>
+        <a href="https://www.streetfighter.com/6/buckler/ja-jp/battle_change" target="_blank" rel="noreferrer"><b>CAPCOM｜Battle Change List</b><span>現行の共通システム・キャラクター調整の最終確認先。</span></a>
+        <a href="https://www.streetfighter.com/6/ja-jp/character/marisa/movelist" target="_blank" rel="noreferrer"><b>CAPCOM｜マリーザ コマンドリスト</b><span>SA・必殺技・モダン入力の確認。</span></a>
+        <a href="moves.html?move=sa2"><b>MODERN MARISA LAB｜SA2</b><span>マリーザ固有のフレーム、左右移動、簡易入力メモ。</span></a>
+      </div>
+      <div class="back-links"><a href="strategy.html">実戦攻略へ戻る</a><a href="spacing.html">間合い管理</a><a href="moves.html">技と派生</a></div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="site-footer-inner shell"><b>MODERN MARISA LAB</b><span>SYSTEM LAB / 2026-08-13</span></div></footer>
+</body>
+</html>
