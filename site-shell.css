@@ -1,6 +1,7 @@
 @import url("site-shell-base.css?v=0.24.0");
 @import url("theme-marisa.css?v=0.24.0");
 @import url("theme-marisa-runtime.css?v=0.24.0");
+@import url("ui-polish.css?v=20260812");
 
 /* Mobile navigation: keep every menu label visible without horizontal scrolling. */
 @media (max-width: 820px) {
