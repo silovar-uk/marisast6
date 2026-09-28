@@ -334,7 +334,7 @@ function renderAll() { renderChrome(); renderFocus(); renderList(); renderDetail
 
 /* ---------- 状況から探す ---------- */
 function renderSituations() {
-  const scenes = ['すべて', ...new Set(SITUATIONS.map(s => s.scene))];
+  const scenes = ['すべて', ...(LAB.scenes?.length ? LAB.scenes : [...new Set(SITUATIONS.map(s => s.scene))])];
   $('#scenes').innerHTML = scenes.map(s => `<button type="button" class="chip" data-scene="${s}" aria-pressed="${state.scene === s}">${s}</button>`).join('');
   $('#sits').innerHTML = SITUATIONS.map((s, k) => {
     if (state.scene !== 'すべて' && s.scene !== state.scene) return '';
