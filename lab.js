@@ -592,7 +592,7 @@ document.addEventListener('input', e => {
   state.tableAdvanced[key] = { ...(state.tableAdvanced[key] || {}), [part]: a.value };
   renderList();
   const next = $(`[data-adv-key="${key}"][data-adv-part="${part}"]`);
-  if (next) { next.focus(); if (next.setSelectionRange) { const p = next.value.length; next.setSelectionRange(p, p); } }
+  if (next) { next.focus(); if (next.type !== 'number' && next.setSelectionRange) { const p = next.value.length; next.setSelectionRange(p, p); } }
 });
 document.addEventListener('change', e => {
   const a = e.target.closest('[data-adv-key]');
