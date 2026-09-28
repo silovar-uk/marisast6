@@ -423,7 +423,7 @@ document.addEventListener('click', e => {
     e.preventDefault();
     e.stopPropagation();
     const wasOpen = peek.classList.contains('open');
-    $('.cell-peek.open').forEach(x => x.classList.remove('open'));
+    document.querySelectorAll('.cell-peek.open').forEach(x => x.classList.remove('open'));
     peek.classList.toggle('open', !wasOpen);
     return;
   }
