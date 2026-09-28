@@ -1,7 +1,7 @@
 (async () => {
 'use strict';
 const DATA_URL = 'data/official-modern.json';
-const LAB = window.MARISA_LAB || { phase: 4, ids: {}, idToName: {}, routes: {}, situations: [] };
+const LAB = window.MARISA_LAB || { phase: 4, ids: {}, idToName: {}, when: {}, derives: {}, routes: {}, situations: [], scenes: [] };
 const PHASE = Number(LAB.phase || 4);
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
@@ -32,25 +32,7 @@ const VARIANT_OF = {
 };
 const FAMILY_TITLE = { 'ノバキュラ': ['ノバキュラスワイプ／シュート', '→＋中'] };
 // 既存サイトの「使いどころ」を1行だけ引き継ぐ(系統単位)
-const WHEN = {
-  '立ち弱P（ライトパンチ）': '少し離れた相手へ、小さく触りたい時。',
-  '立ち中P（ミドルパンチ）': '近距離で何を押すか迷った時。',
-  '立ち中K（スターナムブレイク）': '開幕前後の距離で、相手の前歩きを止めたい時。',
-  '立ち強P（ヘビィーパンチ）': '相手の長い通常技が空振った瞬間。ホールドは確定反撃と起き攻め。',
-  'しゃがみ弱P（アンダーライト）': '密着で相手の連携に隙がある時。4Fの基準技。',
-  'しゃがみ弱K（フットバッシュ）': '起き攻めやラッシュ後、相手が立ちガードしそうな時。',
-  'しゃがみ中P（アンダーミドル）': 'A＋中が届かない距離で、相手の前進を止めたい時。',
-  'しゃがみ強P（ハーフハート）': '正面の飛びを早めに察知した時。ホールドは端のコンボ用。',
-  'マグナバンカー': '投げ抜けを空振らせた時、または起き攻めで打撃を重ねる時。',
-  'ガイアバッシュ': '相手の通常技を空振らせ、その足元へ差し返す時。',
-  'ファルクスクラッシュ': '遠めから触り、キャンセルラッシュで攻めを続ける時。',
-  'グラディウス': '中距離で牽制を受け止めたい時。ホールドはインパクト対策。',
-  'ディマカイルス': '小技や中攻撃のヒットを確認して、ダウンまで取る時。',
-  'ファランクス': '弾・下段・地上牽制を読んで飛び越える時。',
-  'クアドリガ': 'Year 4でモダンから使えるようになった前進蹴り。締めと運び。',
-  'スクトゥム': '構えから当身と3つの派生で読み合う時。',
-  'スーパーアーツ': 'ゲージを使った切り返しと締め。発生と無敵の差を見比べる。'
-};
+const WHEN = LAB.when || {};
 const WIN_LABEL = { armor: 'アーマー', parry: '当身', inv: '完全無敵', aainv: '対空無敵', thinv: '投げ無敵', air: '空中', proj: '弾無敵', derive: '派生受付' };
 const FLAG_RULES = [[/強制立ち/, '強制立ち'], [/めくり性能/, 'めくり'], [/アーマーブレイク/, 'アーマーブレイク'], [/壁やられ/, '壁やられ'], [/被パニッシュカウンター判定/, '動作中は常に被パニカン'], [/ハードノックダウン/, 'ハードダウン'], [/しゃがみ状態の相手に当たらない/, 'しゃがみに当たらない'], [/連打キャンセル/, '連打キャンセル']];
 const CANCEL = {
@@ -60,17 +42,7 @@ const CANCEL = {
   SA3: { text: 'SA3だけ', to: ['SA3 アポロウーサ'] }
 };
 const SPECIAL_FAMILIES = [['グラディウス', '弱 グラディウス'], ['ディマカイルス', '弱 ディマカイルス（1段目）'], ['ファランクス', '弱 ファランクス'], ['クアドリガ', '弱 クアドリガ'], ['スクトゥム', 'スクトゥム']];
-const DERIVES = {
-  '立ち弱P（ライトパンチ）': ['ライトワンツー'], '立ち中P（ミドルパンチ）': ['ミドルワンツー'],
-  '立ち強P（ヘビィーパンチ）': ['ヘビィーワンツー'], '立ち強P（ヘビィーパンチ）（ホールド）': ['ヘビィーワンツー'],
-  'ジャンプ中P（ヴォラーレフィスト）': ['ヴォラーレコンボ'],
-  'ノバキュラスワイプ/ノバキュラシュート（1段目）': ['ノバキュラスワイプ', 'ノバキュラシュート'],
-  'ファルクスクラッシュ（1段目）': ['ファルクスクラッシュ（2段目）'], 'ファルクスクラッシュ（1段目）（ホールド）': ['ファルクスクラッシュ（2段目）'],
-  '弱 ディマカイルス（1段目）': ['弱 ディマカイルス（2段目）'], '中 ディマカイルス（1段目）': ['中 ディマカイルス（2段目）'],
-  '強 ディマカイルス（1段目）': ['強 ディマカイルス（2段目）'], 'OD ディマカイルス（1段目）': ['OD ディマカイルス（2段目）'],
-  'スクトゥム': ['トニトルス（1段目）', 'プロケッラ', 'エンフォルド'], 'OD スクトゥム': ['トニトルス（1段目）', 'プロケッラ', 'エンフォルド'],
-  'トニトルス（1段目）': ['トニトルス（2段目）'], 'SA1 マリーザジャベリン（ホールド）': ['SA1 マリーザジャベリン(当身派生版)']
-};
+const DERIVES = Object.fromEntries(Object.entries(LAB.derives || {}).map(([from, tos]) => [LAB.idToName[from] || from, tos.map(id => LAB.idToName[id] || id)]));
 // 既存サイトの定番ルート(資料由来・2026年3月基準)の見本
 const ROUTES = Object.fromEntries(Object.entries(LAB.routes || {}).map(([id, conds]) => [LAB.idToName[id] || id, Object.fromEntries(Object.entries(conds).map(([cond, list]) => [cond, list.map(x => [x.route, x.damage, x.verification, x.conditions || []])]))]));
 const COND = { n: ['通常ヒット', 0], c: ['カウンター', 2], pc: ['パニカン', 4], dr: ['ラッシュ', 4], g: ['ガード', 0] };
@@ -362,7 +334,7 @@ function renderAll() { renderChrome(); renderFocus(); renderList(); renderDetail
 
 /* ---------- 状況から探す ---------- */
 function renderSituations() {
-  const scenes = ['すべて', ...new Set(SITUATIONS.map(s => s.scene))];
+  const scenes = ['すべて', ...(LAB.scenes?.length ? LAB.scenes : [...new Set(SITUATIONS.map(s => s.scene))])];
   $('#scenes').innerHTML = scenes.map(s => `<button type="button" class="chip" data-scene="${s}" aria-pressed="${state.scene === s}">${s}</button>`).join('');
   $('#sits').innerHTML = SITUATIONS.map((s, k) => {
     if (state.scene !== 'すべて' && s.scene !== state.scene) return '';

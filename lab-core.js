@@ -30,7 +30,9 @@
     const totalOnly = /全体 ?(\d+)/.exec(String(row.recovery ?? ''));
     const landing = /着地後(\d+)/.exec(String(row.recovery ?? ''));
     const total = a && rec != null ? a.to + rec : totalOnly ? Number(totalOnly[1]) : null;
-    return { id, index, startup: number(row.startup), active: a, recovery: rec, landing: landing ? Number(landing[1]) : null, total, hit: row.hit === 'D' ? 'D' : number(row.hit), block: number(row.block), windows: parseWindows(row.notes), raw: row };
+    const pc = (row.notes || []).map(text => /パニッシュカウンター時\+(\d+)F/.exec(text)).find(Boolean);
+    const pcHit = pc ? Number(pc[1]) : null;
+    return { id, index, startup: number(row.startup), active: a, recovery: rec, landing: landing ? Number(landing[1]) : null, total, hit: row.hit === 'D' ? 'D' : number(row.hit), block: number(row.block), pcHit, windows: parseWindows(row.notes), raw: row };
   }
   function frameGap(blockAdvantage, startup) { return startup - 1 - blockAdvantage; }
   function linkWindow(hitAdvantage, startup) { return hitAdvantage - startup + 1; }
