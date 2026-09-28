@@ -180,21 +180,31 @@ function matches(o, q) {
   const s = (o.name + ' ' + o.input + ' ' + o.variant + ' ' + famOf(o).title).toLowerCase();
   return q.toLowerCase().split(/\s+/).every(w => s.includes(w.replace('+', '＋')));
 }
+function rowPassesFilters(o) {
+  return Object.entries(state.tableFilters).every(([key, q]) => tableFilterMatch(tableFilterValue(o, key), q)) &&
+    Object.entries(state.tableAdvanced).every(([key, rule]) => tableAdvancedMatch(o, key, rule));
+}
 function visibleFamilies() {
   const q = state.q.trim();
   const out = [];
   for (const f of families.values()) {
     if (state.cat !== 'すべて' && f.chip !== state.cat) continue;
-    const rs = f.rows.filter(r => (!state.focus || state.focus.names.has(r.name)) && (!q || matches(r, q)));
+    let rs = f.rows.filter(r =>
+      (!state.focus || state.focus.names.has(r.name)) &&
+      (!q || matches(r, q)) &&
+      rowPassesFilters(r)
+    );
+    if (state.sorts.length) rs = [...rs].sort(compareRows);
     if (rs.length) out.push([f, rs]);
   }
+  if (state.sorts.length) out.sort((a, b) => compareRows(a[1][0], b[1][0]));
   return out;
 }
 function renderList() {
   const list = $('#list');
   const fams = visibleFamilies();
   if (state.view === 'table') { renderTable(fams); return; }
-  list.innerHTML = fams.map(([f, rs]) => `
+  list.innerHTML = `${renderSortTools()}${renderFilterPanel()}${renderBandFilters()}` + fams.map(([f, rs]) => `
     <article class="fam" data-fam="${esc(f.key)}">
       <header class="fam-h"><h3>${esc(f.title)}${f.sub ? `<small>${esc(f.sub)}</small>` : ''}</h3><p class="fam-in">${esc(f.rows[0].input)}</p>${f.when ? `<p class="when">${esc(f.when)}</p>` : ''}</header>
       <div class="fam-grid">
@@ -330,12 +340,27 @@ function renderSortTools() {
     <div class="sort-chain">${active || '<span>列名クリックで単独ソート／Shift＋クリックで追加</span>'}</div>
   </div>`;
 }
+function renderBandFilters() {
+  return `<div class="band-filters" aria-label="帯の絞り込み">
+    ${TABLE_COLS.map(([label, filter, sort, ph]) => {
+      const idx = sort ? state.sorts.findIndex(([key]) => key === sort) : -1;
+      const arrow = idx >= 0 ? (state.sorts[idx][1] > 0 ? '↑' : '↓') : '';
+      const filtered = (state.tableFilters[filter] || '').trim() || state.tableAdvanced[filter];
+      return `<div class="band-filter">
+        <div class="band-filter-head">
+          ${sort
+            ? `<button type="button" class="band-sort" data-sort="${sort}" title="タップ=単独ソート">${esc(label)}${arrow ? ' ' + arrow : ''}${idx >= 0 ? `<small>${idx + 1}</small>` : ''}</button><button type="button" class="band-sort-add" data-sort-add="${sort}" title="並び順に追加">＋</button>`
+            : `<span>${esc(label)}</span>`}
+          <button type="button" class="filter-more${filtered ? ' on' : ''}" data-filter-menu="${filter}" aria-label="${esc(label)}の詳細フィルター">⌄</button>
+        </div>
+        <input class="tbl-filter band-filter-input" type="search" inputmode="${NUMERIC_FILTERS.has(filter) ? 'text' : 'search'}" data-filter="${filter}" value="${esc(state.tableFilters[filter] || '')}" placeholder="${esc(ph)}" maxlength="12" size="8" aria-label="${esc(label)}を絞り込む">
+      </div>`;
+    }).join('')}
+  </div>`;
+}
 function renderTable(fams) {
   let rs = fams.flatMap(([, r]) => r);
-  rs = rs.filter(o =>
-    Object.entries(state.tableFilters).every(([key, q]) => tableFilterMatch(tableFilterValue(o, key), q)) &&
-    Object.entries(state.tableAdvanced).every(([key, rule]) => tableAdvancedMatch(o, key, rule))
-  );
+  rs = rs.filter(rowPassesFilters);
   if (state.sorts.length) rs = [...rs].sort(compareRows);
   const cell = (v, cls = '') => `<td class="${cls}">${v}</td>`;
   const adv = v => { const t = TIER(v); return `<span class="${t ? 't-' + t[0] : ''}">${fmt(v)}</span>`; };
@@ -537,6 +562,14 @@ document.addEventListener('click', e => {
   if (t.dataset.filterClose != null) { state.filterPanel = null; return renderList(); }
   if (t.dataset.filterReset) { delete state.tableAdvanced[t.dataset.filterReset]; state.filterPanel = null; return renderList(); }
   if (t.dataset.preset) { const p = SORT_PRESETS[t.dataset.preset]; state.sorts = p.sorts.map(x => [...x]); state.sortPreset = t.dataset.preset; return renderList(); }
+  if (t.dataset.sortAdd) {
+    const k = t.dataset.sortAdd;
+    const found = state.sorts.findIndex(([key]) => key === k);
+    if (found >= 0) state.sorts[found][1] *= -1;
+    else state.sorts.push([k, 1]);
+    state.sortPreset = null;
+    return renderList();
+  }
   if (t.dataset.sortClear != null) { state.sorts = []; state.sortPreset = null; return renderList(); }
   if (t.matches('.row') && dragMoved) return;
   if (t.dataset.tab) return showTab(t.dataset.tab);
