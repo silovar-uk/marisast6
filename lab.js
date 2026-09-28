@@ -181,7 +181,7 @@ function visibleFamilies() {
   const out = [];
   for (const f of families.values()) {
     if (state.cat !== 'すべて' && f.chip !== state.cat) continue;
-    const rs = f.rows.filter(r => !q || matches(r, q));
+    const rs = f.rows.filter(r => (!state.focus || state.focus.names.has(r.name)) && (!q || matches(r, q)));
     if (rs.length) out.push([f, rs]);
   }
   return out;
@@ -370,7 +370,7 @@ function renderDetail() {
   markPips();
 }
 function renderFocus() {
-  $('#focus').innerHTML = state.focus ? `<div class="focus-banner">状況：${esc(state.focus.title)}｜${state.focus.names.size}技を強調中<button type="button" data-unfocus>解除</button></div>` : '';
+  $('#focus').innerHTML = state.focus ? `<div class="focus-banner">状況：${esc(state.focus.title)}｜候補${state.focus.names.size}技だけ表示中<button type="button" data-unfocus>解除</button></div>` : '';
 }
 function renderChrome() {
   const cats = ['すべて', '通常技', '特殊技', '必殺技', 'SA', '投げ', '共通'];
