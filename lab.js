@@ -99,7 +99,7 @@ const isNormal = o => (o.section === '通常技' || o.section === '特殊技') &
 const linkable = o => ['通常技', '特殊技', '必殺技', 'スーパーアーツ'].includes(o.section) && o.startup != null && !/^[（※]/.test(o.input) && !o.input.includes(' → ') && o.part !== '2段目' && !o.name.startsWith('CA ');
 
 /* ---------- 状態 ---------- */
-const state = { tab: 'waza', cat: '必殺技', q: '', view: 'band', pun: { on: false, n: 6 }, cond: 'n', path: [], focus: null, sort: { key: null, dir: 1 }, scene: 'すべて', lastMap: null };
+const state = { tab: 'waza', cat: '必殺技', q: '', view: 'band', pun: { on: false, n: 6 }, cond: 'n', path: [], focus: null, sort: { key: null, dir: 1 }, tableFilters: {}, scene: 'すべて', lastMap: null };
 let rows = [], byId = new Map(), byName = new Map(), families = new Map();
 
 try {
@@ -201,18 +201,67 @@ function renderList() {
     </article>`).join('') || '<p class="note">条件に合う技がありません。</p>';
   markPips();
 }
+function tableFilterValue(o, key) {
+  if (key === 'move') return [famOf(o).title, famOf(o).sub, o.variant, o.name].filter(Boolean).join(' ');
+  if (key === 'input') return o.input || '';
+  if (key === 'startup') return o.startup;
+  if (key === 'active') return o.raw.active || '';
+  if (key === 'recovery') return o.raw.recovery || '';
+  if (key === 'total') return o.total;
+  if (key === 'hit') return o.hit;
+  if (key === 'block') return o.block;
+  if (key === 'cancel') return o.cancel || '';
+  if (key === 'dmg') return typeof o.dmg === 'object' && o.dmg ? o.dmg.cmd : o.dmg;
+  if (key === 'attribute') return o.raw.attribute || '';
+  return '';
+}
+function tableFilterMatch(value, query) {
+  const q = String(query || '').trim();
+  if (!q) return true;
+  if (typeof value === 'number') {
+    const m = /^(<=|>=|<|>|=)?\s*(-?\d+(?:\.\d+)?)$/.exec(q.replace(/[−－]/g, '-'));
+    if (m) {
+      const n = Number(m[2]);
+      return m[1] === '<=' ? value <= n : m[1] === '>=' ? value >= n : m[1] === '<' ? value < n : m[1] === '>' ? value > n : value === n;
+    }
+  }
+  const text = value === 'D' ? 'D ダウン' : String(value ?? '—');
+  return text.toLowerCase().includes(q.toLowerCase().replace('+', '＋'));
+}
 function renderTable(fams) {
   let rs = fams.flatMap(([, r]) => r);
+  rs = rs.filter(o => Object.entries(state.tableFilters).every(([key, q]) => tableFilterMatch(tableFilterValue(o, key), q)));
   const k = state.sort.key;
   if (k) {
     const val = o => k === 'dmg' ? (typeof o.dmg === 'object' && o.dmg ? o.dmg.cmd : o.dmg) : o[k] === 'D' ? 99 : o[k];
     rs = [...rs].sort((a, b) => ((val(a) ?? 999) - (val(b) ?? 999)) * state.sort.dir);
   }
-  const cols = [['技', null], ['入力', null], ['発生', 'startup'], ['持続', null], ['硬直', null], ['全体', 'total'], ['ヒット', 'hit'], ['ガード', 'block'], ['キャンセル', null], ['ダメージ', 'dmg'], ['属性', null]];
+  const cols = [
+    ['技', 'move', null, '技名'],
+    ['入力', 'input', null, '入力'],
+    ['発生', 'startup', 'startup', '≤6'],
+    ['持続', 'active', null, '持続'],
+    ['硬直', 'recovery', null, '硬直'],
+    ['全体', 'total', 'total', '≤40'],
+    ['ヒット', 'hit', 'hit', '>=1'],
+    ['ガード', 'block', 'block', '>=0'],
+    ['キャンセル', 'cancel', null, 'C / SA'],
+    ['ダメージ', 'dmg', 'dmg', '>=1000'],
+    ['属性', 'attribute', null, '属性']
+  ];
   const cell = (v, cls = '') => `<td class="${cls}">${v}</td>`;
   const adv = v => { const t = TIER(v); return `<span class="${t ? 't-' + t[0] : ''}">${fmt(v)}</span>`; };
-  $('#list').innerHTML = `<div class="tbl-wrap"><table class="tbl"><thead><tr>${cols.map(([c, key]) => `<th${key ? ` data-sort="${key}"` : ''}>${c}${key && state.sort.key === key ? (state.sort.dir > 0 ? ' ▲' : ' ▼') : ''}</th>`).join('')}</tr></thead><tbody>${rs.map(o => `
-    <tr data-id="${o.id}" data-name="${esc(o.name)}" class="${cur() === o ? 'sel' : ''}${punClass(o)}">${cell(esc(famOf(o).title) + ' <small>' + esc(o.variant) + '</small>')}${cell(esc(o.input), 'in')}${cell(o.startup ?? '—')}${cell(esc(o.raw.active || '—'))}${cell(esc(o.raw.recovery || '—'))}${cell(o.total ?? '—')}${cell(adv(o.hit))}${cell(adv(o.block))}${cell(esc(o.cancel || '—'))}${cell(esc(o.raw.damage))}${cell(esc(o.raw.attribute || '—'))}</tr>`).join('')}</tbody></table></div>`;
+  const peek = text => {
+    const full = String(text || '—');
+    return `<button type="button" class="cell-peek" data-peek="${esc(full)}" aria-label="${esc(full)}"><span>${esc(full)}</span></button>`;
+  };
+  $('#list').innerHTML = `<div class="tbl-wrap"><table class="tbl"><thead>
+    <tr>${cols.map(([c, filter, sort]) => `<th${sort ? ` data-sort="${sort}"` : ''}>${c}${sort && state.sort.key === sort ? (state.sort.dir > 0 ? ' ▲' : ' ▼') : ''}</th>`).join('')}</tr>
+    <tr class="filter-row">${cols.map(([c, filter, sort, ph]) => `<th><input class="tbl-filter" type="search" inputmode="${['startup','total','hit','block','dmg'].includes(filter) ? 'text' : 'search'}" data-filter="${filter}" value="${esc(state.tableFilters[filter] || '')}" placeholder="${esc(ph)}" maxlength="12" size="8" aria-label="${esc(c)}を絞り込む"></th>`).join('')}</tr>
+    </thead><tbody>${rs.map(o => `
+    <tr data-id="${o.id}" data-name="${esc(o.name)}" class="${cur() === o ? 'sel' : ''}${punClass(o)}">${cell(esc(famOf(o).title) + ' <small>' + esc(o.variant) + '</small>')}${cell(peek(o.input), 'in')}${cell(o.startup ?? '—')}${cell(esc(o.raw.active || '—'))}${cell(esc(o.raw.recovery || '—'))}${cell(o.total ?? '—')}${cell(adv(o.hit))}${cell(adv(o.block))}${cell(esc(o.cancel || '—'))}${cell(esc(o.raw.damage))}${cell(esc(o.raw.attribute || '—'))}</tr>`).join('')}</tbody></table>
+    ${rs.length ? '' : '<p class="tbl-empty">この絞り込みに合う技がありません。</p>'}
+  </div>`;
 }
 function markPips() {
   for (const b of $$('.bar')) b.classList.toggle('pips', b.clientWidth / Number(b.dataset.max) >= 5);
@@ -341,7 +390,10 @@ function renderSituations() {
     const picks = s.pick.map(n => byName.get(n)).filter(Boolean);
     const max = Math.max(20, Math.ceil(Math.max(...picks.map(p => p.span)) / 10) * 10);
     return `<article class="sit"><span class="scene">${esc(s.scene)}</span><h3>${esc(s.title)}</h3><p>${esc(s.cue)}</p>
-      ${picks.map((p, j) => `<div class="pick"><span class="${j ? '' : 'first'}">${j ? '代わり' : '第一候補'}<br>${esc(famOf(p).title)}${p.variant !== '通常' ? ' ' + esc(p.variant) : ''}</span>${barHTML(p, max)}<span class="st">${p.startup ?? '—'}F</span></div>`).join('')}
+      ${picks.map((p, j) => {
+        const showInput = p.section === '通常技' || p.section === '特殊技';
+        return `<div class="pick"><span class="${j ? '' : 'first'}">${j ? '代わり' : '第一候補'}<br><span class="pick-name">${esc(famOf(p).title)}${p.variant !== '通常' ? ' ' + esc(p.variant) : ''}</span>${showInput ? `<kbd class="pick-input">${esc(p.input)}</kbd>` : ''}</span>${barHTML(p, max)}<span class="st">${p.startup ?? '—'}F</span></div>`;
+      }).join('')}
       <p>避けたい場面：${esc(s.risk)}</p>
       <a data-sit="${k}" href="index.html?focus=${encodeURIComponent(s.key)}">技で比べる</a></article>`;
   }).join('');
@@ -366,6 +418,15 @@ function openSheet(on) {
 let dragMoved = false, downX = 0;
 document.addEventListener('pointerdown', e => { dragMoved = false; downX = e.clientX; });
 document.addEventListener('click', e => {
+  const peek = e.target.closest('[data-peek]');
+  if (peek) {
+    e.preventDefault();
+    e.stopPropagation();
+    const wasOpen = peek.classList.contains('open');
+    $('.cell-peek.open').forEach(x => x.classList.remove('open'));
+    peek.classList.toggle('open', !wasOpen);
+    return;
+  }
   const t = e.target.closest('button, tr[data-id], th[data-sort]');
   if (!t) return;
   if (t.matches('.row') && dragMoved) return;
@@ -394,6 +455,15 @@ document.addEventListener('click', e => {
 });
 $('#backdrop').addEventListener('click', () => openSheet(false));
 $('#q').addEventListener('input', e => { state.q = e.target.value; renderList(); });
+document.addEventListener('input', e => {
+  const f = e.target.closest('.tbl-filter');
+  if (!f) return;
+  state.tableFilters[f.dataset.filter] = f.value;
+  const pos = { start: f.selectionStart, end: f.selectionEnd };
+  renderList();
+  const next = $(`.tbl-filter[data-filter="${f.dataset.filter}"]`);
+  if (next) { next.focus(); next.setSelectionRange(pos.start ?? next.value.length, pos.end ?? next.value.length); }
+});
 $('#export-notebook')?.addEventListener('click', () => {
   const payload = { version: 1, exportedAt: new Date().toISOString(), situations: SITUATIONS.map(s => ({ id: s.key, scene: s.scene, title: s.title, picks: (s.pick || []).map(n => LAB.ids[n]).filter(Boolean) })) };
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
