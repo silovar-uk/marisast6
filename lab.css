@@ -220,11 +220,12 @@ kbd, .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; 
   .d-top { position: sticky; top: -14px; background: var(--panel); padding-top: 4px; padding-bottom: 8px; z-index: 1; }
 }
 @media (max-width: 600px) {
+  .app { padding-inline: 10px; }
   .basis { display: none; }
   .frow { grid-template-columns: 58px minmax(0, 1fr) 76px; gap: 8px; }
   .adv { flex-direction: column; gap: 0; align-items: flex-end; font-size: 12px; line-height: 1.25; }
   .av { min-width: 0; }
-  .fam { padding-inline: 10px; }
+  .fam { padding-inline: 8px; }
   .pun input[type="range"] { width: 96px; }
   .sits { grid-template-columns: minmax(0, 1fr); }
 }
