@@ -1,142 +1,67 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#07080a" />
-  <meta name="description" content="2026年8月3日調整対応。モダンマリーザの次に覚えるコンボ、判断傾向、今日の練習をまとめる個人用攻略ホーム。" />
-  <title>MODERN MARISA LAB｜モダンマリーザ攻略</title>
-  <link rel="icon" type="image/png" sizes="180x180" href="/marisast6/apple-touch-icon.png?v=20260814">
-  <link rel="apple-touch-icon" sizes="180x180" href="/marisast6/apple-touch-icon.png?v=20260814">
-
-  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="site-shell.css?v=0.24.0" />
-  <link rel="stylesheet" href="theme-marisa.css?v=0.24.0" />
-  <link rel="stylesheet" href="home-dashboard.css?v=0.24.0" />
-  <!-- CI compatibility: home-dashboard.css?v=0.23.2 -->
-  <link rel="stylesheet" href="page-guides.css?v=0.24.0" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MODERN MARISA LAB｜技</title>
+<meta name="description" content="モダンマリーザの公式フレームデータ84行を、帯・表・つながりで見切る。">
+<link rel="icon" href="favicon.svg">
+<link rel="stylesheet" href="lab.css">
 </head>
-<body class="page-home">
-  <header class="site-header">
-    <div class="site-header-inner shell">
-      <a class="site-brand" href="index.html">
-        <span class="site-brand-mark">M</span>
-        <span><b>MODERN MARISA LAB</b><small>技・判断・実戦の攻略資料</small></span>
-      </a>
-      <nav class="site-tabs" aria-label="ページ">
-        <a href="decision.html">作戦ノート</a>
-        <a href="index.html" aria-current="page">ホーム</a>
-        <a href="situations.html">状況から探す</a>
-        <a href="moves.html">技と派生</a>
-        <a href="advantage.html">有利と連携</a>
-        <a href="matchups.html">キャラ対策</a>
-        <a href="strategy.html">実戦攻略</a>
-        <a href="drill.html">コンボドリル</a>
-        <a href="controls.html">操作差</a>
-      </nav>
-    </div>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand">MODERN <span>MARISA</span> LAB</div>
+    <nav class="nav" aria-label="ページ">
+      <a id="tab-waza" data-tab="waza" href="index.html" aria-current="page">技</a>
+      <a id="tab-jokyo" data-tab="jokyo" href="situations.html">状況</a>
+    </nav>
+    <p class="basis" id="basis">公式フレームデータを読み込み中</p>
   </header>
 
-  <main>
-    <section class="home-hero shell">
-      <p class="page-kicker">STREET FIGHTER 6 / MODERN MARISA</p>
-      <h1>知っている。<span>ではなく、適切に選べる。</span></h1>
-      <div class="home-hero-copy">
-        <p>状況を調べ、安定・標準・最大を理解し、判断ドリルで反復する。習得状況と最近のミスから、今日やる練習まで一つにつなげたモダンマリーザ専用ラボです。</p>
-        <aside class="home-hero-note">基準：2026年8月3日調整<br>現行モダン技を収録・一部は再計測中<br>進捗はブラウザ内だけに保存</aside>
+  <section id="waza">
+    <div class="tools">
+      <div class="chips" id="cats" role="group" aria-label="技の種類"></div>
+      <input class="search" id="q" type="search" placeholder="技名・入力で探す（/）" aria-label="技を探す">
+      <div class="views" role="group" aria-label="表示">
+        <button id="view-band" aria-pressed="true">帯</button>
+        <button id="view-table" aria-pressed="false">表</button>
       </div>
-    </section>
+      <label class="pun" for="pun-on"><input id="pun-on" type="checkbox"> 確反ものさし
+        <input id="pun-n" type="range" min="2" max="20" value="6" aria-label="相手の不利フレーム">
+        <output id="pun-out" for="pun-n">相手−6</output>
+      </label>
+    </div>
+    <div class="legend" aria-label="帯の色">
+      <span><i style="background:var(--f-start)"></i>発生まで</span>
+      <span><i style="background:var(--f-act)"></i>持続（攻撃判定）</span>
+      <span><i style="background:var(--f-rec)"></i>硬直</span>
+      <span><i class="k-armor"></i>アーマー</span>
+      <span><i class="k-inv"></i>完全無敵</span>
+      <span><i class="k-aainv"></i>対空無敵</span>
+      <span><i style="background:var(--l-air);height:3px"></i>空中</span>
+      <span><i style="background:var(--l-proj);height:3px"></i>弾無敵</span>
+      <span><i style="border:1.5px dashed var(--text);background:none"></i>派生受付</span>
+      <span>1マス=1F</span>
+    </div>
+    <div id="focus"></div>
+    <div class="lab">
+      <div id="list" class="list" aria-live="polite"></div>
+      <aside id="detail" class="detail" aria-label="技の詳細"></aside>
+    </div>
+    <p class="note">出典: CAPCOM公式フレームデータ（モダン表示）。キャンセルの受付フレームと、距離による届く・届かないは公式表にないため出していません。「資料由来」の点線は既存サイトの攻略資料（2026年3月基準）で、再確認が必要です。</p>
+  </section>
 
-    <section id="home-dashboard" class="home-dashboard" aria-label="今日の練習">
-      <p>練習状況を読み込んでいます。</p>
-    </section>
-
-    <section class="entry-grid shell" aria-label="調べるページ">
-      <a class="entry-link entry-link-primary" href="decision.html"><small>NEW / DECISION NOTEBOOK</small><div><b>今回、意識すること。</b><p>状況から技を選び、時間とキャンセルを確かめる。次の対戦の判断を保存する作戦ノート。</p></div></a>
-      <a class="entry-link entry-link-situations" href="situations.html">
-        <small>01 / SITUATION FINDER</small>
-        <div><b>いま、何に困った？</b><p>距離、位置、相手行動から第一候補と読み合いを逆引きする。</p></div>
-      </a>
-      <a class="entry-link entry-link-primary" href="moves.html">
-        <small>02 / MOVE DATABASE</small>
-        <div><b>技と、<br>その次。</b><p>現行技の使う場面、数値、通常・カウンター・パニカン後の派生を確認する。</p></div>
-      </a>
-      <a class="entry-link entry-link-playbook" href="strategy.html">
-        <small>03 / PLAYBOOK</small>
-        <div><b>理由と習得順。</b><p>実戦攻略を読み、アシストから安定・標準・最大へ一段ずつ進む。</p></div>
-      </a>
-      <a class="entry-link" href="spacing.html">
-        <small>04 / SPACING LAB</small>
-        <div><b>何を振る？の前に、<br>どこに立つ？</b><p>マリーザの間合い管理だけを、立ち位置・歩き・相手の動き・練習法から徹底研究する。</p></div>
-      </a>
-      <a class="entry-link entry-link-matchups" href="matchups.html">
-        <small>05 / MATCHUP LAB</small>
-        <div><b>相手を見て、選ぶ。</b><p>全31キャラを差し・差し返し・置きで分解し、対戦前30秒の作戦を決める。</p></div>
-      </a>
-      <a class="entry-link entry-link-drill" href="drill.html">
-        <small>06 / DECISION DRILL</small>
-        <div><b>完成コンボを選ぶ。</b><p>3→2→1のあと、状況・ゲージ・目的から同じ始動の3ルートを選ぶ。</p></div>
-      </a>
-      <a class="entry-link" href="controls.html">
-        <small>07 / MODERN × CLASSIC</small>
-        <div><b>クラシック攻略を、<br>どう読む？</b><p>使える情報、読み替える情報、モダンでは使えない技を判別する。</p></div>
-      </a>
-    </section>
-
-    <section class="home-method">
-      <div class="home-method-grid shell">
-        <div>
-          <p class="page-kicker">HOW TO USE</p>
-          <h2>一周して、<br>一つ持ち帰る。</h2>
-        </div>
-        <div class="method-steps">
-          <article><span>1</span><b>状況を特定する</b><p>試合で困った場面を、距離・位置・相手行動から探す。</p></article>
-          <article><span>2</span><b>理由と段階を読む</b><p>実戦攻略、技、有利と連携のページで判断の理由を確認する。</p></article>
-          <article><span>3</span><b>5問だけ選ぶ</b><p>最近のミスを含む今日の5問で、適切な選択を反復する。</p></article>
-        </div>
-      </div>
-    </section>
-
-    <section class="first-six-band shell">
-      <div class="first-six-head">
-        <div><p class="page-kicker">FIRST SIX</p><h2>迷ったら、この6技。</h2></div>
-        <p>均等に覚える必要はありません。地上、暴れ、確認、対空、弾抜け、切り返しの基準になる6技から始めます。</p>
-      </div>
-      <div class="first-six-list">
-        <a href="moves.html?move=crLP"><kbd>↓＋弱</kbd><span><b>アンダーライト</b><small>4F暴れ・小技確認</small></span></a>
-        <a href="moves.html?move=stMK"><kbd>N＋中</kbd><span><b>スターナムブレイク</b><small>中距離の基準</small></span></a>
-        <a href="moves.html?move=aMP"><kbd>A中</kbd><span><b>ミドルパンチ</b><small>近距離の確認</small></span></a>
-        <a href="moves.html?move=gladiusL"><kbd>N＋SP</kbd><span><b>弱グラディウス</b><small>ワンボタン対空・牽制</small></span></a>
-        <a href="moves.html?move=phalanxM"><kbd>↓＋SP</kbd><span><b>中ファランクス</b><small>弾・下段への回答</small></span></a>
-        <a href="moves.html?move=sa2"><kbd>SA2</kbd><span><b>メテオリティス</b><small>補助対空・切り返し</small></span></a>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="site-footer-inner shell"><b>MODERN MARISA LAB</b><span>v0.24.0 / PERSONAL TRAINING HOME</span></div>
-  </footer>
-
-  <script src="data-core.js?v=0.24.0"></script>
-  <script src="data-1.js?v=0.24.0"></script>
-  <script src="data-2.js?v=0.24.0"></script>
-  <script src="data-3.js?v=0.24.0"></script>
-  <script src="data-4.js?v=0.24.0"></script>
-  <script src="data-5.js?v=0.24.0"></script>
-  <script src="data-6.js?v=0.24.0"></script>
-  <script src="playbook-data.js?v=0.24.0"></script>
-  <script src="playbook-expanded.js?v=0.24.0"></script>
-  <script src="drill-data.js?v=0.24.0"></script>
-  <script src="drill-route-schema.js?v=0.24.0"></script>
-  <script src="drill-scenarios.js?v=0.24.0"></script>
-  <script src="combo-learning-data.js?v=0.24.0"></script>
-  <script src="drill-result-analysis.js?v=0.24.0"></script>
-  <script src="home-practice-plan.js?v=0.24.0"></script>
-  <script src="home-dashboard.js?v=0.24.0"></script>
-  <!-- CI compatibility: home-practice-plan.js?v=0.23.2 home-dashboard.js?v=0.23.2 -->
-  <script src="matchup-data.js?v=0.24.0"></script>
-  <script src="matchup-home.js?v=0.24.0"></script>
-  <script src="marisa-arena.js?v=0.24.0"></script>
-  <script src="page-guides.js?v=0.24.0"></script>
+  <section id="jokyo" hidden>
+    <div class="sit-tools"><button type="button" id="export-notebook" class="export-btn">ノートをJSONで書き出す</button></div>
+    <div class="scenes chips" id="scenes"></div>
+    <div class="sits" id="sits"></div>
+    <p class="note">既存の状況逆引きと作戦ノートを統合。候補技を比べ、必要な場面だけ技ページへ持ち込めます。</p>
+  </section>
+</div>
+<div class="backdrop" id="backdrop" hidden></div>
+<script src="data/lab-data.js"></script>
+<script src="lab-core.js"></script>
+<script src="lab.js"></script>
 </body>
 </html>
