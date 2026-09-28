@@ -99,7 +99,7 @@ const isNormal = o => (o.section === '通常技' || o.section === '特殊技') &
 const linkable = o => ['通常技', '特殊技', '必殺技', 'スーパーアーツ'].includes(o.section) && o.startup != null && !/^[（※]/.test(o.input) && !o.input.includes(' → ') && o.part !== '2段目' && !o.name.startsWith('CA ');
 
 /* ---------- 状態 ---------- */
-const state = { tab: 'waza', cat: '必殺技', q: '', view: 'band', pun: { on: false, n: 6 }, cond: 'n', path: [], focus: null, sort: { key: null, dir: 1 }, tableFilters: {}, scene: 'すべて', lastMap: null };
+const state = { tab: 'waza', cat: '必殺技', q: '', view: 'band', pun: { on: false, n: 6 }, cond: 'n', path: [], focus: null, sorts: [], sortPreset: null, tableFilters: {}, tableAdvanced: {}, filterPanel: null, scene: 'すべて', lastMap: null };
 let rows = [], byId = new Map(), byName = new Map(), families = new Map();
 
 try {
@@ -134,6 +134,7 @@ const LINK_TARGETS = rows.filter(linkable);
 /* ---------- 帯の描画 ---------- */
 function barHTML(o, max, lg) {
   const pct = f => (f / max * 100).toFixed(3) + '%';
+  const framePct = f => ((f - .5) / max * 100).toFixed(3) + '%';
   const seg = (from, to, cls) => to < from ? '' : `<i class="seg ${cls}" style="left:${pct(from - 1)};width:${pct(Math.min(to, max) - from + 1)};--n:${Math.min(to, max) - from + 1}"></i>`;
   let h = '';
   if (o.a0 != null) {
@@ -147,8 +148,11 @@ function barHTML(o, max, lg) {
     h += `<i class="win ${lane} k-${w.kind}" style="left:${pct(w.from - 1)};width:${pct(Math.min(w.to, max) - w.from + 1)}" title="${esc(w.text)}"></i>`;
   }
   if (state.pun.on && !lg) h += `<i class="pl" style="left:${pct(state.pun.n)}"></i>`;
+  const end = Math.min(max, Math.max(0, Math.floor(o.span || o.total || o.a1 || o.startup || 0)));
+  const important = new Set([1, o.a0, o.a1, end].filter(Number.isFinite));
+  for (let f = 1; f <= end; f++) h += `<b class="fn${important.has(f) ? ' key' : ''}" data-f="${f}" style="left:${framePct(f)}">${f}</b>`;
   h += '<i class="cur"></i>';
-  return `<span class="bar${lg ? ' lg' : ''}" data-max="${max}">${h}</span>`;
+  return `<span class="bar${lg ? ' lg' : ''}" data-max="${max}" data-active-start="${o.a0 ?? ''}">${h}</span>`;
 }
 function rulerHTML(max) {
   let h = '';
@@ -215,11 +219,38 @@ function tableFilterValue(o, key) {
   if (key === 'attribute') return o.raw.attribute || '';
   return '';
 }
+const TABLE_COLS = [
+  ['技', 'move', null, '技名'],
+  ['入力', 'input', null, '入力'],
+  ['発生', 'startup', 'startup', '≤6'],
+  ['持続', 'active', null, '持続'],
+  ['硬直', 'recovery', null, '硬直'],
+  ['全体', 'total', 'total', '≤40'],
+  ['ヒット', 'hit', 'hit', '>=1'],
+  ['ガード', 'block', 'block', '>=0'],
+  ['キャンセル', 'cancel', null, 'C / SA'],
+  ['ダメージ', 'dmg', 'dmg', '>=1000'],
+  ['属性', 'attribute', null, '属性']
+];
+const NUMERIC_FILTERS = new Set(['startup', 'total', 'hit', 'block', 'dmg']);
+const SORT_PRESETS = {
+  fast: { label: '暴れ向き', sorts: [['startup', 1], ['block', -1]] },
+  punish: { label: '確反向き', sorts: [['startup', 1], ['dmg', -1]] },
+  safe: { label: 'ガード安全', sorts: [['block', -1], ['startup', 1]] },
+  power: { label: '高火力', sorts: [['dmg', -1], ['startup', 1]] },
+  compact: { label: '全体短い', sorts: [['total', 1], ['startup', 1]] }
+};
 function tableFilterMatch(value, query) {
   const q = String(query || '').trim();
   if (!q) return true;
   if (typeof value === 'number') {
-    const m = /^(<=|>=|<|>|=)?\s*(-?\d+(?:\.\d+)?)$/.exec(q.replace(/[−－]/g, '-'));
+    const normalized = q.replace(/[−－]/g, '-');
+    const range = /^(-?\d+(?:\.\d+)?)\s*(?:\.\.|〜|~)\s*(-?\d+(?:\.\d+)?)$/.exec(normalized);
+    if (range) {
+      const a = Number(range[1]), b = Number(range[2]), lo = Math.min(a, b), hi = Math.max(a, b);
+      return value >= lo && value <= hi;
+    }
+    const m = /^(<=|>=|<|>|=)?\s*(-?\d+(?:\.\d+)?)$/.exec(normalized);
     if (m) {
       const n = Number(m[2]);
       return m[1] === '<=' ? value <= n : m[1] === '>=' ? value >= n : m[1] === '<' ? value < n : m[1] === '>' ? value > n : value === n;
@@ -228,43 +259,116 @@ function tableFilterMatch(value, query) {
   const text = value === 'D' ? 'D ダウン' : String(value ?? '—');
   return text.toLowerCase().includes(q.toLowerCase().replace('+', '＋'));
 }
+function tableAdvancedMatch(o, key, rule) {
+  if (!rule) return true;
+  const value = tableFilterValue(o, key);
+  if (NUMERIC_FILTERS.has(key)) {
+    if (typeof value !== 'number') return !rule.min && !rule.max;
+    const min = rule.min === '' || rule.min == null ? null : Number(rule.min);
+    const max = rule.max === '' || rule.max == null ? null : Number(rule.max);
+    return (min == null || Number.isNaN(min) || value >= min) && (max == null || Number.isNaN(max) || value <= max);
+  }
+  const needle = String(rule.value || '').trim().toLowerCase();
+  if (!needle) return true;
+  const text = String(value ?? '').toLowerCase();
+  if (rule.mode === 'not') return !text.includes(needle);
+  if (rule.mode === 'equals') return text === needle;
+  return text.includes(needle);
+}
+function sortValue(o, key) {
+  const v = tableFilterValue(o, key);
+  if (key === 'hit' && v === 'D') return 999;
+  return v;
+}
+function compareRows(a, b) {
+  for (const [key, dir] of state.sorts) {
+    const av = sortValue(a, key), bv = sortValue(b, key);
+    if (av == null && bv == null) continue;
+    if (av == null) return 1;
+    if (bv == null) return -1;
+    const cmp = typeof av === 'number' && typeof bv === 'number' ? av - bv : String(av).localeCompare(String(bv), 'ja', { numeric: true });
+    if (cmp) return cmp * dir;
+  }
+  return a.i - b.i;
+}
+function renderFilterPanel() {
+  const key = state.filterPanel;
+  if (!key) return '';
+  const col = TABLE_COLS.find(([, k]) => k === key);
+  if (!col) return '';
+  const label = col[0];
+  const rule = state.tableAdvanced[key] || {};
+  if (NUMERIC_FILTERS.has(key)) {
+    return `<section class="filter-panel" aria-label="${esc(label)}の詳細フィルター">
+      <strong>${esc(label)}</strong><span>範囲で絞る</span>
+      <label>最小 <input type="number" inputmode="numeric" data-adv-key="${key}" data-adv-part="min" value="${esc(rule.min ?? '')}" placeholder="下限"></label>
+      <span>〜</span>
+      <label>最大 <input type="number" inputmode="numeric" data-adv-key="${key}" data-adv-part="max" value="${esc(rule.max ?? '')}" placeholder="上限"></label>
+      <button type="button" data-filter-reset="${key}">この条件を解除</button><button type="button" data-filter-close>閉じる</button>
+    </section>`;
+  }
+  return `<section class="filter-panel" aria-label="${esc(label)}の詳細フィルター">
+    <strong>${esc(label)}</strong>
+    <select data-adv-key="${key}" data-adv-part="mode" aria-label="一致方法">
+      <option value="contains"${(rule.mode || 'contains') === 'contains' ? ' selected' : ''}>含む</option>
+      <option value="not"${rule.mode === 'not' ? ' selected' : ''}>含まない</option>
+      <option value="equals"${rule.mode === 'equals' ? ' selected' : ''}>完全一致</option>
+    </select>
+    <input type="search" data-adv-key="${key}" data-adv-part="value" value="${esc(rule.value || '')}" placeholder="${esc(label)}を入力">
+    <button type="button" data-filter-reset="${key}">この条件を解除</button><button type="button" data-filter-close>閉じる</button>
+  </section>`;
+}
+function renderSortTools() {
+  const names = new Map(TABLE_COLS.filter(x => x[2]).map(([label,, key]) => [key, label]));
+  const active = state.sorts.map(([key, dir], i) => `<span class="sort-chip">${i + 1} ${esc(names.get(key) || key)} ${dir > 0 ? '↑' : '↓'}</span>`).join('');
+  return `<div class="table-tools">
+    <div class="sort-presets" role="group" aria-label="並び替えプリセット">
+      <span>並び順</span>
+      ${Object.entries(SORT_PRESETS).map(([key, p]) => `<button type="button" data-preset="${key}" aria-pressed="${state.sortPreset === key}">${p.label}</button>`).join('')}
+      <button type="button" data-sort-clear>解除</button>
+    </div>
+    <div class="sort-chain">${active || '<span>列名クリックで単独ソート／Shift＋クリックで追加</span>'}</div>
+  </div>`;
+}
 function renderTable(fams) {
   let rs = fams.flatMap(([, r]) => r);
-  rs = rs.filter(o => Object.entries(state.tableFilters).every(([key, q]) => tableFilterMatch(tableFilterValue(o, key), q)));
-  const k = state.sort.key;
-  if (k) {
-    const val = o => k === 'dmg' ? (typeof o.dmg === 'object' && o.dmg ? o.dmg.cmd : o.dmg) : o[k] === 'D' ? 99 : o[k];
-    rs = [...rs].sort((a, b) => ((val(a) ?? 999) - (val(b) ?? 999)) * state.sort.dir);
-  }
-  const cols = [
-    ['技', 'move', null, '技名'],
-    ['入力', 'input', null, '入力'],
-    ['発生', 'startup', 'startup', '≤6'],
-    ['持続', 'active', null, '持続'],
-    ['硬直', 'recovery', null, '硬直'],
-    ['全体', 'total', 'total', '≤40'],
-    ['ヒット', 'hit', 'hit', '>=1'],
-    ['ガード', 'block', 'block', '>=0'],
-    ['キャンセル', 'cancel', null, 'C / SA'],
-    ['ダメージ', 'dmg', 'dmg', '>=1000'],
-    ['属性', 'attribute', null, '属性']
-  ];
+  rs = rs.filter(o =>
+    Object.entries(state.tableFilters).every(([key, q]) => tableFilterMatch(tableFilterValue(o, key), q)) &&
+    Object.entries(state.tableAdvanced).every(([key, rule]) => tableAdvancedMatch(o, key, rule))
+  );
+  if (state.sorts.length) rs = [...rs].sort(compareRows);
   const cell = (v, cls = '') => `<td class="${cls}">${v}</td>`;
   const adv = v => { const t = TIER(v); return `<span class="${t ? 't-' + t[0] : ''}">${fmt(v)}</span>`; };
   const peek = text => {
     const full = String(text || '—');
     return `<button type="button" class="cell-peek" data-peek="${esc(full)}" aria-label="${esc(full)}"><span>${esc(full)}</span></button>`;
   };
-  $('#list').innerHTML = `<div class="tbl-wrap"><table class="tbl"><thead>
-    <tr>${cols.map(([c, filter, sort]) => `<th${sort ? ` data-sort="${sort}"` : ''}>${c}${sort && state.sort.key === sort ? (state.sort.dir > 0 ? ' ▲' : ' ▼') : ''}</th>`).join('')}</tr>
-    <tr class="filter-row">${cols.map(([c, filter, sort, ph]) => `<th><input class="tbl-filter" type="search" inputmode="${['startup','total','hit','block','dmg'].includes(filter) ? 'text' : 'search'}" data-filter="${filter}" value="${esc(state.tableFilters[filter] || '')}" placeholder="${esc(ph)}" maxlength="12" size="8" aria-label="${esc(c)}を絞り込む"></th>`).join('')}</tr>
+  $('#list').innerHTML = `${renderSortTools()}${renderFilterPanel()}<div class="tbl-wrap"><table class="tbl"><thead>
+    <tr>${TABLE_COLS.map(([c, filter, sort]) => {
+      const idx = sort ? state.sorts.findIndex(([key]) => key === sort) : -1;
+      const arrow = idx >= 0 ? (state.sorts[idx][1] > 0 ? ' ▲' : ' ▼') : '';
+      const order = idx >= 0 ? `<small class="sort-order">${idx + 1}</small>` : '';
+      const filtered = (state.tableFilters[filter] || '').trim() || state.tableAdvanced[filter];
+      return `<th${sort ? ` data-sort="${sort}" title="クリック=単独ソート / Shift+クリック=追加"` : ''}><span class="th-main">${c}${arrow}${order}</span><button type="button" class="filter-more${filtered ? ' on' : ''}" data-filter-menu="${filter}" aria-label="${esc(c)}の詳細フィルター">⌄</button></th>`;
+    }).join('')}</tr>
+    <tr class="filter-row">${TABLE_COLS.map(([c, filter, sort, ph]) => `<th><input class="tbl-filter" type="search" inputmode="${NUMERIC_FILTERS.has(filter) ? 'text' : 'search'}" data-filter="${filter}" value="${esc(state.tableFilters[filter] || '')}" placeholder="${esc(ph)}" maxlength="12" size="8" aria-label="${esc(c)}を絞り込む"></th>`).join('')}</tr>
     </thead><tbody>${rs.map(o => `
     <tr data-id="${o.id}" data-name="${esc(o.name)}" class="${cur() === o ? 'sel' : ''}${punClass(o)}">${cell(esc(famOf(o).title) + ' <small>' + esc(o.variant) + '</small>')}${cell(peek(o.input), 'in')}${cell(o.startup ?? '—')}${cell(esc(o.raw.active || '—'))}${cell(esc(o.raw.recovery || '—'))}${cell(o.total ?? '—')}${cell(adv(o.hit))}${cell(adv(o.block))}${cell(esc(o.cancel || '—'))}${cell(esc(o.raw.damage))}${cell(esc(o.raw.attribute || '—'))}</tr>`).join('')}</tbody></table>
     ${rs.length ? '' : '<p class="tbl-empty">この絞り込みに合う技がありません。</p>'}
   </div>`;
 }
 function markPips() {
-  for (const b of $$('.bar')) b.classList.toggle('pips', b.clientWidth / Number(b.dataset.max) >= 5);
+  for (const b of $$('.bar')) {
+    const max = Number(b.dataset.max);
+    const px = b.clientWidth / max;
+    const step = px >= 10 ? 1 : px >= 6 ? 2 : px >= 3 ? 5 : 10;
+    b.classList.toggle('pips', px >= 5);
+    for (const n of $$('.fn', b)) {
+      const f = Number(n.dataset.f);
+      n.classList.toggle('show', n.classList.contains('key') || f % step === 0);
+    }
+    b.dataset.numStep = step;
+  }
 }
 
 /* ---------- 詳細とつながりの地図 ---------- */
@@ -429,6 +533,11 @@ document.addEventListener('click', e => {
   }
   const t = e.target.closest('button, tr[data-id], th[data-sort]');
   if (!t) return;
+  if (t.dataset.filterMenu) { state.filterPanel = state.filterPanel === t.dataset.filterMenu ? null : t.dataset.filterMenu; return renderList(); }
+  if (t.dataset.filterClose != null) { state.filterPanel = null; return renderList(); }
+  if (t.dataset.filterReset) { delete state.tableAdvanced[t.dataset.filterReset]; state.filterPanel = null; return renderList(); }
+  if (t.dataset.preset) { const p = SORT_PRESETS[t.dataset.preset]; state.sorts = p.sorts.map(x => [...x]); state.sortPreset = t.dataset.preset; return renderList(); }
+  if (t.dataset.sortClear != null) { state.sorts = []; state.sortPreset = null; return renderList(); }
   if (t.matches('.row') && dragMoved) return;
   if (t.dataset.tab) return showTab(t.dataset.tab);
   if (t.dataset.cat) { state.cat = t.dataset.cat; try { localStorage.setItem('marisa-lab-cat', state.cat); } catch {} return renderAll(); }
@@ -437,7 +546,19 @@ document.addEventListener('click', e => {
   if (t.dataset.cond) { state.cond = t.dataset.cond; return renderDetail(); }
   if (t.dataset.to) { state.path.push({ id: t.dataset.to, via: t.dataset.via }); state.lastMap = null; renderAll(); return; }
   if (t.dataset.step != null) { state.path = state.path.slice(0, Number(t.dataset.step) + 1); state.lastMap = null; renderAll(); return; }
-  if (t.dataset.sort) { const k = t.dataset.sort; state.sort = { key: k, dir: state.sort.key === k ? -state.sort.dir : 1 }; return renderList(); }
+  if (t.dataset.sort) {
+    const k = t.dataset.sort;
+    const found = state.sorts.findIndex(([key]) => key === k);
+    if (e.shiftKey) {
+      if (found >= 0) state.sorts[found][1] *= -1;
+      else state.sorts.push([k, 1]);
+    } else {
+      const dir = found === 0 && state.sorts.length === 1 ? -state.sorts[0][1] : 1;
+      state.sorts = [[k, dir]];
+    }
+    state.sortPreset = null;
+    return renderList();
+  }
   if (t.dataset.close != null) return openSheet(false);
   if (t.dataset.unfocus != null) { state.focus = null; return renderAll(); }
   if (t.dataset.scene) { state.scene = t.dataset.scene; return renderSituations(); }
@@ -457,12 +578,28 @@ $('#backdrop').addEventListener('click', () => openSheet(false));
 $('#q').addEventListener('input', e => { state.q = e.target.value; renderList(); });
 document.addEventListener('input', e => {
   const f = e.target.closest('.tbl-filter');
-  if (!f) return;
-  state.tableFilters[f.dataset.filter] = f.value;
-  const pos = { start: f.selectionStart, end: f.selectionEnd };
+  if (f) {
+    state.tableFilters[f.dataset.filter] = f.value;
+    const pos = { start: f.selectionStart, end: f.selectionEnd };
+    renderList();
+    const next = $(`.tbl-filter[data-filter="${f.dataset.filter}"]`);
+    if (next) { next.focus(); next.setSelectionRange(pos.start ?? next.value.length, pos.end ?? next.value.length); }
+    return;
+  }
+  const a = e.target.closest('[data-adv-key]');
+  if (!a) return;
+  const key = a.dataset.advKey, part = a.dataset.advPart;
+  state.tableAdvanced[key] = { ...(state.tableAdvanced[key] || {}), [part]: a.value };
   renderList();
-  const next = $(`.tbl-filter[data-filter="${f.dataset.filter}"]`);
-  if (next) { next.focus(); next.setSelectionRange(pos.start ?? next.value.length, pos.end ?? next.value.length); }
+  const next = $(`[data-adv-key="${key}"][data-adv-part="${part}"]`);
+  if (next) { next.focus(); if (next.setSelectionRange) { const p = next.value.length; next.setSelectionRange(p, p); } }
+});
+document.addEventListener('change', e => {
+  const a = e.target.closest('[data-adv-key]');
+  if (!a) return;
+  const key = a.dataset.advKey, part = a.dataset.advPart;
+  state.tableAdvanced[key] = { ...(state.tableAdvanced[key] || {}), [part]: a.value };
+  renderList();
 });
 $('#export-notebook')?.addEventListener('click', () => {
   const payload = { version: 1, exportedAt: new Date().toISOString(), situations: SITUATIONS.map(s => ({ id: s.key, scene: s.scene, title: s.title, picks: (s.pick || []).map(n => LAB.ids[n]).filter(Boolean) })) };
